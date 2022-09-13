@@ -6,7 +6,8 @@ enum SalType
 {
   nil,
   str,
-  number
+  number,
+  any
 }
 
 /* WWW: throwaway value, use SalmonState */
@@ -22,6 +23,15 @@ public:
     rvalue = value;
     rvaluetype = type;
   }
+
+  SalmonEnvironment environ = new SalmonEnvironment();
+}
+
+class SalmonEnvironment
+{
+public:
+  int function(SalmonInfo)[string] env_funcs;
+  string[string] env_vars;
 }
 
 /* this is the value you should use for adding code */
@@ -29,6 +39,7 @@ class SalmonState
 {
 public:
   string CODE = "";
+
 }
 
 /* return the argument at the position @p */

@@ -56,30 +56,42 @@ string[] _sep(string lisp)
   return final_;
 }
 
-class SalmonEnvironment
+int checkeq(SalmonInfo s)
 {
-public:
-  int function(SalmonInfo)[string] env_funcs;
-  string[string] env_vars;
+  s.returnValue(to!string(s.aA[0] == s.aA[1]), SalType.number);
+  return 0;
+}
+
+int builtin_access(SalmonInfo i)
+{
+  i.returnValue(i.environ.env_vars[i.aA[0]], SalType.any);
+  return 0;
 }
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
 string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment())
 {
   int[string] reserves = [
-    "let": 0
+    "let": 0,
+    "require": 1,
   ];
+
   env.env_funcs["+"] = &builtin_add;
+  env.env_funcs["="] = &checkeq;
+  env.env_funcs["eq"] = &checkeq;
   env.env_funcs["print"] = &builtin_print;
   env.env_funcs["println"] = &builtin_dep_println; /* println deprecated */
   env.env_funcs["strcat"] = &builtin_strcat;
+  env.env_funcs["trim"] = &builtin_trim;
+  env.env_funcs["access"] = &builtin_access;
+  env.env_funcs["istrcat"] = &istrcat;
   string b;
 
   int st = 0;
   int m = 0;
-  if (!startsWith(s.CODE, '(') && lambda)
+  if (!startsWith(s.CODE.strip, '(') && lambda)
   {
-    if (s.CODE[1 .. $] in env.env_vars && s.CODE[0] == '&')
+    if (s.CODE.strip[1 .. $] in env.env_vars && s.CODE[0] == '&')
       return env.env_vars[s.CODE[1 .. $]];
 
     return s.CODE;
@@ -112,6 +124,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         return "nil";
       }
       SalmonInfo tmp = new SalmonInfo();
+      tmp.environ = env;
       string[] argum = args[1 .. $];
       for (int _ = 0; _ < argum.length; ++_)
       {
@@ -125,6 +138,16 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
       if (args[0] == "let")
       {
         env.env_vars[argum[0]] = argum[1];
+      }
+      else if (args[0] == "require")
+      {
+        import core.sys.linux.dlfcn;
+
+        void* hndl = dlopen(("./libs/" ~ argum[0] ~ ".so").toStringz(), RTLD_LAZY);
+
+        int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
+
+        openFunc(env);
       }
       else
         env.env_funcs[args[0]](tmp);

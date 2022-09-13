@@ -1,11 +1,26 @@
 import sal_shared_api;
 import std.stdio;
 import std.conv;
+import std.base64;
+import std.string;
 
 int builtin_print(SalmonInfo info)
 {
-  writeln(sal_argument_at(info, 0));
+  writeln(join(info.aA, ""));
   return (0);
+}
+
+int istrcat(SalmonInfo i)
+{
+  i.returnValue(join(i.aA, ""), SalType.any);
+
+  return (0);
+}
+
+int builtin_trim(SalmonInfo s)
+{
+  s.returnValue(s.aA[0].strip, SalType.str);
+  return 0;
 }
 
 int builtin_dep_println(SalmonInfo s)
