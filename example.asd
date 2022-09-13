@@ -1,3 +1,9 @@
-(let m 1)
+(require "math")
+(require "input")
 
-(print &m)
+(print "So, what do you like?")
+
+(let input (trim (getline)))
+
+(print "Oh, I love " (access input) " too!!"))
+
