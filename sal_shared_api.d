@@ -1,0 +1,48 @@
+// Salmon Implementation
+
+import std.stdio;
+
+enum SalType
+{
+  nil,
+  str,
+  number
+}
+
+/* WWW: throwaway value, use SalmonState */
+class SalmonInfo
+{
+public:
+  string[] aA;
+  SalType rvaluetype = SalType.nil; /* return value */
+  string rvalue = "nil";
+  /* + whatever else I need */
+  void returnValue(string value, SalType type)
+  {
+    rvalue = value;
+    rvaluetype = type;
+  }
+}
+
+/* this is the value you should use for adding code */
+class SalmonState
+{
+public:
+  string CODE = "";
+}
+
+/* return the argument at the position @p */
+string sal_argument_at(SalmonInfo s, int p)
+{
+  return s.aA[p];
+}
+
+void salmon_push_code(SalmonState s, string code)
+{
+  s.CODE = code; /* push the code to the state */
+}
+
+SalmonState newState()
+{
+  return new SalmonState();
+}
