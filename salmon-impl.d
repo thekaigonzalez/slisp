@@ -68,12 +68,20 @@ int builtin_access(SalmonInfo i)
   return 0;
 }
 
+int builtin_accessq(SalmonInfo i)
+{
+  i.returnValue(i.environ.env_lists[i.aA[0]].join(","), SalType.any);
+  return 0;
+}
+
 /* STRING because it will return a value to be reparsed if needed. Fight me */
 string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment())
 {
   int[string] reserves = [
     "let": 0,
     "require": 1,
+    "list": 2,
+    "each": 3,
   ];
 
   env.env_funcs["+"] = &builtin_add;
@@ -85,6 +93,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   env.env_funcs["trim"] = &builtin_trim;
   env.env_funcs["access"] = &builtin_access;
   env.env_funcs["istrcat"] = &istrcat;
+  env.env_funcs["accessq"] = &builtin_accessq;
   string b;
 
   int st = 0;
@@ -119,6 +128,22 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
     {
       string[] args = _sep(b.strip);
 
+      if (args[0] == "each")
+      {
+
+        if (args[1] in env.env_lists)
+        {
+          string codee = args[2];
+          foreach (string sm; env.env_lists[args[1]])
+          {
+            env.env_vars["*"] = sm;
+            auto scopem = newState();
+            salmon_push_code(scopem, codee);
+            args[2] = execute_salmon(scopem, true, env);
+          }
+        }
+      }
+
       if (!(args[0] in env.env_funcs) && !(args[0] in reserves))
       {
         return "nil";
@@ -134,7 +159,6 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
       }
 
       tmp.aA = argum;
-
       if (args[0] == "let")
       {
         env.env_vars[argum[0]] = argum[1];
@@ -149,8 +173,39 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
 
         openFunc(env);
       }
+      else if (args[0] == "list")
+      {
+        env.env_lists[argum[0]] = argum[1 .. $];
+      }
+      else if (args[0] == "format")
+      {
+        string target = "nil";
+
+        if (argum[0] in env.env_vars)
+          target = env.env_vars[argum[0]];
+        else if (argum[0] in env.env_lists)
+          target = env.env_lists[argum[0]].join(",");
+
+        auto Scope2 = newState();
+        auto env_loop = new SalmonEnvironment();
+
+        /* bind environment */
+        env_loop.env_lists = env.env_lists;
+        env_loop.env_vars = env.env_vars;
+        env_loop.env_funcs = env.env_funcs;
+
+        env_loop.env_vars["@"] = target;
+        writeln(env_loop);
+        salmon_push_code(Scope2, args[2]);
+
+        execute_salmon(Scope2, true, env_loop);
+
+      }
       else
-        env.env_funcs[args[0]](tmp);
+      {
+        if (!(args[0] in reserves))
+          env.env_funcs[args[0]](tmp);
+      }
 
       if (lambda)
         return tmp.rvalue;
@@ -168,7 +223,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
       b ~= n;
     }
   }
-  return "";
+  return "?";
 }
 
 void main(string[] args)

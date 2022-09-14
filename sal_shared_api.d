@@ -7,7 +7,8 @@ enum SalType
   nil,
   str,
   number,
-  any
+  any,
+  func
 }
 
 /* WWW: throwaway value, use SalmonState */
@@ -32,6 +33,11 @@ class SalmonEnvironment
 public:
   int function(SalmonInfo)[string] env_funcs;
   string[string] env_vars;
+  string[][string] env_lists;
+  SalmonEnvironment copy()
+  {
+    return new SalmonEnvironment();
+  }
 }
 
 /* this is the value you should use for adding code */
