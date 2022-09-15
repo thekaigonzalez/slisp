@@ -150,16 +150,15 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
 
       if (args[0] == "each")
       {
-
-        if (args[1] in env.env_lists)
+        if (args[1].strip in env.env_lists)
         {
           string codee = args[2];
-          foreach (string sm; env.env_lists[args[1]])
+          foreach (string sm; env.env_lists[args[1].strip])
           {
             env.env_vars["*"] = sm;
             auto scopem = newState();
             salmon_push_code(scopem, codee);
-            args[2] = execute_salmon(scopem, true, env);
+            execute_salmon(scopem, false, env);
           }
         }
       }

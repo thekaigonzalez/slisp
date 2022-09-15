@@ -25,7 +25,7 @@ int lintersection(SalmonInfo i)
   }
 
   list3 ~= join(l, " ") ~ "";
-  writeln(list3);
+  i.environ.env_lists[i.aA[2]] = l;
   i.returnValue(list3, SalType.str);
   return 0;
 }
