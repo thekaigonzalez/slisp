@@ -64,7 +64,8 @@ int checkeq(SalmonInfo s)
 
 int checkxq(SalmonInfo s)
 {
-  s.returnValue(to!string(s.aA[0] != s.aA[1]), SalType.number);
+  string truf = to!string(!(s.aA[0] == s.aA[1]));
+  s.returnValue(truf, SalType.number);
   return 0;
 }
 
@@ -172,7 +173,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         string condition = execute_salmon(scopem, true, env);
 
         auto scopeg = newState();
-        salmon_push_code(scopeg, args[2]);
+        salmon_push_code(scopeg, args[2 .. $].join(' '));
 
         while (condition == "true" || condition == "1")
         {
@@ -225,7 +226,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
       SalmonInfo tmp = new SalmonInfo();
       tmp.environ = env;
       string[] argum = args[1 .. $];
-      if (!(args[0] in reserves))
+      if (!(args[0] in reserves) || args[0] == "let")
       {
         for (int _ = 0; _ < argum.length; ++_)
         {
@@ -272,7 +273,6 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         env_loop.env_funcs = env.env_funcs;
 
         env_loop.env_vars["@"] = target;
-        writeln(env_loop);
         salmon_push_code(Scope2, args[2]);
 
         execute_salmon(Scope2, true, env_loop);
