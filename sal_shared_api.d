@@ -28,6 +28,12 @@ public:
   SalmonEnvironment environ = new SalmonEnvironment();
 }
 
+class SalmonFunction {
+  public:
+    string run;
+    string returns;
+}
+
 class SalmonEnvironment
 {
 public:
@@ -38,6 +44,7 @@ public:
   {
     return new SalmonEnvironment();
   }
+  SalmonFunction[string] env_userdefined;
 }
 
 /* this is the value you should use for adding code */

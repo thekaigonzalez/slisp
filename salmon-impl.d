@@ -62,6 +62,12 @@ int checkeq(SalmonInfo s)
   return 0;
 }
 
+int checkxq(SalmonInfo s)
+{
+  s.returnValue(to!string(s.aA[0] != s.aA[1]), SalType.number);
+  return 0;
+}
+
 int builtin_access(SalmonInfo i)
 {
   i.returnValue(i.environ.env_vars[i.aA[0]], SalType.any);
@@ -82,10 +88,13 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
     "require": 1,
     "list": 2,
     "each": 3,
+    "if": 4,
+    "defun": 5,
   ];
 
   env.env_funcs["+"] = &builtin_add;
   env.env_funcs["="] = &checkeq;
+  env.env_funcs["not"] = &checkxq;
   env.env_funcs["eq"] = &checkeq;
   env.env_funcs["print"] = &builtin_print;
   env.env_funcs["println"] = &builtin_dep_println; /* println deprecated */
@@ -107,8 +116,8 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   }
   else if (!startsWith(s.CODE, '(') && !lambda && !startsWith(s.CODE, ';'))
   {
-    writeln("(syntax warning) this style of syntax is deprecated: `<function> (args)`.\nPlease use the modern" ~
-        "`(<function> <args>)' format.");
+    // writeln("(syntax warning) this style of syntax is deprecated: `<function> (args)`.\nPlease use the modern" ~
+        // "`(<function> <args>)' format.");
   }
   for (int i = 0; i < s.CODE.length; ++i)
   {
@@ -155,18 +164,76 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         }
       }
 
-      if (!(args[0] in env.env_funcs) && !(args[0] in reserves))
+      else if (args[0] == "while")
+      {
+        string codee = args[1];
+
+        auto scopem = newState();
+        salmon_push_code(scopem, codee);
+        string condition = execute_salmon(scopem, true, env);
+
+        auto scopeg = newState();
+        salmon_push_code(scopeg, args[2]);
+
+        while (condition == "true" || condition == "1")
+        {
+          execute_salmon(scopeg, false, env);
+          condition = execute_salmon(scopem, true, env);
+        }
+      }
+
+      else if (args[0] == "defun")
+      {
+        string codee = args[1];
+
+        auto scopem = newState();
+        salmon_push_code(scopem, codee);
+        string name = execute_salmon(scopem, true, env);
+
+        auto scopeg = newState();
+        salmon_push_code(scopeg, args[args.length-1]);
+
+        auto Func = new SalmonFunction();
+        
+        Func.run = join(args[2 .. args.length-2], ' ');
+        Func.returns = execute_salmon(scopeg, true, env);
+
+        env.env_userdefined[name] = Func;
+      }
+
+      else if (args[0] == "if")
+      {
+        string codee = args[1];
+
+        auto scopem = newState();
+        salmon_push_code(scopem, codee);
+        string condition = execute_salmon(scopem, true, env);
+
+        auto scopeg = newState();
+        salmon_push_code(scopeg, join(args[2 .. $], " "));
+
+        if (condition == "true" || condition == "1")
+        {
+          execute_salmon(scopeg, false, env);
+          condition = execute_salmon(scopem, true, env);
+        }
+      }
+
+      if (!(args[0] in env.env_funcs) && !(args[0] in env.env_userdefined) && !(args[0] in reserves))
       {
         return "nil";
       }
       SalmonInfo tmp = new SalmonInfo();
       tmp.environ = env;
       string[] argum = args[1 .. $];
-      for (int _ = 0; _ < argum.length; ++_)
+      if (!(args[0] in reserves))
       {
-        auto Scope = newState();
-        salmon_push_code(Scope, argum[_]);
-        argum[_] = execute_salmon(Scope, true, env);
+        for (int _ = 0; _ < argum.length; ++_)
+        {
+          auto Scope = newState();
+          salmon_push_code(Scope, argum[_]);
+          argum[_] = execute_salmon(Scope, true, env);
+        }
       }
 
       tmp.aA = argum;
@@ -214,7 +281,23 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
       }
       else
       {
-        if (!(args[0] in reserves))
+        if (args[0] in env.env_userdefined)
+        {
+          auto sl = newState();
+          auto sl2 = newState();
+          SalmonFunction fn = env.env_userdefined[args[0]];
+          string cod = fn.run;
+          string rv = fn.returns;
+          salmon_push_code(sl, cod);
+          salmon_push_code(sl2, rv);
+
+          execute_salmon(sl, false, env);
+
+          if (lambda) {
+            return execute_salmon(sl2, true, env);
+          }
+        }
+        else if (!(args[0] in reserves))
           env.env_funcs[args[0]](tmp);
       }
 
