@@ -1,7 +1,7 @@
 (list a 1 2 3 4)
 
 (each a 
-      (print (access *)))
+      (print (get *)))
 
 (require "math")
 (require "input")
@@ -11,7 +11,7 @@
 
 (print "So, what do you like?")
 
-(let input (trim (getline)))
+(set input (trim (getline)))
 
-(print "Oh, I love " (access input) " too!!"))
+(print "Oh, I love " (get input) " too!!"))
 

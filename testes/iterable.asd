@@ -3,5 +3,5 @@
 (list my-list a b c d e f)
 
 (each my-list 
-      (print (access *)))
+      (print (get *)))
 

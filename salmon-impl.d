@@ -85,7 +85,7 @@ int builtin_accessq(SalmonInfo i)
 string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment())
 {
   int[string] reserves = [
-    "let": 0,
+    "set": 0,
     "require": 1,
     "list": 2,
     "each": 3,
@@ -101,9 +101,9 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   env.env_funcs["println"] = &builtin_dep_println; /* println deprecated */
   env.env_funcs["strcat"] = &builtin_strcat;
   env.env_funcs["trim"] = &builtin_trim;
-  env.env_funcs["access"] = &builtin_access;
+  env.env_funcs["get"] = &builtin_access;
   env.env_funcs["istrcat"] = &istrcat;
-  env.env_funcs["accessq"] = &builtin_accessq;
+  env.env_funcs["getq"] = &builtin_accessq;
   string b;
 
   int st = 0;
@@ -226,7 +226,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
       SalmonInfo tmp = new SalmonInfo();
       tmp.environ = env;
       string[] argum = args[1 .. $];
-      if (!(args[0] in reserves) || args[0] == "let")
+      if (!(args[0] in reserves) || args[0] == "set")
       {
         for (int _ = 0; _ < argum.length; ++_)
         {
@@ -237,7 +237,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
       }
 
       tmp.aA = argum;
-      if (args[0] == "let")
+      if (args[0] == "set")
       {
         env.env_vars[argum[0]] = argum[1];
       }

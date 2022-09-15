@@ -9,4 +9,4 @@
 
 (each list-three
               (print 
-                  (access *)))
+                  (get *)))

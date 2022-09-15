@@ -1,6 +1,6 @@
 (require "os")
 
-(let gcc_status (sys "gcc --version"))
-(let gcc_version (osys "gcc --version"))
+(set gcc_status (sys "gcc --version"))
+(set gcc_version (osys "gcc --version"))
 
-(print "GCC version: " (access gcc_version))
+(print "GCC version: " (get gcc_version))
