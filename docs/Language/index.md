@@ -6,3 +6,4 @@ This is the place for technical language information!
 - [How Parsing Works](./Parser.md)
 - [The D API](./D_API/index.md)
 - [Types](./Types/index.md)
+- [Creating Functions](./Functions.md)
