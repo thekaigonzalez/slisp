@@ -104,6 +104,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   env.env_funcs["get"] = &builtin_access;
   env.env_funcs["istrcat"] = &istrcat;
   env.env_funcs["getq"] = &builtin_accessq;
+  
   string b;
 
   int st = 0;
