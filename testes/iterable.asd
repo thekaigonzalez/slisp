@@ -4,4 +4,3 @@
 
 (each my-list 
       (print (get *)))
-
