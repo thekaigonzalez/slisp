@@ -105,7 +105,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
 
     return s.CODE;
   }
-  else if (!startsWith(s.CODE, '(') && !lambda)
+  else if (!startsWith(s.CODE, '(') && !lambda && !startsWith(s.CODE, ';'))
   {
     writeln("(syntax warning) this style of syntax is deprecated: `<function> (args)`.\nPlease use the modern" ~
         "`(<function> <args>)' format.");
@@ -123,6 +123,17 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
     {
       m += 1;
       b ~= n;
+    }
+    else if (n == ';' && st == 0)
+    {
+      st = -100;
+      m = -1;
+    }
+    else if (n == '\n' && st == -100)
+    {
+      st = 0;
+      m = 0;
+      b = "";
     }
     else if (n == ')' && m == 1 && st == 1)
     {
