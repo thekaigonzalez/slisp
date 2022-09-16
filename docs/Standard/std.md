@@ -39,7 +39,7 @@ Returns `str1 + str2`
 
 Stands for **I**nfinite **`strcat`**.
 
-It joins `strs` separated by ` `.
+It joins `strs` separated by `' '`.
 
 ## `trim <str>`
 
