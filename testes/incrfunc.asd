@@ -1,3 +1,4 @@
+; Increment variable by 1
 (defun increment (var)
   (set (get var) 1))
 
