@@ -1,5 +1,5 @@
-(defun test 
-          (print "Hello!")
-            (print "world!"))
+(defun test (n, g)
+          (print (get n))
+            (print "h"))
 
-(test)
+(test f gfds)

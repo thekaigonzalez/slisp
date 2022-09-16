@@ -32,6 +32,8 @@ class SalmonFunction {
   public:
     string run;
     string returns;
+    string[string] parameters;
+    string[] template_params;
 }
 
 class SalmonEnvironment

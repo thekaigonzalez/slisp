@@ -56,6 +56,45 @@ string[] _sep(string lisp)
   return final_;
 }
 
+string[] parseParamList(string mf)
+{
+  int st = 0;
+  string b = "";
+  string[] pi;
+
+  foreach (char s; mf)
+  {
+    if (s == '(' && st == 0)
+    {
+      st = 1;
+    }
+    else if (s == ')' && st == 1)
+    {
+      if (b.strip.length > 0) { pi ~= b.strip; }
+
+      return pi;
+    }
+    else if (s == '(' && st != 0)
+    {
+      st += 5;
+    }
+    else if (s == ')' && st > 1)
+    {
+      st -= 5;
+    }
+    else if (s == ',' && st == 1)
+    {
+      pi ~= b.strip;
+      b = "";
+    }
+    else
+    {
+      b ~= s;
+    }
+  }
+  return pi;
+}
+
 int checkeq(SalmonInfo s)
 {
   s.returnValue(to!string(s.aA[0] == s.aA[1]), SalType.number);
@@ -104,7 +143,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   env.env_funcs["get"] = &builtin_access;
   env.env_funcs["istrcat"] = &istrcat;
   env.env_funcs["getq"] = &builtin_accessq;
-  
+
   string b;
 
   int st = 0;
@@ -119,7 +158,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   else if (!startsWith(s.CODE, '(') && !lambda && !startsWith(s.CODE, ';'))
   {
     // writeln("(syntax warning) this style of syntax is deprecated: `<function> (args)`.\nPlease use the modern" ~
-        // "`(<function> <args>)' format.");
+    // "`(<function> <args>)' format.");
   }
   for (int i = 0; i < s.CODE.length; ++i)
   {
@@ -150,6 +189,9 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
     {
       string[] args = _sep(b.strip);
 
+      for (int ia = 0 ; ia < args.length ; ++ ia) {
+        args[ia] = strip(args[ia]);
+      }
       if (args[0] == "each")
       {
         if (args[1].strip in env.env_lists)
@@ -192,12 +234,13 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         string name = execute_salmon(scopem, true, env);
 
         auto scopeg = newState();
-        salmon_push_code(scopeg, args[args.length-1]);
+        salmon_push_code(scopeg, args[args.length - 1]);
 
         auto Func = new SalmonFunction();
-        
-        Func.run = join(args[2 .. args.length-2], ' ');
-        Func.returns = execute_salmon(scopeg, true, env);
+
+        Func.template_params = parseParamList(args[2]);
+        Func.run = join(args[3 .. args.length], ' ');
+        Func.returns = scopeg.CODE;
 
         env.env_userdefined[name] = Func;
       }
@@ -288,12 +331,17 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
           SalmonFunction fn = env.env_userdefined[args[0]];
           string cod = fn.run;
           string rv = fn.returns;
+
           salmon_push_code(sl, cod);
           salmon_push_code(sl2, rv);
-
+          
+          for (int f1 = 0 ; f1 < fn.template_params.length; ++ f1) {
+            env.env_vars[fn.template_params[f1]] = argum[f1];
+          }
           execute_salmon(sl, false, env);
 
-          if (lambda) {
+          if (lambda)
+          {
             return execute_salmon(sl2, true, env);
           }
         }
@@ -339,7 +387,6 @@ void main(string[] args)
   SalmonState s = newState();
 
   salmon_push_code(s, readText(args[1]));
-
   SalmonEnvironment env = new SalmonEnvironment();
 
   execute_salmon(s, false, env);
