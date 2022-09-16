@@ -1,4 +1,4 @@
-# Specification Module - Salmon
+# salspec - Salmon Specification Module
 
 This module contains functions that are a part of the Salmon language standard.
 

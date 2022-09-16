@@ -4,3 +4,4 @@
 - [input](./Input.md)
 - [std](./std.md)
 - [salspec](./spec.md)
+- [curl](./curl.md)
