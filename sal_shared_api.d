@@ -42,6 +42,7 @@ public:
   int function(SalmonInfo)[string] env_funcs;
   string[string] env_vars;
   string[][string] env_lists;
+  string[string] env_definitions;
   SalmonEnvironment copy()
   {
     return new SalmonEnvironment();

@@ -10,6 +10,7 @@ import std.file;
 import sal_builtins;
 import std.algorithm : canFind;
 import sal_shared_api;
+static import core.exception;
 
 string[] _sep(string lisp)
 {
@@ -70,7 +71,10 @@ string[] parseParamList(string mf)
     }
     else if (s == ')' && st == 1)
     {
-      if (b.strip.length > 0) { pi ~= b.strip; }
+      if (b.strip.length > 0)
+      {
+        pi ~= b.strip;
+      }
 
       return pi;
     }
@@ -189,9 +193,9 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
     {
       string[] args = _sep(b.strip);
 
-      for (int ia = 0 ; ia < args.length ; ++ ia) {
-        args[ia] = strip(args[ia]);
-      }
+      // for (int ia = 0 ; ia < args.length ; ++ ia) {
+      //   args[ia] = strip(args[ia]);
+      // }
       if (args[0] == "each")
       {
         if (args[1].strip in env.env_lists)
@@ -243,6 +247,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         Func.returns = scopeg.CODE;
 
         env.env_userdefined[name] = Func;
+        env.env_definitions[name] = args.join(' ');
       }
 
       else if (args[0] == "if")
@@ -334,9 +339,19 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
 
           salmon_push_code(sl, cod);
           salmon_push_code(sl2, rv);
-          
-          for (int f1 = 0 ; f1 < fn.template_params.length; ++ f1) {
-            env.env_vars[fn.template_params[f1]] = argum[f1];
+
+          for (int f1 = 0; f1 < fn.template_params.length; ++f1)
+          {
+            try
+            {
+              env.env_vars[fn.template_params[f1]] = argum[f1];
+            }
+            catch (core.exception.ArrayIndexError)
+            {
+              writeln("error: parameter `" ~ fn.template_params[f1] ~ "` not supplied.");
+              writeln("note: '" ~ args[0] ~ "' defined here:\n-------------------------------------------------------------------------\n\t" ~ env.env_definitions[args[0].strip] ~ "\n-------------------------------------------------------------------------");
+              return "errorParameterNotSupplied";
+            }
           }
           execute_salmon(sl, false, env);
 
