@@ -124,10 +124,13 @@ int builtin_accessq(SalmonInfo i)
   return 0;
 }
 
-void err(string msg, int lineno = 0, string file = "") {
+void err(string msg, int lineno = 0, string file = "")
+{
   writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[31;1merror:\033[0m " ~ msg);
 }
-void note(string msg, int lineno = 0, string file = "") {
+
+void note(string msg, int lineno = 0, string file = "")
+{
   writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[36mnote:\033[0m " ~ msg);
 }
 
@@ -303,13 +306,24 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
       }
       else if (args[0] == "require")
       {
-        import core.sys.linux.dlfcn;
 
-        void* hndl = dlopen(("./libs/" ~ argum[0] ~ ".so").toStringz(), RTLD_LAZY);
+        if (exists(args[1]))
+        {
+          auto include = newState;
+          include.CODE = readText(args[1]);
+          execute_salmon(inlcude, lambda, env);
+        }
+        else
+        {
 
-        int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
+          import core.sys.linux.dlfcn;
 
-        openFunc(env);
+          void* hndl = dlopen(("./libs/" ~ argum[0] ~ ".so").toStringz(), RTLD_LAZY);
+
+          int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
+
+          openFunc(env);
+        }
       }
       else if (args[0] == "list")
       {
@@ -360,7 +374,8 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
             catch (core.exception.ArrayIndexError)
             {
               err("parameter `" ~ fn.template_params[f1] ~ "` not supplied.", LINE_NUMBER, _FILEN);
-              note("defined here:\n  (\033[35;1mdefun\033[0m \033[36;1m" ~ args[0] ~ "\033[;0m (" ~ join(fn.template_params, ", ") ~ ") ...", LINE_NUMBER, _FILEN);
+              note("defined here:\n  (\033[35;1mdefun\033[0m \033[36;1m" ~ args[0] ~ "\033[;0m (" ~ join(
+                  fn.template_params, ", ") ~ ") ...", LINE_NUMBER, _FILEN);
               writeln("\t\033[36;1m ^~~~~~~~~~~~\033[0m");
               return "errorParameterNotSupplied";
             }
