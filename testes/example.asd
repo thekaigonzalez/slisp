@@ -14,4 +14,3 @@
 (set input (trim (getline)))
 
 (print "Oh, I love " (get input) " too!!"))
-
