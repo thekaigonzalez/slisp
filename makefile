@@ -4,6 +4,8 @@ all: binary
 	gdc ./linputlib.d -shared -fPIC -L-static -o ./libs/input.so
 	gdc ./loslib.d -shared -fPIC -L-static -o ./libs/os.so
 	gdc ./external.d -shared -fPIC -L-static -o ./libs/salspec.so
+	gdc ./lcurl.d -shared -fPIC -L-static -o ./libs/curl.so
+
 
 	
 binary: 
