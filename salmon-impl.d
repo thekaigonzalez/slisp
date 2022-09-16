@@ -124,6 +124,13 @@ int builtin_accessq(SalmonInfo i)
   return 0;
 }
 
+void err(string msg) {
+  writeln("\033[31;1merror:\033[0m " ~ msg);
+}
+void note(string msg) {
+  writeln("\033[36mnote:\033[0m " ~ msg);
+}
+
 /* STRING because it will return a value to be reparsed if needed. Fight me */
 string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment())
 {
@@ -348,11 +355,9 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
             }
             catch (core.exception.ArrayIndexError)
             {
-              writeln("error: parameter `" ~ fn.template_params[f1] ~ "` not supplied.");
-              writeln("note: '" ~ args[0] ~ "' defined here:\n"
-              ~"----------------------------------------------------------"
-              ~"---------------\n\t" ~ env.env_definitions[args[0].strip] ~ "\n-----------------------------------------"
-              ~"--------------------------------");
+              err("parameter `" ~ fn.template_params[f1] ~ "` not supplied.");
+              note("defined here:\n  (\033[35;1mdefun\033[0m \033[36;1m" ~ args[0] ~ "\033[;0m (" ~ join(fn.template_params, ", ") ~ ") ...");
+              writeln("\t\033[36;1m ^~~~~~~~~~~~\033[0m");
               return "errorParameterNotSupplied";
             }
           }
