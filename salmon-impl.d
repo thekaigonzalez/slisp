@@ -349,7 +349,10 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
             catch (core.exception.ArrayIndexError)
             {
               writeln("error: parameter `" ~ fn.template_params[f1] ~ "` not supplied.");
-              writeln("note: '" ~ args[0] ~ "' defined here:\n-------------------------------------------------------------------------\n\t" ~ env.env_definitions[args[0].strip] ~ "\n-------------------------------------------------------------------------");
+              writeln("note: '" ~ args[0] ~ "' defined here:\n"
+              ~"----------------------------------------------------------"
+              ~"---------------\n\t" ~ env.env_definitions[args[0].strip] ~ "\n-----------------------------------------"
+              ~"--------------------------------");
               return "errorParameterNotSupplied";
             }
           }
