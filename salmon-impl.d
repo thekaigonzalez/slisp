@@ -124,16 +124,19 @@ int builtin_accessq(SalmonInfo i)
   return 0;
 }
 
-void err(string msg) {
-  writeln("\033[31;1merror:\033[0m " ~ msg);
+void err(string msg, int lineno = 0, string file = "") {
+  writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[31;1merror:\033[0m " ~ msg);
 }
-void note(string msg) {
-  writeln("\033[36mnote:\033[0m " ~ msg);
+void note(string msg, int lineno = 0, string file = "") {
+  writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[36mnote:\033[0m " ~ msg);
 }
+
+string _FILEN = "";
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
 string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment())
 {
+  int LINE_NUMBER = 1;
   int[string] reserves = [
     "set": 0,
     "require": 1,
@@ -195,6 +198,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
       st = 0;
       m = 0;
       b = "";
+      LINE_NUMBER += 1;
     }
     else if (n == ')' && m == 1 && st == 1)
     {
@@ -355,8 +359,8 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
             }
             catch (core.exception.ArrayIndexError)
             {
-              err("parameter `" ~ fn.template_params[f1] ~ "` not supplied.");
-              note("defined here:\n  (\033[35;1mdefun\033[0m \033[36;1m" ~ args[0] ~ "\033[;0m (" ~ join(fn.template_params, ", ") ~ ") ...");
+              err("parameter `" ~ fn.template_params[f1] ~ "` not supplied.", LINE_NUMBER, _FILEN);
+              note("defined here:\n  (\033[35;1mdefun\033[0m \033[36;1m" ~ args[0] ~ "\033[;0m (" ~ join(fn.template_params, ", ") ~ ") ...", LINE_NUMBER, _FILEN);
               writeln("\t\033[36;1m ^~~~~~~~~~~~\033[0m");
               return "errorParameterNotSupplied";
             }
@@ -398,6 +402,7 @@ void main(string[] args)
     writeln("** SALMON LISP REPL **");
     SalmonState input = new SalmonState();
     SalmonEnvironment env = new SalmonEnvironment();
+    _FILEN = "repl";
     while (true)
     {
       write("Lisp> ");
@@ -407,6 +412,8 @@ void main(string[] args)
       input.CODE = "";
     }
   }
+
+  _FILEN = args[1];
   SalmonState s = newState();
 
   salmon_push_code(s, readText(args[1]));
