@@ -311,7 +311,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         {
           auto include = newState;
           include.CODE = readText(args[1]);
-          execute_salmon(inlcude, lambda, env);
+          execute_salmon(include, lambda, env);
         }
         else
         {
