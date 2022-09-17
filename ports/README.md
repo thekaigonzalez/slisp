@@ -10,3 +10,4 @@ Contains ports from every language I've made to Salmon.
 - [sdkl](https://github.com/thekaigonzalez/SDKL-Tests/)
 - [ptex](https://github.com/thekaigonzalez/PTEX/tree/master/testes)
 - [sdkl-old](https://github.com/thekaigonzalez/SDKL-Old/tree/master/tests)
+- [qbasic](https://github.com/thekaigonzalez/QBasic)
