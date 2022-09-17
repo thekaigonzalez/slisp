@@ -8,3 +8,4 @@ Contains ports from every language I've made to Salmon.
 - [isyspp](https://github.com/thekaigonzalez/ISysPP/tree/master/testes)
 - [recfg](https://github.com/thekaigonzalez/ReConfiguration/tree/master/tests)
 - [sdkl](https://github.com/thekaigonzalez/SDKL-Tests/)
+- [ptex](https://github.com/thekaigonzalez/PTEX/tree/master/testes)
