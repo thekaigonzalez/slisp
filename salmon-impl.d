@@ -439,6 +439,11 @@ void main(string[] args)
     }
   }
 
+  if (!exists(args[1])) {
+    writeln("file not found.");
+    return -1;
+  }
+
   _FILEN = args[1];
   SalmonState s = newState();
 
