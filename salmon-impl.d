@@ -310,10 +310,14 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
       else if (args[0] == "require")
       {
 
-        if (exists(args[1]))
+        if (exists(args[1]) && isFile(args[1]))
         {
           auto include = newState;
           include.CODE = readText(args[1]);
+          execute_salmon(include, lambda, env);
+        } else if (exists(args[1]) && isDir(args[1])) {
+          auto include = newState;
+          include.CODE = readText(args[1] ~ "/init.asd");
           execute_salmon(include, lambda, env);
         }
         else
@@ -421,7 +425,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   return "?";
 }
 
-void main(string[] args)
+int main(string[] args)
 {
   if (args.length == 1)
   {
@@ -441,7 +445,7 @@ void main(string[] args)
 
   if (!exists(args[1])) {
     writeln("file not found.");
-    return -1;
+    return 2;
   }
 
   _FILEN = args[1];
@@ -451,4 +455,6 @@ void main(string[] args)
   SalmonEnvironment env = new SalmonEnvironment();
 
   execute_salmon(s, false, env);
+
+  return 0;
 }
