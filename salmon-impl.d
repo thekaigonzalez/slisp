@@ -608,6 +608,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
 int main(string[] args)
 {
   SalmonEnvironment env = new SalmonEnvironment();
+  env.env_vars["salmon_version"] = "26";
   env.env_lists["arg"] = args[1 .. $];
   if (args.length == 1)
   {
