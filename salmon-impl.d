@@ -119,6 +119,12 @@ int lengthLisp(SalmonInfo s)
   return 0;
 }
 
+int probeFileLisp(SalmonInfo s)
+{
+  s.returnValue(s.aA[0].exists.to!string, SalType.str);
+  return 0;
+}
+
 int builtin_access(SalmonInfo i)
 {
   i.returnValue(i.environ.env_vars[i.aA[0]], SalType.any);
@@ -159,6 +165,12 @@ int replaceLisp(SalmonInfo inf)
   return 0;
 }
 
+int assertLisp(SalmonInfo inf)
+{
+  assert(to!bool(inf.aA[0]));
+  return 0;
+}
+
 int returnLisp(SalmonInfo inf)
 {
   inf.returnValue(inf.aA[0], SalType.any);
@@ -184,6 +196,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
     "each": 3,
     "if": 4,
     "defun": 5,
+    "ecase": 6,
   ];
 
   env.env_funcs["+"] = &builtin_add;
@@ -194,7 +207,8 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   env.env_funcs["length"] = &lengthLisp;
   env.env_funcs["replace"] = &replaceLisp;
   env.env_funcs["return"] = &returnLisp;
-
+  env.env_funcs["assert"] = &assertLisp;
+  env.env_funcs["probe-file"] = &probeFileLisp;
 
   env.env_funcs["eq"] = &checkeq;
   env.env_funcs["getf"] = &returnAt;
@@ -328,6 +342,33 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         }
       }
 
+      else if (args[0] == "ecase")
+      {
+        string codee = args[1];
+        auto scopem = newState();
+        salmon_push_code(scopem, codee);
+        string condition = execute_salmon(scopem, true, env);
+        auto scopeg = newState();
+        salmon_push_code(scopeg, (args[2]));
+
+        auto scopef = newState();
+        salmon_push_code(scopef, (args[3]));
+        if (condition == "true" || condition == "1")
+        {
+          if (lambda)
+            return execute_salmon(scopeg, true, env);
+          execute_salmon(scopeg, false, env);
+          condition = execute_salmon(scopem, true, env);
+        }
+        else
+        {
+          if (lambda)
+            return execute_salmon(scopef, true, env);
+          execute_salmon(scopef, false, env);
+          condition = execute_salmon(scopem, true, env);
+        }
+      }
+
       if (!(args[0] in env.env_funcs) && !(args[0] in env.env_userdefined) && !(args[0] in reserves))
       {
         return "nil";
@@ -381,7 +422,8 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
           {
             import core.sys.linux.dlfcn;
 
-            void* hndl = dlopen(("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so").toStringz(), RTLD_LAZY);
+            void* hndl = dlopen(("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so")
+                .toStringz(), RTLD_LAZY);
 
             int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
 
@@ -448,7 +490,6 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
                   fn.template_params, ", ") ~ ") ...", LINE_NUMBER, _FILEN);
               writeln("\t\033[36;1m ^~~~~~~~~~~~\033[0m");
               exit(9);
-              return "errorParameterNotSupplied";
             }
           }
           execute_salmon(sl, false, env);
@@ -470,11 +511,25 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
           {
             return "nil";
           }
-          catch (core.exception.RangeError e) {
+          catch (core.exception.RangeError e)
+          {
             err("tried to access unknown value", LINE_NUMBER, _FILEN);
             note("line here:\n\t" ~ toSyntax(args[0], args[1], "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
             exit(10);
-            return "errorUnknownValue";
+          }
+          catch (ConvException e)
+          {
+            err(e.msg, LINE_NUMBER, _FILEN);
+            return "convException";
+          }
+          catch (FileException e)
+          {
+            return "nil";
+          }
+          catch (core.exception.AssertError e)
+          {
+            err(e.msg, LINE_NUMBER, _FILEN);
+            note("condition:\n\t" ~ toSyntax(args[0], args[1], "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
           }
         }
       }
