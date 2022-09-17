@@ -106,6 +106,12 @@ int checkeq(SalmonInfo s)
   return 0;
 }
 
+int checkbet(SalmonInfo s)
+{
+  s.returnValue(to!string(s.aA[0].to!int < s.aA[1].to!int), SalType.number);
+  return 0;
+}
+
 int checkxq(SalmonInfo s)
 {
   string truf = to!string(!(s.aA[0] == s.aA[1]));
@@ -183,6 +189,18 @@ int readlineLisp(SalmonInfo inf)
   return 0;
 }
 
+int writeLineLisp(SalmonInfo inf)
+{
+  write(inf.aA[0]);
+  return 0;
+}
+
+int isNull(SalmonInfo i)
+{
+  i.returnValue((i.aA[0] == "nil").to!string, SalType.str);
+  return 0;
+}
+
 string _FILEN = "";
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
@@ -200,6 +218,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   ];
 
   env.env_funcs["+"] = &builtin_add;
+  env.env_funcs["<"] = &checkbet;
   env.env_funcs["*"] = &builtin_mul;
 
   env.env_funcs["="] = &checkeq;
@@ -209,10 +228,12 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   env.env_funcs["return"] = &returnLisp;
   env.env_funcs["assert"] = &assertLisp;
   env.env_funcs["probe-file"] = &probeFileLisp;
+  env.env_funcs["null"] = &isNull;
 
   env.env_funcs["eq"] = &checkeq;
   env.env_funcs["getf"] = &returnAt;
   env.env_funcs["read-line"] = &readlineLisp;
+  env.env_funcs["write-line"] = &writeLineLisp;
 
   env.env_funcs["print"] = &builtin_print;
   env.env_funcs["println"] = &builtin_dep_println; /* println deprecated */
@@ -513,9 +534,10 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
           }
           catch (core.exception.RangeError e)
           {
-            err("tried to access unknown value", LINE_NUMBER, _FILEN);
-            note("line here:\n\t" ~ toSyntax(args[0], args[1], "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
-            exit(10);
+            // err("tried to access unknown value", LINE_NUMBER, _FILEN);
+            // note("line here:\n\t" ~ toSyntax(args[0], args[1], "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
+            // exit(10);
+            return "nil";
           }
           catch (ConvException e)
           {
