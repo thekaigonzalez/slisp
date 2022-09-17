@@ -114,6 +114,24 @@ int checkbet(SalmonInfo s)
   return 0;
 }
 
+int checkgre(SalmonInfo s)
+{
+  s.returnValue(to!string(s.aA[0].to!int > s.aA[1].to!int), SalType.number);
+  return 0;
+}
+
+int checkbete(SalmonInfo s)
+{
+  s.returnValue(to!string(s.aA[0].to!int <= s.aA[1].to!int), SalType.number);
+  return 0;
+}
+
+int checkgree(SalmonInfo s)
+{
+  s.returnValue(to!string(s.aA[0].to!int >= s.aA[1].to!int), SalType.number);
+  return 0;
+}
+
 int checkxq(SalmonInfo s)
 {
   string truf = to!string(!(s.aA[0] == s.aA[1]));
@@ -228,6 +246,10 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
 
   env.env_funcs["+"] = &builtin_add;
   env.env_funcs["<"] = &checkbet;
+  env.env_funcs[">"] = &checkgre;
+  env.env_funcs[">="] = &checkgree;
+  env.env_funcs["<="] = &checkbete;
+
   env.env_funcs["*"] = &builtin_mul;
 
   env.env_funcs["="] = &checkeq;
@@ -613,7 +635,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
 int main(string[] args)
 {
   SalmonEnvironment env = new SalmonEnvironment();
-  env.env_vars["salmon_version"] = "25";
+  env.env_vars["salmon_version"] = "26";
   env.env_lists["arg"] = args[1 .. $];
   if (args.length == 1)
   {
