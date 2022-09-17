@@ -9,3 +9,4 @@ This is the place for technical language information!
 - [Creating Functions](./Functions.md)
 - [What is the SPI?](./The_SPI.md)
 - [Optimization](./Optimizing.md)
+- [Lisp VS SDKL](./Comparisons.md)
