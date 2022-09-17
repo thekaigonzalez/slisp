@@ -6,6 +6,7 @@ module salmon;
 import std.stdio;
 import std.conv;
 import std.string;
+import std.concurrency;
 import std.file;
 import core.thread;
 import sal_builtins;
@@ -216,6 +217,8 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
     "if": 4,
     "defun": 5,
     "ecase": 6,
+    "&thread": 7,
+    "await": 8,
   ];
 
   env.env_funcs["+"] = &builtin_add;
@@ -307,6 +310,19 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         }
       }
 
+      else if (args[0] == "&thread")
+      {
+        string codee = args[1];
+        auto scopem = newState();
+        salmon_push_code(scopem, codee);
+        string f = "nil";
+        Thread ab = new Thread({
+          f = execute_salmon(scopem, false, env);
+        }).start();
+        if (lambda)
+          return f;
+      }
+
       else if (args[0] == "while")
       {
         string codee = args[1];
@@ -362,6 +378,11 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
           execute_salmon(scopeg, false, env);
           condition = execute_salmon(scopem, true, env);
         }
+      }
+
+      else if (args[0] == "await") {
+        thread_joinAll();
+        return "nil";
       }
 
       else if (args[0] == "ecase")
