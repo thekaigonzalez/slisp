@@ -123,7 +123,8 @@ int checkxq(SalmonInfo s)
 
 int lengthLisp(SalmonInfo s)
 {
-  if (s.aA[0] in s.environ.env_lists) {
+  if (s.aA[0] in s.environ.env_lists)
+  {
     s.returnValue(s.environ.env_lists[s.aA[0]].length.to!string, SalType.str);
     return 0;
   }
@@ -320,9 +321,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         auto scopem = newState();
         salmon_push_code(scopem, codee);
         string f = "nil";
-        Thread ab = new Thread({
-          f = execute_salmon(scopem, false, env);
-        }).start();
+        Thread ab = new Thread({ f = execute_salmon(scopem, false, env); }).start();
         if (lambda)
           return f;
       }
@@ -384,7 +383,8 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         }
       }
 
-      else if (args[0] == "await") {
+      else if (args[0] == "await")
+      {
         thread_joinAll();
         return "nil";
       }
@@ -554,6 +554,11 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
           {
             env.env_funcs[args[0]](tmp);
           }
+          catch (core.exception.ArraySliceError e)
+          {
+            err("could not truncate: bad statement", LINE_NUMBER, _FILEN);
+            note("statement length: " ~ s.CODE.length.to!string, LINE_NUMBER, _FILEN);
+          }
           catch (core.exception.ArrayIndexError e)
           {
             return "nil";
@@ -620,7 +625,15 @@ int main(string[] args)
       write("Lisp> ");
       string n = readln();
       salmon_push_code(input, n);
-      writeln(execute_salmon(input, true, env));
+      try
+      {
+        writeln(execute_salmon(input, true, env));
+      }
+      catch (core.exception.ArraySliceError e)
+      {
+        err("imbalanced statement (failure to slice)", 0, _FILEN);
+        note("line length: " ~ n.strip.length.to!string, 0, _FILEN);
+      }
       input.CODE = "";
     }
   }
