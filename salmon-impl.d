@@ -123,6 +123,10 @@ int checkxq(SalmonInfo s)
 
 int lengthLisp(SalmonInfo s)
 {
+  if (s.aA[0] in s.environ.env_lists) {
+    s.returnValue(s.environ.env_lists[s.aA[0]].length.to!string, SalType.str);
+    return 0;
+  }
   s.returnValue(s.aA[0].length.to!string, SalType.number);
   return 0;
 }
