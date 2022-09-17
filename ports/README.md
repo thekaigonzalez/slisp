@@ -9,3 +9,4 @@ Contains ports from every language I've made to Salmon.
 - [recfg](https://github.com/thekaigonzalez/ReConfiguration/tree/master/tests)
 - [sdkl](https://github.com/thekaigonzalez/SDKL-Tests/)
 - [ptex](https://github.com/thekaigonzalez/PTEX/tree/master/testes)
+- [sdkl-old](https://github.com/thekaigonzalez/SDKL-Old/tree/master/tests)
