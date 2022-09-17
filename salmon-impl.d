@@ -124,8 +124,8 @@ int builtin_accessq(SalmonInfo i)
   return 0;
 }
 
-string toSyntax(string fun, string noted, string arg2) {
-  return("(\033[35;1m" ~ fun ~ "\033[0m \033[36;1m" ~ noted ~ "\033[;0m (" ~ arg2 ~ ")");
+string toSyntax(string fun, string noted, string arg2, int lineno = 0) {
+  return(to!string(lineno) ~ " | (\033[35;1m" ~ fun ~ "\033[0m \033[36;1m" ~ noted ~ "\033[;0m (" ~ arg2 ~ ")");
 }
 
 void err(string msg, int lineno = 0, string file = "")
@@ -329,7 +329,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
             openFunc(env);
           } else {
             err("require '" ~ argum[0] ~ "' - library not found in any supported path(s).", LINE_NUMBER, _FILEN);
-            note("required here:\n\t" ~ toSyntax("require", "\"" ~ argum[0] ~ "\"", "..."), LINE_NUMBER, _FILEN);
+            note("required here:\n\t" ~ toSyntax("require", "\"" ~ argum[0] ~ "\"", "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
           }
         }
       }
