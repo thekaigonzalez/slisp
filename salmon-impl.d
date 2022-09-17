@@ -158,6 +158,12 @@ int replaceLisp(SalmonInfo inf)
   return 0;
 }
 
+int returnLisp(SalmonInfo inf)
+{
+  inf.returnValue(inf.aA[0], SalType.any);
+  return 0;
+}
+
 int readlineLisp(SalmonInfo inf)
 {
   inf.returnValue(readln(), SalType.any);
@@ -186,6 +192,8 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   env.env_funcs["not"] = &checkxq;
   env.env_funcs["length"] = &lengthLisp;
   env.env_funcs["replace"] = &replaceLisp;
+  env.env_funcs["return"] = &returnLisp;
+
 
   env.env_funcs["eq"] = &checkeq;
   env.env_funcs["getf"] = &returnAt;
@@ -424,7 +432,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
 
           salmon_push_code(sl, cod);
           salmon_push_code(sl2, rv);
-
+          auto env_arch = env.copy;
           for (int f1 = 0; f1 < fn.template_params.length; ++f1)
           {
             try
@@ -446,6 +454,8 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
           {
             return execute_salmon(sl2, true, env);
           }
+
+          env = env_arch;
         }
         else if (!(args[0] in reserves))
         {
