@@ -17,13 +17,15 @@ The typical bind to `math.sin()` in every programming language.
 
 ```
 
-### `intersection [list-one: list...] [list-two: list...]`
+### `intersection [list-one: list...] [list-two: list...] [list-three: any...]`
 
 `list-one`: [List](../Language/Types/List.md)
 
 `list-two`: [List](../Language/Types/List.md)
 
-Prints the intersection (common values) in two arrays.
+`list-three`: [Any](../Language/Types/Any.md)
+
+Puts the intersection of `[list-one]` & `list-two` into `list-three`.
 
 ```lisp
 (require "math")
@@ -31,8 +33,12 @@ Prints the intersection (common values) in two arrays.
 (list list-one 1 2 3 4 5)
 (list list-two 2 4 6)
 
-; Prints: 2 4
-(intersection list-one list-two)
+(intersection list-one list-two list-three)
+
+(each list-three
+  (print (get *)))
+; 2
+; 4
 ```
 
 You can read more on **intersections** [here.](https://en.wikipedia.org/wiki/Intersection)
