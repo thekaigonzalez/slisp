@@ -124,6 +124,10 @@ int builtin_accessq(SalmonInfo i)
   return 0;
 }
 
+string toSyntax(string fun, string noted, string arg2) {
+  return("(\033[35;1m" ~ fun ~ "\033[0m \033[36;1m" ~ noted ~ "\033[;0m (" ~ arg2 ~ ")");
+}
+
 void err(string msg, int lineno = 0, string file = "")
 {
   writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[31;1merror:\033[0m " ~ msg);
@@ -201,7 +205,6 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
       st = 0;
       m = 0;
       b = "";
-      LINE_NUMBER += 1;
     }
     else if (n == ')' && m == 1 && st == 1)
     {
@@ -315,14 +318,19 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
         }
         else
         {
+          if (exists("./libs/" ~ argum[0] ~ ".so"))
+          {
+            import core.sys.linux.dlfcn;
 
-          import core.sys.linux.dlfcn;
+            void* hndl = dlopen(("./libs/" ~ argum[0] ~ ".so").toStringz(), RTLD_LAZY);
 
-          void* hndl = dlopen(("./libs/" ~ argum[0] ~ ".so").toStringz(), RTLD_LAZY);
+            int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
 
-          int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
-
-          openFunc(env);
+            openFunc(env);
+          } else {
+            err("require '" ~ argum[0] ~ "' - library not found in any supported path(s).", LINE_NUMBER, _FILEN);
+            note("required here:\n\t" ~ toSyntax("require", "\"" ~ argum[0] ~ "\"", "..."), LINE_NUMBER, _FILEN);
+          }
         }
       }
       else if (args[0] == "list")
@@ -405,6 +413,9 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
     else
     {
       b ~= n;
+      if (n == '\n') {
+        LINE_NUMBER += 1;
+      }
     }
   }
   return "?";
