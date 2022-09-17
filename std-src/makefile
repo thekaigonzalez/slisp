@@ -1,6 +1,9 @@
-OPT=-O2 -march=native -pipe
+OPT=-O2 -march=native -pipe -I../
 std:
 	gdc ./lmathlib.d -shared -fPIC -L-static $(OPT) -o ./libs/math.so
 	gdc ./loslib.d -shared -fPIC -L-static $(OPT) -o ./libs/os.so
 	gdc ./external.d -shared -fPIC -L-static $(OPT) -o ./libs/salspec.so
 	gdc ./lcurl.d -shared -fPIC -L-static $(OPT) -o ./libs/curl.so
+
+install:
+	cp ./libs/*.so /usr/local/lib/salmon/libs

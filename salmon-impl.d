@@ -146,17 +146,20 @@ void note(string msg, int lineno = 0, string file = "")
   writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[36mnote:\033[0m " ~ msg);
 }
 
-int returnAt(SalmonInfo inf) {
+int returnAt(SalmonInfo inf)
+{
   inf.returnValue(inf.environ.env_lists[inf.aA[0]][to!int(inf.aA[1])], SalType.any);
   return 0;
 }
 
-int replaceLisp(SalmonInfo inf) {
+int replaceLisp(SalmonInfo inf)
+{
   inf.returnValue(inf.aA[0].replace(inf.aA[1], inf.aA[2]), SalType.any);
   return 0;
 }
 
-int readlineLisp(SalmonInfo inf) {
+int readlineLisp(SalmonInfo inf)
+{
   inf.returnValue(readln(), SalType.any);
   return 0;
 }
@@ -183,7 +186,6 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   env.env_funcs["not"] = &checkxq;
   env.env_funcs["length"] = &lengthLisp;
   env.env_funcs["replace"] = &replaceLisp;
-
 
   env.env_funcs["eq"] = &checkeq;
   env.env_funcs["getf"] = &returnAt;
@@ -366,6 +368,16 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
 
             openFunc(env);
           }
+          else if (exists("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so"))
+          {
+            import core.sys.linux.dlfcn;
+
+            void* hndl = dlopen(("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so").toStringz(), RTLD_LAZY);
+
+            int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
+
+            openFunc(env);
+          }
           else
           {
             err("require '" ~ argum[0] ~ "' - library not found in any supported path(s).", LINE_NUMBER, _FILEN);
@@ -435,10 +447,14 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
             return execute_salmon(sl2, true, env);
           }
         }
-        else if (!(args[0] in reserves)) {
-          try {
+        else if (!(args[0] in reserves))
+        {
+          try
+          {
             env.env_funcs[args[0]](tmp);
-          } catch (core.exception.ArrayIndexError e) {
+          }
+          catch (core.exception.ArrayIndexError e)
+          {
             return "nil";
           }
         }
