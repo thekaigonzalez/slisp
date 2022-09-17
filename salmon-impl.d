@@ -7,6 +7,7 @@ import std.stdio;
 import std.conv;
 import std.string;
 import std.file;
+import core.thread;
 import sal_builtins;
 import core.stdc.stdlib;
 import std.algorithm : canFind;
