@@ -8,5 +8,5 @@
 (intersection list-one list-two list-three) ; (list-three) is created at runtime
 
 (each list-three
-              (print 
-                  (get *)))
+    (print 
+        (get *)))
