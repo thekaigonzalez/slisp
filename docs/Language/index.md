@@ -8,3 +8,4 @@ This is the place for technical language information!
 - [Types](./Types/index.md)
 - [Creating Functions](./Functions.md)
 - [What is the SPI?](./The_SPI.md)
+- [Optimization](./Optimizing.md)
