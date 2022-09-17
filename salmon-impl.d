@@ -8,6 +8,7 @@ import std.conv;
 import std.string;
 import std.file;
 import sal_builtins;
+import core.stdc.stdlib;
 import std.algorithm : canFind;
 import sal_shared_api;
 static import core.exception;
@@ -390,6 +391,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
           {
             err("require '" ~ argum[0] ~ "' - library not found in any supported path(s).", LINE_NUMBER, _FILEN);
             note("required here:\n\t" ~ toSyntax("require", "\"" ~ argum[0] ~ "\"", "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
+            exit(8);
           }
         }
       }
@@ -445,6 +447,7 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
               note("defined here:\n  (\033[35;1mdefun\033[0m \033[36;1m" ~ args[0] ~ "\033[;0m (" ~ join(
                   fn.template_params, ", ") ~ ") ...", LINE_NUMBER, _FILEN);
               writeln("\t\033[36;1m ^~~~~~~~~~~~\033[0m");
+              exit(9);
               return "errorParameterNotSupplied";
             }
           }
@@ -466,6 +469,12 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
           catch (core.exception.ArrayIndexError e)
           {
             return "nil";
+          }
+          catch (core.exception.RangeError e) {
+            err("tried to access unknown value", LINE_NUMBER, _FILEN);
+            note("line here:\n\t" ~ toSyntax(args[0], args[1], "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
+            exit(10);
+            return "errorUnknownValue";
           }
         }
       }
