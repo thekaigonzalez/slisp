@@ -112,6 +112,12 @@ int checkxq(SalmonInfo s)
   return 0;
 }
 
+int lengthLisp(SalmonInfo s)
+{
+  s.returnValue(s.aA[0].length.to!string, SalType.number);
+  return 0;
+}
+
 int builtin_access(SalmonInfo i)
 {
   i.returnValue(i.environ.env_vars[i.aA[0]], SalType.any);
@@ -124,8 +130,10 @@ int builtin_accessq(SalmonInfo i)
   return 0;
 }
 
-string toSyntax(string fun, string noted, string arg2, int lineno = 0) {
-  return(to!string(lineno) ~ " | (\033[35;1m" ~ fun ~ "\033[0m \033[36;1m" ~ noted ~ "\033[;0m (" ~ arg2 ~ ")");
+string toSyntax(string fun, string noted, string arg2, int lineno = 0)
+{
+  return (to!string(
+      lineno) ~ " | (\033[35;1m" ~ fun ~ "\033[0m \033[36;1m" ~ noted ~ "\033[;0m (" ~ arg2 ~ ")");
 }
 
 void err(string msg, int lineno = 0, string file = "")
@@ -136,6 +144,21 @@ void err(string msg, int lineno = 0, string file = "")
 void note(string msg, int lineno = 0, string file = "")
 {
   writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[36mnote:\033[0m " ~ msg);
+}
+
+int returnAt(SalmonInfo inf) {
+  inf.returnValue(inf.environ.env_lists[inf.aA[0]][to!int(inf.aA[1])], SalType.any);
+  return 0;
+}
+
+int replaceLisp(SalmonInfo inf) {
+  inf.returnValue(inf.aA[0].replace(inf.aA[1], inf.aA[2]), SalType.any);
+  return 0;
+}
+
+int readlineLisp(SalmonInfo inf) {
+  inf.returnValue(readln(), SalType.any);
+  return 0;
 }
 
 string _FILEN = "";
@@ -158,7 +181,14 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
 
   env.env_funcs["="] = &checkeq;
   env.env_funcs["not"] = &checkxq;
+  env.env_funcs["length"] = &lengthLisp;
+  env.env_funcs["replace"] = &replaceLisp;
+
+
   env.env_funcs["eq"] = &checkeq;
+  env.env_funcs["getf"] = &returnAt;
+  env.env_funcs["read-line"] = &readlineLisp;
+
   env.env_funcs["print"] = &builtin_print;
   env.env_funcs["println"] = &builtin_dep_println; /* println deprecated */
   env.env_funcs["strcat"] = &builtin_strcat;
@@ -317,7 +347,9 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
           auto include = newState;
           include.CODE = readText(args[1]);
           execute_salmon(include, lambda, env);
-        } else if (exists(args[1]) && isDir(args[1])) {
+        }
+        else if (exists(args[1]) && isDir(args[1]))
+        {
           auto include = newState;
           include.CODE = readText(args[1] ~ "/init.asd");
           execute_salmon(include, lambda, env);
@@ -333,7 +365,9 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
             int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
 
             openFunc(env);
-          } else {
+          }
+          else
+          {
             err("require '" ~ argum[0] ~ "' - library not found in any supported path(s).", LINE_NUMBER, _FILEN);
             note("required here:\n\t" ~ toSyntax("require", "\"" ~ argum[0] ~ "\"", "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
           }
@@ -401,8 +435,13 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
             return execute_salmon(sl2, true, env);
           }
         }
-        else if (!(args[0] in reserves))
-          env.env_funcs[args[0]](tmp);
+        else if (!(args[0] in reserves)) {
+          try {
+            env.env_funcs[args[0]](tmp);
+          } catch (core.exception.ArrayIndexError e) {
+            return "nil";
+          }
+        }
       }
 
       if (lambda)
@@ -419,7 +458,8 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
     else
     {
       b ~= n;
-      if (n == '\n') {
+      if (n == '\n')
+      {
         LINE_NUMBER += 1;
       }
     }
@@ -429,11 +469,12 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
 
 int main(string[] args)
 {
+  SalmonEnvironment env = new SalmonEnvironment();
+  env.env_lists["arg"] = args[1 .. $];
   if (args.length == 1)
   {
     writeln("** SALMON LISP REPL **");
     SalmonState input = new SalmonState();
-    SalmonEnvironment env = new SalmonEnvironment();
     _FILEN = "repl";
     while (true)
     {
@@ -445,7 +486,8 @@ int main(string[] args)
     }
   }
 
-  if (!exists(args[1])) {
+  if (!exists(args[1]))
+  {
     writeln("file not found.");
     return 2;
   }
@@ -454,7 +496,6 @@ int main(string[] args)
   SalmonState s = newState();
 
   salmon_push_code(s, readText(args[1]));
-  SalmonEnvironment env = new SalmonEnvironment();
 
   execute_salmon(s, false, env);
 
