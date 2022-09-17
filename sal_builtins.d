@@ -49,3 +49,15 @@ int builtin_add(SalmonInfo info)
   info.returnValue(to!string(i), SalType.number);
   return (0);
 }
+
+int builtin_mul(SalmonInfo info)
+{
+  int i = 1;
+
+  foreach (string n; info.aA)
+  {
+    i *= to!int(n);
+  }
+  info.returnValue(to!string(i), SalType.number);
+  return (0);
+}

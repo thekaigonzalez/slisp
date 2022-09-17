@@ -154,6 +154,8 @@ string execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env 
   ];
 
   env.env_funcs["+"] = &builtin_add;
+  env.env_funcs["*"] = &builtin_mul;
+
   env.env_funcs["="] = &checkeq;
   env.env_funcs["not"] = &checkxq;
   env.env_funcs["eq"] = &checkeq;
