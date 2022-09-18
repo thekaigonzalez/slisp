@@ -12,10 +12,10 @@ But that leaves out the `else if` & `else`.
 
 So, what's the solution?
 
-**`ecase`**.
+**`case`**.
 
 ```lisp
-(ecase (condition)
+(case (condition)
   (if-case)
   (elif-case)
   (else-case))

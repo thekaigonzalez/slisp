@@ -1,5 +1,5 @@
 (defun evaluate_path (p)
-  (ecase (not 
+  (case (not 
     (probe-file (get p)) true)
       (return "not a path")
       (return "is a path")))

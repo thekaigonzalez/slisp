@@ -246,7 +246,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
     "each": 3,
     "if": 4,
     "defun": 5,
-    "ecase": 6,
+    "case": 6,
     "&thread": 7,
     "await": 8,
   ];
@@ -437,7 +437,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         value.returnNil();
       }
 
-      else if (args[0] == "ecase")
+      else if (args[0] == "case")
       {
         string codee = args[1];
         auto scopem = newState();
