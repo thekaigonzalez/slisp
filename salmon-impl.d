@@ -181,16 +181,6 @@ string toSyntax(string fun, string noted, string arg2, int lineno = 0)
       lineno) ~ " | (\033[35;1m" ~ fun ~ "\033[0m \033[36;1m" ~ noted ~ "\033[;0m (" ~ arg2 ~ ")");
 }
 
-void err(string msg, int lineno = 0, string file = "")
-{
-  writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[31;1merror:\033[0m " ~ msg);
-}
-
-void note(string msg, int lineno = 0, string file = "")
-{
-  writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[36mnote:\033[0m " ~ msg);
-}
-
 int returnAt(SalmonInfo inf)
 {
   inf.returnValue(inf.environ.env_lists[inf.aA[0]][to!int(inf.aA[1])], SalType.any);
@@ -227,84 +217,21 @@ int writeLineLisp(SalmonInfo inf)
   return 0;
 }
 
+int compileLisp(SalmonInfo inf)
+{
+  auto n = newState();
+  n.CODE = inf.aA[0];
+  auto vat = execute_salmon(n, true, inf.environ);
+  inf.returnValue(vat.getValue, vat.getType);
+  return 0;
+}
+
 int isNull(SalmonInfo i)
 {
   i.returnValue((i.aA[0] == "nil").to!string, SalType.str);
   return 0;
 }
 
-SalType checkSalmonType(string s)
-{
-  s = s.strip;
-  if (s == "true" || s == "false")
-  {
-    return SalType.boolean;
-  }
-
-  try
-  {
-    s.to!float;
-    return SalType.number;
-  }
-  catch (Exception)
-  {
-    if (s.startsWith('"'))
-      return SalType.str;
-
-    return SalType.any;
-  }
-}
-
-string parse_string(string n)
-{
-  if (!startsWith(n.strip, '"'))
-    return "nil";
-
-  int s = 0;
-  string b = "";
-
-  foreach (char k; n)
-  {
-    if (k == '"' && s == 0)
-    {
-      s = 1;
-      b = "";
-    }
-    else if (k == '\\' && s == 1)
-    {
-      s = 2;
-    }
-    else if (k == '"' && s == 2)
-    {
-      b ~= '"';
-      s = 1;
-    }
-    else if (k == '"' && s == 1)
-    {
-      break;
-    }
-    else
-    {
-      if (s == 2)
-      {
-        switch (k)
-        {
-        case 'n':
-          b ~= '\n';
-          s = 1;
-          break;
-        default:
-          err("unknown escape sequence, `" ~ k ~ "`.");
-          exit(11);
-          break;
-        }
-      }
-      else
-        b ~= k;
-    }
-  }
-  return b;
-}
 
 string _FILEN = "";
 
@@ -338,6 +265,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["replace"] = &replaceLisp;
   env.env_funcs["return"] = &returnLisp;
   env.env_funcs["assert"] = &assertLisp;
+  env.env_funcs["compile"] = &compileLisp;
   env.env_funcs["type"] = &typeLisp;
   env.env_funcs["probe-file"] = &probeFileLisp;
   env.env_funcs["null"] = &isNull;

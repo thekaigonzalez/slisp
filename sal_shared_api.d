@@ -1,6 +1,20 @@
 // Salmon Implementation
 
 import std.stdio;
+import std.string;
+import std.path;
+import std.conv;
+import core.stdc.stdlib;
+
+void err(string msg, int lineno = 0, string file = "")
+{
+  writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[31;1merror:\033[0m " ~ msg);
+}
+
+void note(string msg, int lineno = 0, string file = "")
+{
+  writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[36mnote:\033[0m " ~ msg);
+}
 
 enum SalType
 {
@@ -33,42 +47,49 @@ public:
 }
 
 /* value: type */
-class SalmonValue {
+class SalmonValue
+{
 public:
   string v = "nil";
   SalType t = SalType.nil;
   SalmonValue[] g; /* unless it's a list */
 
   // Adds `value` to @v & `type` as the type.
-  void returnValue(string value, SalType type) {
+  void returnValue(string value, SalType type)
+  {
     t = type;
     v = value;
   }
 
-  void returnList(SalmonValue[] li) {
+  void returnList(SalmonValue[] li)
+  {
     g = li;
   }
 
-  string getValue() {
+  string getValue()
+  {
     return v;
   }
 
-  SalType getType() {
+  SalType getType()
+  {
     return t;
   }
 
-  void returnNil() {
+  void returnNil()
+  {
     t = SalType.nil;
     v = "null";
   }
 }
 
-class SalmonFunction {
-  public:
-    string run;
-    string returns;
-    string[string] parameters;
-    string[] template_params;
+class SalmonFunction
+{
+public:
+  string run;
+  string returns;
+  string[string] parameters;
+  string[] template_params;
 }
 
 class SalmonEnvironment
@@ -82,7 +103,107 @@ public:
   {
     return new SalmonEnvironment();
   }
+
   SalmonFunction[string] env_userdefined;
+}
+
+SalType checkSalmonType(string s)
+{
+  s = s.strip;
+  if (s == "true" || s == "false")
+  {
+    return SalType.boolean;
+  }
+
+  try
+  {
+    s.to!float;
+    return SalType.number;
+  }
+  catch (Exception)
+  {
+    if (s.startsWith('"'))
+      return SalType.str;
+
+    return SalType.any;
+  }
+}
+
+string parse_string(string n)
+{
+  if (!startsWith(n.strip, '"'))
+    return "nil";
+
+  int s = 0;
+  string b = "";
+  string b2 = "";
+
+  foreach (char k; n)
+  {
+    if (k == '"' && s == 0)
+    {
+      s = 1;
+      b = "";
+    }
+    else if (k == '\\' && s == 1)
+    {
+      s = 2;
+    }
+    else if (k == '"' && s == 2)
+    {
+      b ~= '"';
+      s = 1;
+    }
+    else if (k == '"' && s == 1)
+    {
+      break;
+    }
+    else if (k == '[' && s == 3)
+    {
+      s = 4;
+    }
+    else if (k == 'm' && s == 4)
+    {
+      b ~= "\033[" ~ b2 ~ "m";
+      s = 1;
+    }
+    else
+    {
+      if (s == 2)
+      {
+        switch (k)
+        {
+        case 'n':
+          b ~= '\n';
+          s = 1;
+          break;
+        case 't':
+          b ~= '\t';
+          s = 1;
+          break;
+        case 'e':
+          s = 3;
+          break;
+        default:
+          err("unknown escape sequence, `" ~ k ~ "`.");
+          exit(11);
+          break;
+        }
+      }
+      else
+      {
+        if (s >= 4)
+        {
+          b2 ~= k;
+        }
+        else
+        {
+          b ~= k;
+        }
+      }
+    }
+  }
+  return b;
 }
 
 /* this is the value you should use for adding code */
