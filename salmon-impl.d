@@ -464,7 +464,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
             value.returnValue(exe2.getValue(), exe2.getType());
             return value;
           }
-          execute_salmon(scopef, false, env);
           condition = execute_salmon(scopem, true, env).getValue();
         }
       }
