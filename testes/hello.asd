@@ -1,1 +1,3 @@
-(print "hello, world!")
+(require "math")
+
+(print "hello,\nworld!")

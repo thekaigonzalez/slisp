@@ -4,13 +4,12 @@
       (print (get *)))
 
 (require "math")
-(require "input")
 
 (print 
   (trim "     Hi      "))
 
 (print "So, what do you like?")
 
-(set input (trim (getline)))
+(set input (trim (read-line)))
 
 (print "Oh, I love " (get input) " too!!")

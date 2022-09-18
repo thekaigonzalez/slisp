@@ -8,7 +8,10 @@ enum SalType
   str,
   number,
   any,
-  func
+  func,
+  list,
+  error,
+  boolean
 }
 
 /* WWW: throwaway value, use SalmonState */
@@ -26,6 +29,37 @@ public:
   }
 
   SalmonEnvironment environ = new SalmonEnvironment();
+}
+
+/* value: type */
+class SalmonValue {
+public:
+  string v = "nil";
+  SalType t = SalType.nil;
+  SalmonValue[] g; /* unless it's a list */
+
+  // Adds `value` to @v & `type` as the type.
+  void returnValue(string value, SalType type) {
+    t = type;
+    v = value;
+  }
+
+  void returnList(SalmonValue[] li) {
+    g = li;
+  }
+
+  string getValue() {
+    return v;
+  }
+
+  SalType getType() {
+    return t;
+  }
+
+  void returnNil() {
+    t = SalType.nil;
+    v = "null";
+  }
 }
 
 class SalmonFunction {
