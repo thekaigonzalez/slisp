@@ -14,23 +14,35 @@ void test_dir(string dname)
   int failed_tests = 0;
 
   auto strnc = dirEntries(dname, SpanMode.depth);
+  if (".testcache".exists == false)
+    ".testcache".mkdir;
 
   foreach (string d; strnc)
   {
-    testN += 1;
     if (d.isFile() && endsWith(d, ".asd"))
     {
-      auto proc = executeShell("salmon-linux-x86_64 " ~ d ~ " | echo 'asdf'");
+      testN += 1;
+
+      auto proc = executeShell("salmon-linux-x86_64 " ~ d);
 
       if (proc.status == 0)
       {
-        writeln("\033[32;1mTEST " ~ testN.to!string ~ " SUCCESSFUL!\033[0;0m");
+        writeln("\033[32;1mTEST " ~ testN.to!string ~ " SUCCESSFUL!\033[0;0m\b");
         passedTests += 1;
+        File n = File(".testcache/test-" ~ testN.to!string ~ "-" ~ baseName(d) ~ ".cache", "w");
+
+        n.write(proc.output);
+
+        n.close();
       }
       else
       {
-        writeln("\033[33;1mTEST " ~ testN.to!string ~ " FAILED.\033[0;0m");
-        readln();
+        writeln("\033[33;1mTEST " ~ testN.to!string ~ " FAILED.\033[0;0m\b");
+        File n = File(".testcache/test-fail-" ~ testN.to!string ~ "-" ~ baseName(d) ~ ".cache", "w");
+
+        n.write(proc.output);
+
+        n.close();
         failed_tests += 1;
       }
     }
@@ -48,5 +60,7 @@ void main()
   test_dir("./unit-tests");
   writeln("testing ports");
   test_dir("./ports");
+  // writeln("testing the standard library");
+  // test_dir("./std-src");
 
 }

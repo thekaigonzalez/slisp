@@ -3,3 +3,5 @@ libs
 salmon-linux*
 VersionBins
 .cache
+
+.testcache
