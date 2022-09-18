@@ -19,6 +19,7 @@ class SalmonInfo
 {
 public:
   string[] aA;
+  string[] raw;
   SalType rvaluetype = SalType.nil; /* return value */
   string rvalue = "nil";
   /* + whatever else I need */

@@ -140,6 +140,12 @@ int checkxq(SalmonInfo s)
   return 0;
 }
 
+int typeLisp(SalmonInfo s)
+{
+  s.returnValue(checkSalmonType(s.raw[0]).to!string, SalType.any);
+  return 0;
+}
+
 int lengthLisp(SalmonInfo s)
 {
   if (s.aA[0] in s.environ.env_lists)
@@ -283,14 +289,14 @@ string parse_string(string n)
       {
         switch (k)
         {
-          case 'n':
-            b ~= '\n';
-            s = 1;
-            break;
-          default:
-            err("unknown escape sequence, `" ~ k ~ "`.");
-            exit(11);
-            break;
+        case 'n':
+          b ~= '\n';
+          s = 1;
+          break;
+        default:
+          err("unknown escape sequence, `" ~ k ~ "`.");
+          exit(11);
+          break;
         }
       }
       else
@@ -332,6 +338,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["replace"] = &replaceLisp;
   env.env_funcs["return"] = &returnLisp;
   env.env_funcs["assert"] = &assertLisp;
+  env.env_funcs["type"] = &typeLisp;
   env.env_funcs["probe-file"] = &probeFileLisp;
   env.env_funcs["null"] = &isNull;
 
@@ -357,7 +364,16 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
     if (startsWith(s.CODE.strip, '"'))
       value.returnValue(parse_string(s.CODE), SalType.str);
     else
-      value.returnValue(s.CODE, checkSalmonType(s.CODE)); /* Return the value */
+    {
+      if ((s.CODE.strip) in env.env_vars)
+      {
+        value.returnValue(s.CODE.strip, checkSalmonType(env.env_vars[s.CODE.strip]));
+      }
+      else
+      {
+        value.returnValue(s.CODE, checkSalmonType(s.CODE)); /* Return the value */
+      }
+    }
     return value;
   }
   else if (!startsWith(s.CODE.strip, '(') && !lambda && !startsWith(s.CODE.strip, ';'))
@@ -440,7 +456,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         {
           err("Type `" ~ condition.getType()
               .to!string ~ "`, expected `boolean`.", LINE_NUMBER, _FILEN);
-          note("Does the statement `" ~ scopem.CODE ~ "' return a `true/false` value?", LINE_NUMBER, _FILEN);
+          note("Does the statement `" ~ scopem.CODE.strip ~ "' return a `true/false` value?", LINE_NUMBER, _FILEN);
           return value;
         }
 
@@ -543,7 +559,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           argum[_] = execute_salmon(Scope, true, env).getValue();
         }
       }
-
+      tmp.raw = args;
       tmp.aA = argum;
       if (args[0] == "set")
       {
@@ -645,7 +661,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           string cod = fn.run;
           string rv = fn.returns;
 
-          
           salmon_push_code(sl, cod);
           salmon_push_code(sl2, rv);
           auto env_arch = env.copy;
@@ -713,7 +728,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           }
         }
       }
-      if (lambda) {
+      if (lambda)
+      {
         value.returnValue(tmp.rvalue, tmp.rvaluetype);
       }
       m = 0;
