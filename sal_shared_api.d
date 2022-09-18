@@ -185,8 +185,13 @@ string parse_string(string n)
           s = 3;
           break;
         default:
-          err("unknown escape sequence, `" ~ k ~ "`.");
-          exit(11);
+          if (k != '0')
+          {
+            err("unknown escape sequence, `" ~ k ~ "`.");
+            exit(11);
+          }
+          b ~= k;
+          s = 1;
           break;
         }
       }
