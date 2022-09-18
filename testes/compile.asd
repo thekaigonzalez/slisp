@@ -1,0 +1,1 @@
+(print (compile "(+ 1 1)"))
