@@ -771,7 +771,8 @@ int main(string[] args)
       salmon_push_code(input, n);
       try
       {
-        writeln(execute_salmon(input, true, env));
+        auto run = execute_salmon(input, true, env);
+        writeln(run.getValue() ~ "(" ~ run.getType().to!string ~ ")");
       }
       catch (core.exception.ArraySliceError e)
       {

@@ -12,5 +12,7 @@ executable(
   install: true
 )
 
+executable('sal-test', 'sal_test.d', install : true)
+
 install_subdir('salmon', install_dir: 'lib')
 install_subdir('salmon/libs', install_dir: 'lib/salmon')
