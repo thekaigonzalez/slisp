@@ -1,0 +1,1 @@
+(print "\e[31mHello, red world!\e[0m")
