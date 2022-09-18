@@ -451,16 +451,19 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         if (condition == "true" || condition == "1")
         {
           auto exe = execute_salmon(scopeg, true, env);
-          if (lambda)
+          if (lambda) {
             value.returnValue(exe.getValue(), exe.getType());
-          execute_salmon(scopeg, false, env);
+            return value;
+          }
           condition = execute_salmon(scopem, true, env).getValue();
         }
         else
         {
           auto exe2 = execute_salmon(scopef, true, env);
-          if (lambda)
+          if (lambda) {
             value.returnValue(exe2.getValue(), exe2.getType());
+            return value;
+          }
           execute_salmon(scopef, false, env);
           condition = execute_salmon(scopem, true, env).getValue();
         }
