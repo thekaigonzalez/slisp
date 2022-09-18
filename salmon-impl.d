@@ -105,7 +105,7 @@ string[] parseParamList(string mf)
 
 int checkeq(SalmonInfo s)
 {
-  s.returnValue(to!string(s.aA[0] == s.aA[1]), SalType.number);
+  s.returnValue(to!string(s.aA[0] == s.aA[1]), SalType.boolean);
   return 0;
 }
 
@@ -465,6 +465,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           execute_salmon(scopeg, false, env);
           condition = execute_salmon(scopem, true, env);
         }
+        return value;
       }
 
       else if (args[0] == "defun")
