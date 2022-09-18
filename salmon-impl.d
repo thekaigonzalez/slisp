@@ -293,14 +293,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       value.returnValue(parse_string(s.CODE), SalType.str);
     else
     {
-      if ((s.CODE.strip) in env.env_vars)
-      {
-        value.returnValue(s.CODE.strip, checkSalmonType(env.env_vars[s.CODE.strip]));
-      }
-      else
-      {
-        value.returnValue(s.CODE, checkSalmonType(s.CODE)); /* Return the value */
-      }
+      value.returnValue(s.CODE, checkSalmonType(s.CODE)); /* Return the value */
+      return value;
     }
     return value;
   }
@@ -475,6 +469,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       if (!(args[0] in env.env_funcs) && !(args[0] in env.env_userdefined) && !(args[0] in reserves))
       {
         value.returnNil();
+        return value;
       }
       SalmonInfo tmp = new SalmonInfo();
       tmp.environ = env;
@@ -643,8 +638,10 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           }
           catch (ConvException e)
           {
+            writeln(env.env_vars);
             err(e.msg, LINE_NUMBER, _FILEN);
             value.returnValue("convException", SalType.error);
+            exit(13);
           }
           catch (FileException e)
           {
