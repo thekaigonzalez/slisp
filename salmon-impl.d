@@ -278,7 +278,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["print"] = &builtin_print;
   env.env_funcs["println"] = &builtin_dep_println; /* println deprecated */
   env.env_funcs["strcat"] = &builtin_strcat;
-  env.env_funcs["trim"] = &builtin_trim;
+  env.env_funcs["string-trim"] = &builtin_trim;
   env.env_funcs["get"] = &builtin_access;
   env.env_funcs["istrcat"] = &istrcat;
   env.env_funcs["getq"] = &builtin_accessq;
@@ -681,10 +681,22 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   return value;
 }
 
+string getTargetSystem() {
+  version (linux) {
+    return "Linux";
+  } version (Windows) {
+    return "Windows";
+  } version (OSX) {
+    return "macOS/OSX-based";
+  }
+  return "Unknown";
+}
+
 int main(string[] args)
 {
   SalmonEnvironment env = new SalmonEnvironment();
-  env.env_vars["salmon_version"] = "26";
+  env.env_vars["salmon_version"] = "27";
+  env.env_vars["compiler_system"] = getTargetSystem();
   env.env_lists["arg"] = args[1 .. $];
   if (args.length == 1)
   {

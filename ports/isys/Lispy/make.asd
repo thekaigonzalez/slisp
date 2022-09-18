@@ -1,0 +1,1 @@
+(print "make -C src...")
