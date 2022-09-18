@@ -79,7 +79,7 @@ public:
   void returnNil()
   {
     t = SalType.nil;
-    v = "null";
+    v = "nil";
   }
 }
 
