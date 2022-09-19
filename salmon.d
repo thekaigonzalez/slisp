@@ -7,8 +7,8 @@ import std.file;
 static import core.exception;
 import salinterp;
 
-
 import sal_shared_api;
+
 int main(string[] args)
 {
   SalmonEnvironment env = new SalmonEnvironment();
