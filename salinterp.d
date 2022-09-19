@@ -1,7 +1,7 @@
 /* SALMON: A basic implementation of Common Lisp. */
 // (print "Hello, Salmon World!")
 
-module salmon;
+module salinterp;
 
 import std.stdio;
 import std.conv;
@@ -232,7 +232,6 @@ int isNull(SalmonInfo i)
   return 0;
 }
 
-
 string _FILEN = "";
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
@@ -451,7 +450,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         if (condition == "true" || condition == "1")
         {
           auto exe = execute_salmon(scopeg, true, env);
-          if (lambda) {
+          if (lambda)
+          {
             value.returnValue(exe.getValue(), exe.getType());
             return value;
           }
@@ -460,7 +460,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         else
         {
           auto exe2 = execute_salmon(scopef, true, env);
-          if (lambda) {
+          if (lambda)
+          {
             value.returnValue(exe2.getValue(), exe2.getType());
             return value;
           }
@@ -681,59 +682,19 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   return value;
 }
 
-string getTargetSystem() {
-  version (linux) {
+string getTargetSystem()
+{
+  version (linux)
+  {
     return "Linux";
-  } version (Windows) {
+  }
+  version (Windows)
+  {
     return "Windows";
-  } version (OSX) {
+  }
+  version (OSX)
+  {
     return "macOS/OSX-based";
   }
   return "Unknown";
-}
-
-int main(string[] args)
-{
-  SalmonEnvironment env = new SalmonEnvironment();
-  env.env_vars["salmon_version"] = "27";
-  env.env_vars["compiler_system"] = getTargetSystem();
-  env.env_lists["arg"] = args[1 .. $];
-  if (args.length == 1)
-  {
-    writeln("** SALMON LISP REPL **");
-    SalmonState input = new SalmonState();
-    _FILEN = "repl";
-    while (true)
-    {
-      write("Lisp> ");
-      string n = readln();
-      salmon_push_code(input, n);
-      try
-      {
-        auto run = execute_salmon(input, true, env);
-        writeln(run.getValue() ~ "(" ~ run.getType().to!string ~ ")");
-      }
-      catch (core.exception.ArraySliceError e)
-      {
-        err("imbalanced statement (failure to slice)", 0, _FILEN);
-        note("line length: " ~ n.strip.length.to!string, 0, _FILEN);
-      }
-      input.CODE = "";
-    }
-  }
-
-  if (!exists(args[1]))
-  {
-    writeln("file not found.");
-    return 2;
-  }
-
-  _FILEN = args[1];
-  SalmonState s = newState();
-
-  salmon_push_code(s, readText(args[1]));
-
-  execute_salmon(s, false, env);
-
-  return 0;
 }
