@@ -11,3 +11,4 @@ This is the place for technical language information!
 - [Optimization](./Optimizing.md)
 - [Lisp VS SDKL](./Comparisons.md)
 - [Control Flow](./Control_flow.md)
+- [Understanding Errors](./Errors.md)
