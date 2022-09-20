@@ -64,6 +64,7 @@ public:
   void returnList(SalmonValue[] li)
   {
     g = li;
+    t = SalType.list;
   }
 
   string getValue()
