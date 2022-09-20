@@ -84,6 +84,21 @@ public:
   }
 }
 
+string[] valuesToList(SalmonValue[] l, SalmonEnvironment env) {
+  /** 
+   * Converts `l` to a `SalmonValue[]`
+   */
+  string[] n = [];
+  int iterator = 0;
+
+  foreach (SalmonValue s; l) {
+    n ~= s.v;
+    iterator += 1;
+  }  
+
+  return n;
+}
+
 class SalmonFunction
 {
 public:
