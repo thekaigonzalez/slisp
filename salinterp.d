@@ -232,6 +232,24 @@ int isNull(SalmonInfo i)
   return 0;
 }
 
+SalmonValue[] listToValues(string[] l, SalmonEnvironment env) {
+  /** 
+   * Converts `l` to a `SalmonValue[]`
+   */
+  SalmonValue[] n = [];
+  int iterator = 0;
+
+  foreach (string s; l) {
+    auto sa = newState();
+
+    salmon_push_code(sa, s);
+    n ~= execute_salmon(sa, true, env);
+    iterator += 1;
+  }  
+
+  return n;
+}
+
 string _FILEN = "";
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
@@ -265,6 +283,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["return"] = &returnLisp;
   env.env_funcs["assert"] = &assertLisp;
   env.env_funcs["compile"] = &compileLisp;
+  env.env_funcs["type"] = &typeLisp;
   env.env_funcs["type"] = &typeLisp;
   env.env_funcs["probe-file"] = &probeFileLisp;
   env.env_funcs["null"] = &isNull;
@@ -477,6 +496,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       SalmonInfo tmp = new SalmonInfo();
       tmp.environ = env;
       string[] argum = args[1 .. $];
+
+      SalmonValue[] rargum = [];
+
       if (!(args[0] in reserves) || args[0] == "set")
       {
         for (int _ = 0; _ < argum.length; ++_)
@@ -484,6 +506,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           auto Scope = newState();
           salmon_push_code(Scope, argum[_]);
           argum[_] = execute_salmon(Scope, true, env).getValue();
+          rargum[_] = execute_salmon(Scope, true, env);
         }
       }
       tmp.raw = args;
@@ -553,7 +576,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       }
       else if (args[0] == "list")
       {
-        env.env_lists[argum[0]] = argum[1 .. $];
+        value.returnList(listToValues(argum[0 .. $], env));
+
+        return value;
       }
       else if (args[0] == "format")
       {
