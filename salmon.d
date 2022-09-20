@@ -29,7 +29,11 @@ int main(string[] args)
       try
       {
         auto run = execute_salmon(input, true, env);
-        writeln(run.getValue() ~ "(" ~ run.getType().to!string ~ ")");
+        if (run.getType() == SalType.list) {
+          writeln("[" ~ valuesToList(run.g, env).join(", ") ~ "] (" ~ run.getType.to!string ~ ")");
+        } else {
+          writeln(run.getValue() ~ " (" ~ run.getType().to!string ~ ")");
+        }
       }
       catch (core.exception.ArraySliceError e)
       {
