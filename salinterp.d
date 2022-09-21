@@ -11,6 +11,7 @@ import std.file;
 import core.thread;
 import sal_builtins;
 import core.stdc.stdlib;
+import sal_auxlib;
 import std.algorithm : canFind;
 import sal_shared_api;
 static import core.exception;
@@ -103,50 +104,50 @@ string[] parseParamList(string mf)
   return pi;
 }
 
-int checkeq(SalmonInfo s)
+int checkeq(SalmonSub s)
 {
   s.returnValue(to!string(s.aA[0] == s.aA[1]), SalType.boolean);
   return 0;
 }
 
-int checkbet(SalmonInfo s)
+int checkbet(SalmonSub s)
 {
   s.returnValue(to!string(s.aA[0].to!int < s.aA[1].to!int), SalType.boolean);
   return 0;
 }
 
-int checkgre(SalmonInfo s)
+int checkgre(SalmonSub s)
 {
   s.returnValue(to!string(s.aA[0].to!int > s.aA[1].to!int), SalType.boolean);
   return 0;
 }
 
-int checkbete(SalmonInfo s)
+int checkbete(SalmonSub s)
 {
   s.returnValue(to!string(s.aA[0].to!int <= s.aA[1].to!int), SalType.boolean);
   return 0;
 }
 
-int checkgree(SalmonInfo s)
+int checkgree(SalmonSub s)
 {
   s.returnValue(to!string(s.aA[0].to!int >= s.aA[1].to!int), SalType.boolean);
   return 0;
 }
 
-int checkxq(SalmonInfo s)
+int checkxq(SalmonSub s)
 {
   string truf = to!string(!(s.aA[0] == s.aA[1]));
   s.returnValue(truf, SalType.boolean);
   return 0;
 }
 
-int typeLisp(SalmonInfo s)
+int typeLisp(SalmonSub s)
 {
   s.returnValue(checkSalmonType(s.raw[0]).to!string, SalType.any);
   return 0;
 }
 
-int lengthLisp(SalmonInfo s)
+int lengthLisp(SalmonSub s)
 {
   if (s.aA[0] in s.environ.env_lists)
   {
@@ -157,21 +158,21 @@ int lengthLisp(SalmonInfo s)
   return 0;
 }
 
-int probeFileLisp(SalmonInfo s)
+int probeFileLisp(SalmonSub s)
 {
   s.returnValue(s.aA[0].exists.to!string, SalType.str);
   return 0;
 }
 
-int builtin_access(SalmonInfo i)
+int builtin_access(SalmonSub i)
 {
-  i.returnValue(i.environ.env_vars[i.aA[0]], SalType.any);
+  i.returnValue(i.environ.env_vars[i.aA[0]].getValue(), SalType.any);
   return 0;
 }
 
-int builtin_accessq(SalmonInfo i)
+int builtin_accessq(SalmonSub i)
 {
-  i.returnValue(i.environ.env_lists[i.aA[0]].join(","), SalType.any);
+  deprecate("\033[;1m`getq'\033[0m is deprecated, please use \033[;1m`get'\033[0m.", __LINE__, "[D]");
   return 0;
 }
 
@@ -181,43 +182,70 @@ string toSyntax(string fun, string noted, string arg2, int lineno = 0)
       lineno) ~ " | (\033[35;1m" ~ fun ~ "\033[0m \033[36;1m" ~ noted ~ "\033[;0m (" ~ arg2 ~ ")");
 }
 
-int returnAt(SalmonInfo inf)
+int returnAt(SalmonSub inf)
 {
-  inf.returnValue(inf.environ.env_lists[inf.aA[0]][to!int(inf.aA[1])], SalType.any);
+  deprecate("\033[;1m`getf'\033[0m is deprecated, please use \033[;1m`position'\033[0m.", __LINE__, "[D]");
+  // inf.returnValue(inf.environ.env_lists[inf.aA[0]][to!int(inf.aA[1])], SalType.any);
   return 0;
 }
 
-int replaceLisp(SalmonInfo inf)
+int positionLisp(SalmonSub inf)
+{
+  SalmonValue list = inf.value_at(0);
+  // foreach (SalmonValue value; inf.newArg)
+  // {
+  //   if (value.getType() == SalType.list)
+  //   {
+  //     writeln(value.list_members());
+  //   }
+  //   else
+  //   {
+  //     writeln(value.getValue() ~ " - " ~ value.getType().to!string);
+  //   }
+  // }
+
+  int pos = inf.aA[1].to!int;
+  inf.returnValue(list.list_members()[pos]);
+  return 0;
+}
+
+int lispPosition(SalmonSub inf)
+{
+  // inf.returnValue([to!int(inf.aA[1])], SalType.any);
+  return 0;
+}
+
+int replaceLisp(SalmonSub inf)
 {
   inf.returnValue(inf.aA[0].replace(inf.aA[1], inf.aA[2]), SalType.any);
   return 0;
 }
 
-int assertLisp(SalmonInfo inf)
+int assertLisp(SalmonSub inf)
 {
   assert(to!bool(inf.aA[0]));
   return 0;
 }
 
-int returnLisp(SalmonInfo inf)
+int returnLisp(SalmonSub inf)
 {
   inf.returnValue(inf.aA[0], SalType.any);
   return 0;
 }
 
-int readlineLisp(SalmonInfo inf)
+int readlineLisp(SalmonSub inf)
 {
   inf.returnValue(readln(), SalType.any);
   return 0;
 }
 
-int writeLineLisp(SalmonInfo inf)
+int writeLineLisp(SalmonSub inf)
 {
   write(inf.aA[0]);
   return 0;
 }
 
-int compileLisp(SalmonInfo inf)
+int compileLisp(SalmonSub inf)
 {
   auto n = newState();
   n.CODE = inf.aA[0];
@@ -226,31 +254,40 @@ int compileLisp(SalmonInfo inf)
   return 0;
 }
 
-int isNull(SalmonInfo i)
+int isNull(SalmonSub i)
 {
   i.returnValue((i.aA[0] == "nil").to!string, SalType.str);
   return 0;
 }
 
-SalmonValue[] listToValues(string[] l, SalmonEnvironment env) {
+SalmonValue[] listToValues(string[] l, SalmonEnvironment env)
+{
   /** 
    * Converts `l` to a `SalmonValue[]`
    */
   SalmonValue[] n = [];
   int iterator = 0;
 
-  foreach (string s; l) {
+  foreach (string s; l)
+  {
     auto sa = newState();
 
     salmon_push_code(sa, s);
     n ~= execute_salmon(sa, true, env);
     iterator += 1;
-  }  
+  }
 
   return n;
 }
 
 string _FILEN = "";
+
+SalmonValue quickRun(string c, SalmonEnvironment env)
+{
+  auto sc = newState();
+  salmon_push_code(sc, c);
+  return execute_salmon(sc, true, env);
+}
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
 SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment())
@@ -300,6 +337,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["get"] = &builtin_access;
   env.env_funcs["istrcat"] = &istrcat;
   env.env_funcs["getq"] = &builtin_accessq;
+  env.env_funcs["position"] = &positionLisp;
 
   string b;
   SalmonValue value = new SalmonValue();
@@ -311,6 +349,12 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       value.returnValue(parse_string(s.CODE), SalType.str);
     else
     {
+      if (lambda && (s.CODE.strip in env.env_vars))
+      {
+        auto var = env.env_vars[s.CODE.strip];
+        value.returnValue(var);
+        return value;
+      }
       value.returnValue(s.CODE, checkSalmonType(s.CODE)); /* Return the value */
       return value;
     }
@@ -360,7 +404,11 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           string codee = args[2];
           foreach (string sm; env.env_lists[args[1].strip])
           {
-            env.env_vars["*"] = sm;
+            auto naf = newState();
+            salmon_push_code(naf, sm);
+
+            env.env_vars["*"] = execute_salmon(naf, true, env);
+
             auto scopem = newState();
             salmon_push_code(scopem, codee);
             execute_salmon(scopem, false, env);
@@ -493,27 +541,28 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         value.returnNil();
         return value;
       }
-      SalmonInfo tmp = new SalmonInfo();
+      SalmonSub tmp = new SalmonSub();
       tmp.environ = env;
       string[] argum = args[1 .. $];
-
       SalmonValue[] rargum = [];
 
-      if (!(args[0] in reserves) || args[0] == "set")
+      if (!(args[0] in reserves))
       {
         for (int _ = 0; _ < argum.length; ++_)
         {
           auto Scope = newState();
           salmon_push_code(Scope, argum[_]);
           argum[_] = execute_salmon(Scope, true, env).getValue();
-          rargum[_] = execute_salmon(Scope, true, env);
+          rargum ~= execute_salmon(Scope, true, env);
         }
       }
       tmp.raw = args;
+      tmp.newArg = rargum;
       tmp.aA = argum;
       if (args[0] == "set")
       {
-        env.env_vars[argum[0]] = argum[1];
+        auto nafa = quickRun(argum[1], env);
+        env.env_vars[argum[0]] = nafa;
       }
       else if (args[0] == "require")
       {
@@ -585,9 +634,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         string target = "nil";
 
         if (argum[0] in env.env_vars)
-          target = env.env_vars[argum[0]];
+          target = env.env_vars[argum[0]].getValue();
         else if (argum[0] in env.env_lists)
-          target = env.env_lists[argum[0]].join(",");
+          target = env.env_vars[argum[0]].list_members().valuesToList(env).join(",");
 
         auto Scope2 = newState();
         auto env_loop = new SalmonEnvironment();
@@ -597,7 +646,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         env_loop.env_vars = env.env_vars;
         env_loop.env_funcs = env.env_funcs;
 
-        env_loop.env_vars["@"] = target;
+        env_loop.env_vars["@"] = quickRun(target, env);
         salmon_push_code(Scope2, args[2]);
 
         execute_salmon(Scope2, true, env_loop);
@@ -620,7 +669,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           {
             try
             {
-              env.env_vars[fn.template_params[f1]] = argum[f1];
+              env.env_vars[fn.template_params[f1]] = quickRun(argum[f1], env);
             }
             catch (core.exception.ArrayIndexError)
             {
@@ -666,7 +715,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           }
           catch (ConvException e)
           {
-            writeln(env.env_vars);
             err(e.msg, LINE_NUMBER, _FILEN);
             value.returnValue("convException", SalType.error);
             exit(13);
@@ -685,6 +733,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       if (lambda)
       {
         value.returnValue(tmp.rvalue, tmp.rvaluetype);
+        return value;
       }
       m = 0;
       st = 0;
@@ -721,5 +770,8 @@ string getTargetSystem()
   {
     return "macOS/OSX-based";
   }
-  return "Unknown";
+  else
+  {
+    return "Unknown";
+  }
 }
