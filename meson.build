@@ -7,7 +7,9 @@ executable(
   [
     './salmon.d',
     './salinterp.d',
+    './sal_type.d',
     './sal_shared_api.d',
+    './sal_auxlib.d',
     './sal_builtins.d'
   ],
   install: true
