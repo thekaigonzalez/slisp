@@ -3,27 +3,28 @@ import std.stdio;
 import std.conv;
 import std.base64;
 import std.string;
+import sal_auxlib;
 
-int builtin_print(SalmonInfo info)
+int builtin_print(SalmonSub info)
 {
   writeln(join(info.aA, ""));
   return (0);
 }
 
-int istrcat(SalmonInfo i)
+int istrcat(SalmonSub i)
 {
   i.returnValue(join(i.aA, ""), SalType.any);
 
   return (0);
 }
 
-int builtin_trim(SalmonInfo s)
+int builtin_trim(SalmonSub s)
 {
   s.returnValue(s.aA[0].strip, SalType.str);
   return 0;
 }
 
-int builtin_dep_println(SalmonInfo s)
+int builtin_dep_println(SalmonSub s)
 {
   writeln(
     "(deprecation) `println` is not a part of the Common Lisp standard. It is only here for reference purposes.\n" ~
@@ -31,14 +32,14 @@ int builtin_dep_println(SalmonInfo s)
   return (1);
 }
 
-int builtin_strcat(SalmonInfo info)
+int builtin_strcat(SalmonSub info)
 {
-  info.returnValue(sal_argument_at(info, 0) ~ sal_argument_at(info, 1), SalType.str);
+  info.returnValue(info.aA[0] ~ info.aA[1], SalType.str);
 
   return (0);
 }
 
-int builtin_add(SalmonInfo info)
+int builtin_add(SalmonSub info)
 {
   int i = 0;
 
@@ -50,7 +51,7 @@ int builtin_add(SalmonInfo info)
   return (0);
 }
 
-int builtin_mul(SalmonInfo info)
+int builtin_mul(SalmonSub info)
 {
   int i = 1;
 

@@ -2,6 +2,7 @@
 
 import std.stdio;
 import std.string;
+import sal_auxlib;
 import std.path;
 import std.conv;
 import core.stdc.stdlib;
@@ -14,6 +15,11 @@ void err(string msg, int lineno = 0, string file = "")
 void note(string msg, int lineno = 0, string file = "")
 {
   writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[36mnote:\033[0m " ~ msg);
+}
+
+void deprecate(string msg, int lineno = 0, string file = "")
+{
+  writeln("\033[;1m" ~ file ~ ":" ~ to!string(lineno) ~ ": \033[33;1mdeprecated:\033[0m " ~ msg);
 }
 
 enum SalType
@@ -47,42 +53,6 @@ public:
 }
 
 /* value: type */
-class SalmonValue
-{
-public:
-  string v = "nil";
-  SalType t = SalType.nil;
-  SalmonValue[] g; /* unless it's a list */
-
-  // Adds `value` to @v & `type` as the type.
-  void returnValue(string value, SalType type)
-  {
-    t = type;
-    v = value;
-  }
-
-  void returnList(SalmonValue[] li)
-  {
-    g = li;
-    t = SalType.list;
-  }
-
-  string getValue()
-  {
-    return v;
-  }
-
-  SalType getType()
-  {
-    return t;
-  }
-
-  void returnNil()
-  {
-    t = SalType.nil;
-    v = "nil";
-  }
-}
 
 string[] valuesToList(SalmonValue[] l, SalmonEnvironment env) {
   /** 
@@ -111,8 +81,8 @@ public:
 class SalmonEnvironment
 {
 public:
-  int function(SalmonInfo)[string] env_funcs;
-  string[string] env_vars;
+  int function(SalmonSub)[string] env_funcs;
+  SalmonValue[string] env_vars;
   string[][string] env_lists;
   string[string] env_definitions;
   SalmonEnvironment copy()
