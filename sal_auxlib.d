@@ -4,6 +4,21 @@ import salinterp;
 import sal_shared_api;
 import std.conv;
 
+string[] valArrayToString(SalmonValue va) {
+  string[] n;
+
+  foreach (SalmonValue v; va.g)
+  {
+    n ~= v.getValue();
+  }
+
+  return n;
+}
+
+void listAppendV(SalmonValue v, SalmonValue thisList) {
+  thisList.g ~= v;
+}
+
 class SalmonValue
 {
 public:
@@ -23,7 +38,7 @@ public:
       g = n.g;
     } else 
       v = n.v;
-      
+
     t = n.getType();
   }
 
@@ -34,7 +49,7 @@ public:
 
   SalmonValue[] list_members() {
     if (t != SalType.list) {
-      err("[C]: running list_members() on a type \033[;1m" ~ t.to!string ~ "\033[0m");
+      note("[From D]: running list_members() on a type \033[;1m" ~ t.to!string ~ "\033[0m", __LINE__, __FILE__);
       return [new SalmonValue()];
     } else {
       return this.g;
@@ -62,6 +77,10 @@ public:
     t = SalType.nil;
     v = "nil";
   }
+
+  void flagAsList() {
+    t = SalType.list;
+  }
 }
 
 class SalmonSub
@@ -78,6 +97,11 @@ public:
   void returnValue(SalmonValue value)
   {
     rvalue = value;
+  }
+
+  void returnValue(string value)
+  {
+    rvalue = quickRun(value, environ);
   }
 
   SalmonValue value_at(int pos) {
