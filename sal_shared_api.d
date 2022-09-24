@@ -93,12 +93,17 @@ public:
   SalmonFunction[string] env_userdefined;
 }
 
-SalType checkSalmonType(string s)
+/* @optional_environment from issue #1 */
+SalType checkSalmonType(string s, SalmonEnvironment optional_environment = new SalmonEnvironment())
 {
   s = s.strip;
   if (s == "true" || s == "false")
   {
     return SalType.boolean;
+  }
+
+  if (s in optional_environment.env_userdefined) {
+    return SalType.func;
   }
 
   try

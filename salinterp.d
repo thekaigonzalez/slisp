@@ -320,11 +320,12 @@ SalmonValue quickRun(string c, SalmonEnvironment env)
 {
   auto sc = newState();
   salmon_push_code(sc, c);
-  return execute_salmon(sc, true, env);
+  return execute_salmon(sc, true, env, true);
 }
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
-SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment())
+SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment()
+                          , bool from_quickrun = false)
 {
   int LINE_NUMBER = 1;
   int[string] reserves = [
@@ -587,8 +588,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         {
           auto Scope = newState();
           salmon_push_code(Scope, argum[_]);
-          argum[_] = execute_salmon(Scope, true, env).getValue();
-          rargum ~= execute_salmon(Scope, true, env);
+          auto c =  execute_salmon(Scope, true, env);
+          argum[_] = c.getValue();
+          rargum ~= c;
         }
       }
       tmp.raw = args;
