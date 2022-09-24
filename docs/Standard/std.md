@@ -108,3 +108,20 @@ Writes `[s]` to `stdout` without flushing.
 ## `replace [s] [l1] [l2]`
 
 Replaces `[l1]` with `[l2]` in string `[s]`.
+
+## `intersection [l1] [l2]`
+
+Returns a [`List`](../Language/Types/List.md) of the intersection between two lists.
+
+```lisp
+(set list1 (list 1 2 3 4))
+(set list2 (list 2 4 6))
+
+(set intersect (intersection list1 list2))
+
+(print (concatenate intersect))
+```
+
+## `find [list] [element]`
+
+Returns `true` if `element` in `list`.

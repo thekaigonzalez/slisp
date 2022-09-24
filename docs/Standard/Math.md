@@ -19,6 +19,10 @@ The typical bind to `math.sin()` in every programming language.
 
 ### `intersection [list-one: list...] [list-two: list...] [list-three: any...]`
 
+> **WARNING:** this version of the intersection function is deprecated.
+> it has now been merged into the standard library.
+> please use [this](std.md) one instead.
+
 `list-one`: [List](../Language/Types/List.md)
 
 `list-two`: [List](../Language/Types/List.md)
