@@ -709,7 +709,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           {
             try
             {
-              env.env_vars[fn.template_params[f1]] = quickRun(argum[f1], env);
+              auto argcodew = rargum[f1];
+
+              env.env_vars[fn.template_params[f1]] = argcodew;
             }
             catch (core.exception.ArrayIndexError)
             {
@@ -720,6 +722,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
               exit(9);
             }
           }
+
 
           execute_salmon(sl, false, env);
 
