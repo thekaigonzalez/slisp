@@ -295,7 +295,9 @@ int isNull(SalmonSub i)
 }
 
 int lispcanFind(SalmonSub i) {
-  i.returnValue(canFind(i.newArg[0].g, i.newArg[1].getValue()).to!string, SalType.boolean);
+  string[] target = valArrayToString(i.newArg[0].g);
+  string existsBool = canFind(target, i.newArg[1].getValue()).to!string;
+  i.returnValue(existsBool, SalType.boolean);
   return 0;
 }
 
