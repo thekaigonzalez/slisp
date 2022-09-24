@@ -647,7 +647,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         }
         else
         {
-          version (Linux)
+          version (linux)
           {
             if (exists("./libs/" ~ argum[0] ~ ".so"))
             {
