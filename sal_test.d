@@ -8,14 +8,14 @@ import std.string;
 import std.getopt;
 import std.path;
 
-void test_dir(string dname, string compiler)
+void test_dir(string dname, string compiler, bool save_test_data = false)
 {
   int testN = 0;
   int passedTests = 0;
   int failed_tests = 0;
 
   auto strnc = dirEntries(dname, SpanMode.depth);
-  if (".testcache".exists == false)
+  if (".testcache".exists == false && save_test_data)
     ".testcache".mkdir;
 
   foreach (string d; strnc)
@@ -30,20 +30,26 @@ void test_dir(string dname, string compiler)
       {
         writeln("\033[32;1mTEST " ~ testN.to!string ~ " SUCCESSFUL!\033[0;0m\b");
         passedTests += 1;
-        File n = File(".testcache/test-" ~ testN.to!string ~ "-" ~ baseName(d) ~ ".cache", "w");
+        if (save_test_data)
+        {
+          File n = File(".testcache/test-" ~ testN.to!string ~ "-" ~ baseName(d) ~ ".cache", "w");
 
-        n.write(proc.output);
+          n.write(proc.output);
 
-        n.close();
+          n.close();
+        }
       }
       else
       {
         writeln("\033[33;1mTEST " ~ testN.to!string ~ " FAILED.\033[0;0m\b");
-        File n = File(".testcache/test-fail-" ~ testN.to!string ~ "-" ~ baseName(d) ~ ".cache", "w");
+        if (save_test_data)
+        {
+          File n = File(".testcache/test-fail-" ~ testN.to!string ~ "-" ~ baseName(d) ~ ".cache", "w");
 
-        n.write(proc.output);
+          n.write(proc.output);
 
-        n.close();
+          n.close();
+        }
         failed_tests += 1;
       }
     }
@@ -57,17 +63,34 @@ void test_dir(string dname, string compiler)
 void main(string[] args)
 {
   string compiler = "salmon-linux-x86_64";
+  bool only_one_dir = false;
+  string startdir = "./unit-tests";
+  string[] additional_dirs;
+  bool saveData = false;
   GetoptResult optional_args = getopt(args, std.getopt.config.bundling,
-                                      "compiler|c", "change the compiler to use", &compiler);
+    "compiler|c", "change the compiler to use", &compiler,
+    "one|o", "run tests on only one directory (starting dir) and skip extras", &only_one_dir,
+    "save|s", "save test data to a .testcache directory.", &saveData,
+    "dir|a", "add a directory to the test suite.", &additional_dirs,
+    "directory|d", "The directory to test (default: unit-tests)", &startdir);
 
-  if (optional_args.helpWanted) {
+  if (optional_args.helpWanted)
+  {
     defaultGetoptPrinter("Salmon testing suite", optional_args.options);
     return;
   }
   writeln("testing packaged tests");
-  test_dir("./unit-tests", compiler);
-  writeln("testing ports");
-  test_dir("./ports", compiler);
+  test_dir(startdir, compiler);
+
+  if (!only_one_dir)
+  {
+    writeln("testing ports");
+    test_dir("./ports", compiler, saveData);
+  }
+
+  foreach (string d; additional_dirs) {
+    test_dir(d, compiler, saveData);
+  }
   // writeln("testing the standard library");
   // test_dir("./std-src");
 
