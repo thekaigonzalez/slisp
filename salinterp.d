@@ -243,7 +243,8 @@ int lintersection(SalmonSub i)
 
   foreach (SalmonValue n; list1)
   {
-    if (canFind(valArrayToString(list2), n.getValue())) {
+    if (canFind(valArrayToString(list2), n.getValue()))
+    {
       listAppendV(n, list3);
     }
   }
@@ -259,7 +260,8 @@ int lintersection(SalmonSub i)
   return 0;
 }
 
-int concat(SalmonSub f) {
+int concat(SalmonSub f)
+{
   string[] array = f.value_at(0).valArrayToString();
   f.returnValue("[" ~ array.join(", ") ~ "]");
   return 0;
@@ -373,8 +375,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["intersection"] = &lintersection;
   env.env_funcs["concatenate"] = &concat;
 
-
-
   string b;
   SalmonValue value = new SalmonValue();
   int st = 0;
@@ -435,20 +435,16 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       // }
       if (args[0] == "each")
       {
-        if (args[1].strip in env.env_lists)
+        SalmonValue lis = quickRun(args[1], env);
+        lis.flagAsList();
+        string codee = args[2];
+        foreach (SalmonValue sm; lis.list_members())
         {
-          string codee = args[2];
-          foreach (string sm; env.env_lists[args[1].strip])
-          {
-            auto naf = newState();
-            salmon_push_code(naf, sm);
+          env.env_vars["@"] = sm;
 
-            env.env_vars["*"] = execute_salmon(naf, true, env);
-
-            auto scopem = newState();
-            salmon_push_code(scopem, codee);
-            execute_salmon(scopem, false, env);
-          }
+          auto scopem = newState();
+          salmon_push_code(scopem, codee);
+          execute_salmon(scopem, false, env);
         }
       }
 
@@ -598,7 +594,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       if (args[0] == "set")
       {
         SalmonValue outVal = rargum[1];
-        env.env_vars[args[0]] = outVal;
+        env.env_vars[argum[0]] = outVal;
       }
       else if (args[0] == "require")
       {
@@ -726,7 +722,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           }
 
           env = env_arch;
-          
+
           return value;
         }
         else if (!(args[0] in reserves))
@@ -772,7 +768,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       {
         if (tmp.rvalue.getType() != SalType.list)
           value.returnValue(tmp.rvalue, tmp.rvalue.getType());
-        else {
+        else
+        {
           value.returnList(tmp.rvalue.g);
         }
         return value;
