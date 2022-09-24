@@ -294,7 +294,8 @@ int isNull(SalmonSub i)
   return 0;
 }
 
-int lispcanFind(SalmonSub i) {
+int lispcanFind(SalmonSub i)
+{
   string[] target = valArrayToString(i.newArg[0].g);
   string existsBool = canFind(target, i.newArg[1].getValue()).to!string;
   i.returnValue(existsBool, SalType.boolean);
@@ -331,8 +332,7 @@ SalmonValue quickRun(string c, SalmonEnvironment env)
 }
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
-SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment()
-                          , bool from_quickrun = false)
+SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment(), bool from_quickrun = false)
 {
   int LINE_NUMBER = 1;
   int[string] reserves = [
@@ -383,7 +383,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["intersection"] = &lintersection;
   env.env_funcs["concatenate"] = &concat;
   env.env_funcs["find"] = &lispcanFind;
-
 
   string b;
   SalmonValue value = new SalmonValue();
@@ -597,7 +596,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         {
           auto Scope = newState();
           salmon_push_code(Scope, argum[_]);
-          auto c =  execute_salmon(Scope, true, env);
+          auto c = execute_salmon(Scope, true, env);
           argum[_] = c.getValue();
           rargum ~= c;
         }
@@ -627,26 +626,29 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         }
         else
         {
-          if (exists("./libs/" ~ argum[0] ~ ".so"))
+          version (Linux)
           {
-            import core.sys.linux.dlfcn;
+            if (exists("./libs/" ~ argum[0] ~ ".so"))
+            {
+              import core.sys.linux.dlfcn;
 
-            void* hndl = dlopen(("./libs/" ~ argum[0] ~ ".so").toStringz(), RTLD_LAZY);
+              void* hndl = dlopen(("./libs/" ~ argum[0] ~ ".so").toStringz(), RTLD_LAZY);
 
-            int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
+              int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
 
-            openFunc(env);
-          }
-          else if (exists("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so"))
-          {
-            import core.sys.linux.dlfcn;
+              openFunc(env);
+            }
+            else if (exists("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so"))
+            {
+              import core.sys.linux.dlfcn;
 
-            void* hndl = dlopen(("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so")
-                .toStringz(), RTLD_LAZY);
+              void* hndl = dlopen(("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so")
+                  .toStringz(), RTLD_LAZY);
 
-            int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
+              int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
 
-            openFunc(env);
+              openFunc(env);
+            }
           }
           else
           {
@@ -731,7 +733,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
               exit(9);
             }
           }
-
 
           execute_salmon(sl, false, env);
 
