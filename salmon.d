@@ -12,7 +12,7 @@ import sal_shared_api;
 int main(string[] args)
 {
   SalmonEnvironment env = new SalmonEnvironment();
-  env.env_vars["salmon_version"] = quickRun("27", env);
+  env.env_vars["salmon_version"] = quickRun("28", env);
   env.env_vars["compiler_system"] = quickRun(getTargetSystem(), env);
   env.env_lists["arg"] = args[1 .. $];
   if (args.length == 1)
