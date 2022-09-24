@@ -5,9 +5,10 @@ import std.process;
 import std.file;
 import std.conv;
 import std.string;
+import std.getopt;
 import std.path;
 
-void test_dir(string dname)
+void test_dir(string dname, string compiler)
 {
   int testN = 0;
   int passedTests = 0;
@@ -23,7 +24,7 @@ void test_dir(string dname)
     {
       testN += 1;
 
-      auto proc = executeShell("salmon-linux-x86_64 " ~ d);
+      auto proc = executeShell(compiler ~ " " ~ d);
 
       if (proc.status == 0)
       {
@@ -53,13 +54,20 @@ void test_dir(string dname)
   }
 }
 
-void main()
+void main(string[] args)
 {
+  string compiler = "salmon-linux-x86_64";
+  GetoptResult optional_args = getopt(args, std.getopt.config.bundling,
+                                      "compiler|c", "change the compiler to use", &compiler);
 
+  if (optional_args.helpWanted) {
+    defaultGetoptPrinter("Salmon testing suite", optional_args.options);
+    return;
+  }
   writeln("testing packaged tests");
-  test_dir("./unit-tests");
+  test_dir("./unit-tests", compiler);
   writeln("testing ports");
-  test_dir("./ports");
+  test_dir("./ports", compiler);
   // writeln("testing the standard library");
   // test_dir("./std-src");
 
