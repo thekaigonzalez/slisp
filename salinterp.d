@@ -294,6 +294,11 @@ int isNull(SalmonSub i)
   return 0;
 }
 
+int lispcanFind(SalmonSub i) {
+  i.returnValue(canFind(i.newArg[0].g, i.newArg[1].getValue()).to!string, SalType.boolean);
+  return 0;
+}
+
 SalmonValue[] listToValues(string[] l, SalmonEnvironment env)
 {
   /** 
@@ -375,6 +380,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["position"] = &positionLisp;
   env.env_funcs["intersection"] = &lintersection;
   env.env_funcs["concatenate"] = &concat;
+  env.env_funcs["find"] = &lispcanFind;
+
 
   string b;
   SalmonValue value = new SalmonValue();
