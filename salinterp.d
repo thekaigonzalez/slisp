@@ -649,26 +649,27 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
 
               openFunc(env);
             }
-          }
-          else
-          {
-            err("require '" ~ argum[0] ~ "' - library not found in any supported path(s).", LINE_NUMBER, _FILEN);
-            note("required here:\n\t" ~ toSyntax("require", "\"" ~ argum[0] ~ "\"", "...", LINE_NUMBER), LINE_NUMBER,
-              _FILEN);
-
-            if (exists("/usr/local/lib/salmon/libs/" ~ argum[0].toLower ~ ".so") || exists(
-                "./libs/" ~ argum[0].toLower))
-            {
-              writeln("\033[;1mTip!\033[0m '" ~ argum[0] ~ "' does not exist, but \033[;1m\"" ~ argum[0].toLower ~
-                  "\"\033[0m does. Did you mean, \033[;1m(\033[35;1mrequire\033[;1m \"" ~ argum[0].toLower ~ "\")\033[0m ?");
-            }
-            if (_FILEN != "repl")
-              exit(8);
             else
             {
-              value.returnValue("importFailure", SalType.error);
+              err("require '" ~ argum[0] ~ "' - library not found in any supported path(s).", LINE_NUMBER, _FILEN);
+              note("required here:\n\t" ~ toSyntax("require", "\"" ~ argum[0] ~ "\"", "...", LINE_NUMBER), LINE_NUMBER,
+                _FILEN);
+
+              if (exists("/usr/local/lib/salmon/libs/" ~ argum[0].toLower ~ ".so") || exists(
+                  "./libs/" ~ argum[0].toLower))
+              {
+                writeln("\033[;1mTip!\033[0m '" ~ argum[0] ~ "' does not exist, but \033[;1m\"" ~ argum[0].toLower ~
+                    "\"\033[0m does. Did you mean, \033[;1m(\033[35;1mrequire\033[;1m \"" ~ argum[0].toLower ~ "\")\033[0m ?");
+              }
+              if (_FILEN != "repl")
+                exit(8);
+              else
+              {
+                value.returnValue("importFailure", SalType.error);
+              }
             }
           }
+
         }
       }
       else if (args[0] == "list")
