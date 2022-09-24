@@ -229,7 +229,7 @@ int assertLisp(SalmonSub inf)
 
 int returnLisp(SalmonSub inf)
 {
-  inf.returnValue(inf.aA[0], SalType.any);
+  inf.returnValue(inf.newArg[0]);
   return 0;
 }
 
@@ -709,9 +709,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           auto sl = newState();
           auto sl2 = newState();
           SalmonFunction fn = env.env_userdefined[args[0]];
-          string cod = fn.run;
-          string rv = fn.returns;
-
+          string cod = fn.run.strip;
+          string rv = fn.returns.strip;
           salmon_push_code(sl, cod);
           salmon_push_code(sl2, rv);
 
