@@ -391,10 +391,13 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
         value.returnValue(var);
         return value;
       }
-      value.returnValue(s.CODE, checkSalmonType(s.CODE)); /* Return the value */
-      return value;
+      else
+      {
+        value.returnValue(s.CODE.strip, checkSalmonType(s.CODE.strip)); /* Return the value */
+        return value;
+      }
+      value.returnNil();
     }
-    return value;
   }
   else if (!startsWith(s.CODE.strip, '(') && !lambda && !startsWith(s.CODE.strip, ';'))
   {
@@ -578,7 +581,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       string[] argum = args[1 .. $];
       SalmonValue[] rargum = [];
 
-      if (!(args[0] in reserves) || args[0] == "set")
+      if (!(args[0] in reserves))
       {
         for (int _ = 0; _ < argum.length; ++_)
         {
@@ -593,7 +596,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       tmp.aA = argum;
       if (args[0] == "set")
       {
-        SalmonValue outVal = rargum[1];
+        SalmonValue outVal = quickRun(argum[1], env);
         env.env_vars[argum[0]] = outVal;
       }
       else if (args[0] == "require")
@@ -697,7 +700,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
 
           salmon_push_code(sl, cod);
           salmon_push_code(sl2, rv);
+
           auto env_arch = env.copy;
+
           for (int f1 = 0; f1 < fn.template_params.length; ++f1)
           {
             try
@@ -713,17 +718,17 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
               exit(9);
             }
           }
+
           execute_salmon(sl, false, env);
 
           if (lambda)
           {
             auto sala = execute_salmon(sl2, true, env);
             value.returnValue(sala.getValue(), sala.getType());
+            return value;
           }
 
           env = env_arch;
-
-          return value;
         }
         else if (!(args[0] in reserves))
         {
