@@ -15,6 +15,17 @@ string[] valArrayToString(SalmonValue va) {
   return n;
 }
 
+string[] valArrayToString(SalmonValue[] va) {
+  string[] n;
+
+  foreach (SalmonValue v; va)
+  {
+    n ~= v.getValue();
+  }
+
+  return n;
+}
+
 void listAppendV(SalmonValue v, SalmonValue thisList) {
   thisList.g ~= v;
 }
