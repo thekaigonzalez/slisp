@@ -13,3 +13,4 @@ Contains ports from every language I've made to Salmon.
 - [qbasic](https://github.com/thekaigonzalez/QBasic)
 - [hid](https://github.com/thekaigonzalez/hid/tree/master/tests)
 - [isys](https://github.com/thekaigonzalez/ISys/tree/master/testes)
+- [exclam (excla)](https://github.com/thekaigonzalez/exclamation_language/tree/master/tests)
