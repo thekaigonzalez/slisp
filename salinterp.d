@@ -723,10 +723,11 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           {
             auto sala = execute_salmon(sl2, true, env);
             value.returnValue(sala.getValue(), sala.getType());
-            return value;
           }
 
           env = env_arch;
+          
+          return value;
         }
         else if (!(args[0] in reserves))
         {
