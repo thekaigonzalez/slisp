@@ -18,16 +18,24 @@ int main(string[] args)
   env.env_lists["arg"] = args[1 .. $];
   GetoptResult optional_arg;
 
+  bool ver = false;
+
   try
   {
     optional_arg = getopt(
       args, std.getopt.config.bundling,
+      "version|v", "Print version and exit", &ver
     );
   }
   catch (GetOptException e)
   {
     err(e.msg, 0, "cli");
     return 91;
+  }
+
+  if (ver) {
+    writefln("Salmon Version: %s", env.env_vars["salmon_version"].getValue());
+    return 0;
   }
 
   if (optional_arg.helpWanted)
@@ -41,7 +49,7 @@ int main(string[] args)
     writeln("\nPositional (Optional) arguments:\n\tfile(s)\tThe file(s) to run. You may specify more than one.");
     writeln("\nThis is the official Salmon command-line-interface.");
     writeln("Any questions? Email me! <gkai70264@gmail.com>");
-    
+
     return 0;
   }
 
