@@ -1,17 +1,4 @@
-# std-src
+# (DEPRECATED) Standard Library Sources
 
-These are the sources for the Salmon Common Lisp Standard Library.
-
-## How to build?
-
-```bash
-$ git clone https://github.com/thekaigonzalez/salmon
-Cloning into 'Salmon'...
-  ...
-
-$ cd salmon
-$ cd std-src
-$ make -j8
-<Build output>
-
-```
+The standard library is deprecated. Every function in it can not be used
+due to the old API breaking some of the functionality, both the standard library AND the documentation will be reconstructed.

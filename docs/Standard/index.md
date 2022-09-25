@@ -1,7 +1,5 @@
-# Standard Package Index (SPI)
+# Hey Traveler!
 
-- [math](./Math.md)
-- [input](./Input.md)
-- [std](./std.md)
-- [salspec](./spec.md)
-- [curl](./curl.md)
+The standard library documentation is currently being reconstructed. In the meantime... Here's a cat!
+
+![cat](./cat.jpg)
