@@ -324,11 +324,11 @@ SalmonValue[] listToValues(string[] l, SalmonEnvironment env)
 
 string _FILEN = "";
 
-SalmonValue quickRun(string c, SalmonEnvironment env)
+SalmonValue quickRun(string c, SalmonEnvironment env, bool lambda = true)
 {
   auto sc = newState();
   salmon_push_code(sc, c);
-  return execute_salmon(sc, true, env);
+  return execute_salmon(sc, lambda, env);
 }
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
