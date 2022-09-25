@@ -41,6 +41,7 @@ int main(string[] args)
     writeln("\nPositional (Optional) arguments:\n\tfile(s)\tThe file(s) to run. You may specify more than one.");
     writeln("\nThis is the official Salmon command-line-interface.");
     writeln("Any questions? Email me! <gkai70264@gmail.com>");
+    
     return 0;
   }
 
