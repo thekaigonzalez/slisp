@@ -1,0 +1,1 @@
+(require "testes/sco/make.asd")
