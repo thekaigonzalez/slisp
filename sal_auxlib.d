@@ -53,6 +53,14 @@ public:
     t = n.getType();
   }
 
+  void setType(SalType ty) {
+    t = ty;
+  }
+
+  void setValue(string value) {
+    v = value;
+  }
+
   void returnValue(SalmonValue n, SalType p) {
     v = n.v;
     t = p;
