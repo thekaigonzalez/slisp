@@ -1,6 +1,6 @@
 project('salmon', 'd')
 
-add_global_arguments(['-L-static', '-Ofast','-Winline','-frelease', '-fbounds-check'], language : 'd')
+add_global_arguments(['-L-static'], language : 'd')
 
 executable(
   'salmon-' + build_machine.system().to_lower() + '-' + build_machine.cpu(),
