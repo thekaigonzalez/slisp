@@ -55,6 +55,5 @@ int main(string[] args)
   salmon_push_code(s, readText(args[1]));
 
   execute_salmon(s, false, env);
-
   return 0;
 }

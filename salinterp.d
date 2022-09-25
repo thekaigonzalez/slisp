@@ -328,11 +328,11 @@ SalmonValue quickRun(string c, SalmonEnvironment env)
 {
   auto sc = newState();
   salmon_push_code(sc, c);
-  return execute_salmon(sc, true, env, true);
+  return execute_salmon(sc, true, env);
 }
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
-SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment(), bool from_quickrun = false)
+SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment env = new SalmonEnvironment())
 {
   int LINE_NUMBER = 1;
   int[string] reserves = [
@@ -583,21 +583,26 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       if (!(args[0] in env.env_funcs) && !(args[0] in env.env_userdefined) && !(args[0] in reserves))
       {
         err("function \033[;1m`" ~ args[0] ~ "`\033[0m is not defined.", LINE_NUMBER, _FILEN);
-        foreach (string f; keys(env.env_funcs)) {
-          if (f.length < 5) continue;
-          int dist = cast(int)levenshteinDistance(f, args[0]);
-          
-          if (dist < f.length/2) { // if it's at least half of the word
+        foreach (string f; keys(env.env_funcs))
+        {
+          if (f.length < 5)
+            continue;
+          int dist = cast(int) levenshteinDistance(f, args[0]);
+
+          if (dist < f.length / 2)
+          { // if it's at least half of the word
             note("\033[;1m`" ~ args[0] ~ "`\033[0m does not exist, but the function \033[34;1m" ~ f ~ "\033[0;0m does.", LINE_NUMBER, _FILEN);
             if (_FILEN != "repl")
               exit(14);
           }
         }
 
-        foreach (string f; keys(env.env_userdefined)) {
-          int dist = cast(int)levenshteinDistance(f, args[0]);
-          
-          if (dist < f.length/2) { // if it's at least half of the word
+        foreach (string f; keys(env.env_userdefined))
+        {
+          int dist = cast(int) levenshteinDistance(f, args[0]);
+
+          if (dist < f.length / 2)
+          { // if it's at least half of the word
             note("\033[;1m`" ~ args[0] ~ "`\033[0m does not exist, but the function \033[34;1m" ~ f ~ "\033[0;0m does.", LINE_NUMBER, _FILEN);
             if (_FILEN != "repl")
               exit(14);
