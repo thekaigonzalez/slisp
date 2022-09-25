@@ -112,7 +112,7 @@ int checkeq(SalmonSub s)
 
 int checkbet(SalmonSub s)
 {
-  s.returnValue(to!string(s.aA[0].to!int < s.aA[1].to!int), SalType.boolean);
+  s.returnValue(to!string(s.newArg[0].getValue().to!int < s.aA[1].to!int), SalType.boolean);
   return 0;
 }
 
@@ -348,6 +348,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   ];
 
   env.env_funcs["+"] = &builtin_add;
+  env.env_funcs["-"] = &builtin_min;
+
   env.env_funcs["<"] = &checkbet;
   env.env_funcs[">"] = &checkgre;
   env.env_funcs[">="] = &checkgree;
