@@ -149,12 +149,28 @@ int typeLisp(SalmonSub s)
 
 int lengthLisp(SalmonSub s)
 {
-  if (s.aA[0] in s.environ.env_lists)
+  auto Length = new SalmonValue();
+  auto lengthOf = s.value_at(0);
+  if (lengthOf.getType() == SalType.list)
   {
-    s.returnValue(s.environ.env_lists[s.aA[0]].length.to!string, SalType.str);
-    return 0;
+    Length.returnValue(lengthOf.list_members().length.to!string, SalType.number);
   }
-  s.returnValue(s.aA[0].length.to!string, SalType.number);
+  else if (lengthOf.getType() == SalType.str)
+  {
+    Length.returnValue(lengthOf.getValue().length.to!string, SalType.number);
+  }
+
+  s.returnValue(Length);
+  
+  return 0;
+}
+
+int toInteger(SalmonSub s) {
+  SalmonValue toConvert = s.value_at(0);
+
+  toConvert.setType(SalType.number); /* basically flagAsList() but an integer */
+
+  s.returnValue(toConvert);
   return 0;
 }
 
@@ -302,7 +318,8 @@ int lispcanFind(SalmonSub i)
   return 0;
 }
 
-string[] getAvailableTokens() {
+string[] getAvailableTokens()
+{
   auto a = split("!,@,#,$,%,^,&,*,(,),_,+,{,},:,\\,<,>,?,`,~,|", ',');
   return a;
 }
@@ -325,6 +342,23 @@ SalmonValue[] listToValues(string[] l, SalmonEnvironment env)
   }
 
   return n;
+}
+
+int truncateList(SalmonSub i)
+{
+  SalmonValue list_truncated = new SalmonValue();
+
+  if (i.value_at(2).getValue() == "*")
+  {
+    list_truncated.returnList(i.value_at(0).list_members[i.value_at(1).getValue().to!int .. $]);
+  }
+  else
+  {
+    list_truncated.returnList(i.value_at(0).list_members[i.value_at(1)
+        .getValue().to!int .. i.value_at(2).getValue().to!int]);
+  }
+  i.returnValue(list_truncated);
+  return (0);
 }
 
 string _FILEN = "";
@@ -373,6 +407,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["type"] = &typeLisp;
   env.env_funcs["probe-file"] = &probeFileLisp;
   env.env_funcs["null"] = &isNull;
+  env.env_funcs["truncate"] = &truncateList;
 
   env.env_funcs["eq"] = &checkeq;
   env.env_funcs["getf"] = &returnAt;
@@ -854,7 +889,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       }
     }
   }
-  if (st != 0) {
+  if (st != 0 && st != -100)
+  {
     err("Unfinished statement");
   }
   return value;
