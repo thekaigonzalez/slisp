@@ -2,7 +2,7 @@
   (case (> n 2)
     (return 1)
     (return (+ 
-              (fib (- n 1)) 
-              (fib (- n 2))))))
+              (bog-fib (- n 1)) 
+              (bog-fib (- n 2))))))
 
 (print (bog-fib 5))
