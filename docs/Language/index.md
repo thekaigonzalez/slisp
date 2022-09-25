@@ -12,3 +12,4 @@ This is the place for technical language information!
 - [Lisp VS SDKL](./Comparisons.md)
 - [Control Flow](./Control_flow.md)
 - [Understanding Errors](./Errors.md)
+- [SLisp vs. Traditional Implementations](./Diff.md)
