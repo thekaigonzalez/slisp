@@ -2,6 +2,7 @@ import std.stdio;
 import std.conv;
 import std.string;
 import std.path;
+import std.getopt;
 import std.file;
 
 static import core.exception;
@@ -15,6 +16,34 @@ int main(string[] args)
   env.env_vars["salmon_version"] = quickRun("28", env);
   env.env_vars["compiler_system"] = quickRun(getTargetSystem(), env);
   env.env_lists["arg"] = args[1 .. $];
+  GetoptResult optional_arg;
+
+  try
+  {
+    optional_arg = getopt(
+      args, std.getopt.config.bundling,
+    );
+  }
+  catch (GetOptException e)
+  {
+    err(e.msg, 0, "cli");
+    return 91;
+  }
+
+  if (optional_arg.helpWanted)
+  {
+    writeln("Options:");
+    foreach (it; optional_arg.options)
+    {
+      writefln("\t%s (%s)\t%s", it.optShort,
+        it.optLong, it.help);
+    }
+    writeln("\nPositional (Optional) arguments:\n\tfile(s)\tThe file(s) to run. You may specify more than one.");
+    writeln("\nThis is the official Salmon command-line-interface.");
+    writeln("Any questions? Email me! <gkai70264@gmail.com>");
+    return 0;
+  }
+
   if (args.length == 1)
   {
     writeln("** SALMON LISP REPL **");
@@ -28,9 +57,12 @@ int main(string[] args)
       try
       {
         auto run = execute_salmon(input, true, env);
-        if (run.getType() == SalType.list) {
+        if (run.getType() == SalType.list)
+        {
           writeln("[" ~ valuesToList(run.g, env).join(", ") ~ "] (" ~ run.getType.to!string ~ ")");
-        } else {
+        }
+        else
+        {
           writeln(run.getValue() ~ " (" ~ run.getType().to!string ~ ")");
         }
       }
@@ -45,15 +77,19 @@ int main(string[] args)
 
   if (!exists(args[1]))
   {
-    writeln("file not found.");
+    err("file not found.", 0, "commandline");
     return 2;
   }
 
-  _FILEN = args[1];
-  SalmonState s = newState();
-
-  salmon_push_code(s, readText(args[1]));
-
-  execute_salmon(s, false, env);
+  foreach (string f; args[1..$])
+  {
+    _FILEN = f;
+    if (!exists(f))
+    {
+      err("file not found.", 0, "commandline");
+      return -1;
+    }
+    quickRun(readText(f), env, false);
+  }
   return 0;
 }
