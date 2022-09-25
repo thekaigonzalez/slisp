@@ -302,6 +302,11 @@ int lispcanFind(SalmonSub i)
   return 0;
 }
 
+string[] getAvailableTokens() {
+  auto a = split("!,@,#,$,%,^,&,*,(,),_,+,{,},:,\\,<,>,?,`,~,|", ',');
+  return a;
+}
+
 SalmonValue[] listToValues(string[] l, SalmonEnvironment env)
 {
   /** 
@@ -834,11 +839,23 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
     else
     {
       b ~= n;
+
+      // if (canFind(getAvailableTokens(), n.to!string) && st == 0 && m == 0) {
+      //   err("expected a \033[31;1mroot\033[0;0m \033[36;1msexpr\033[0m, got token \033[;1m`" ~ n.to!string ~ "'\033[0m");
+      //   if (_FILEN != "repl")
+      //     exit(801);
+      //   value.returnValue("unexpectedToken", SalType.error);
+      //   return value;
+      // }
+
       if (n == '\n')
       {
         LINE_NUMBER += 1;
       }
     }
+  }
+  if (st != 0) {
+    err("Unfinished statement");
   }
   return value;
 }
