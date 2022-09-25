@@ -361,6 +361,28 @@ int truncateList(SalmonSub i)
   return (0);
 }
 
+int substrLisp(SalmonSub i) {
+  SalmonValue str = i.value_at(0);
+
+  if (str.getType() != SalType.str) {
+    note("(substr) expects a `str` type, got " ~ str.getType().to!string);
+    // if (_FILEN != "repl") exit(934);
+  }
+
+  SalmonValue beginningRange = i.value_at(1);
+
+  SalmonValue endingRange = i.value_at(2);
+
+  SalmonValue substr = new SalmonValue();
+
+  substr.setValue(str.getValue()[getArgumentAsNumber(beginningRange) .. getArgumentAsNumber(endingRange)]);
+  substr.setType(SalType.str);
+
+  i.returnValue(substr);
+
+  return 0;
+}
+
 string _FILEN = "";
 
 SalmonValue quickRun(string c, SalmonEnvironment env, bool lambda = true)
@@ -420,6 +442,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["string-trim"] = &builtin_trim;
   env.env_funcs["get"] = &builtin_access;
   env.env_funcs["istrcat"] = &istrcat;
+  env.env_funcs["substr"] = &substrLisp;
   env.env_funcs["getq"] = &builtin_accessq;
   env.env_funcs["position"] = &positionLisp;
   env.env_funcs["intersection"] = &lintersection;
