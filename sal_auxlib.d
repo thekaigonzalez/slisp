@@ -4,6 +4,15 @@ import salinterp;
 import sal_shared_api;
 import std.conv;
 
+int getArgumentAsNumber(SalmonValue v) {
+  if (v.getType() == SalType.number)
+    return to!int(v.getValue());
+  else {
+    err("Could not convert type \033[;1m`" ~ v.getType().to!string ~ "`\033[0m to \033[;1mnumber\033[0m.");
+    return -9;
+  }
+}
+
 string[] valArrayToString(SalmonValue va) {
   string[] n;
 
