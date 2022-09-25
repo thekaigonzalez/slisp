@@ -1,12 +1,8 @@
-; Now we can create another list
+; Better yet, now we can create lists as variables!
 
-(require "math")
+(set list1 (list 1 2 3 4))
+(set list2 (list 2 4 6))
 
-(list list-one 1 2 3 4 5)
-(list list-two 2 4 6)
+(set list3 (intersection list1 list2))
 
-(intersection list-one list-two list-three) ; (list-three) is created at runtime
-
-(each list-three
-    (print 
-        (get *)))
+(print (concatenate list3))
