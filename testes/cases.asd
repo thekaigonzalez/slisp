@@ -1,8 +1,8 @@
-(set input (trim (read-line)))
+(set input (string-trim (read-line)))
 
 (case (= 
-  (get input) "hello")
+  input "hello")
     (print "Hi!")
-    (case (= (get input) "Bye")
+    (case (= input "Bye")
       (print "Ok, bye")
       (print "Something else")))
