@@ -7,7 +7,7 @@ The nature of Salmon is like Python, it's high-level and is built with a languag
 Salmon isn't only good for heavy Lisp algorithms, abiding SLisp's dynamic nature, it can be used to create
 anything from basic scripts!.
 
-To get started, checkout the [sections](#sections) or [learn how to make a "Hello world" program!](./)
+To get started, checkout the [sections](#sections) or [learn how to make a "Hello world" program!](./Handbook/)
 
 ## Sections
 
