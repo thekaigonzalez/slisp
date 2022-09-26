@@ -11,6 +11,7 @@ import std.file;
 import core.thread;
 import sal_builtins;
 import core.stdc.stdlib;
+import std.math;
 import sal_auxlib;
 import std.algorithm : levenshteinDistance, canFind;
 import sal_shared_api;
@@ -421,6 +422,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
 
   env.env_funcs["+"] = &builtin_add;
   env.env_funcs["-"] = &builtin_min;
+  env.env_funcs["/"] = &builtin_div;
 
   env.env_funcs["<"] = &checkbet;
   env.env_funcs[">"] = &checkgre;

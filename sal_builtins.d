@@ -61,6 +61,16 @@ int builtin_min(SalmonSub info)
   return (0);
 }
 
+int builtin_div(SalmonSub info)
+{
+  int i = info.value_at(0).getValue().to!int;
+
+  int i1 = info.value_at(1).getValue().to!int;
+
+  info.returnValue(to!string(i / i1), SalType.number);
+  return (0);
+}
+
 int builtin_mul(SalmonSub info)
 {
   int i = 1;
