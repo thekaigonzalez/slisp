@@ -76,7 +76,7 @@ public:
   }
 
   void returnValue(SalmonValue n) {
-    if (n.getType() == SalType.list) {
+    if (n.getType() == SalType.list || n.getType() == SalType.pair) {
       g = n.g;
     } else 
       v = n.v;
@@ -92,6 +92,10 @@ public:
     v = value;
   }
 
+  void setValue(SalmonValue[] value) {
+    g = value;
+  }
+
   void returnValue(SalmonValue n, SalType p) {
     v = n.v;
     t = p;
@@ -104,6 +108,14 @@ public:
     } else {
       return this.g;
     }
+  }
+
+  SalmonValue[] list_pair() {
+    if (this.getType() != SalType.pair) {
+      note("[From D]: running list_members() on a type \033[;1m" ~ t.to!string ~ "\033[0m", __LINE__, __FILE__);
+      return [new SalmonValue()];
+    }
+    return this.g;
   }
 
   void returnList(SalmonValue[] li)
@@ -131,6 +143,15 @@ public:
   void flagAsList() {
     t = SalType.list;
   }
+}
+
+SalmonValue convertStringToValue(string str) {
+  auto v = new SalmonValue();
+
+  v.setValue(str);
+  v.setType(SalType.str);
+
+  return v;
 }
 
 /** 
