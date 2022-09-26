@@ -162,11 +162,25 @@ int lengthLisp(SalmonSub s)
   }
 
   s.returnValue(Length);
-  
+
   return 0;
 }
 
-int toInteger(SalmonSub s) {
+int newPair(SalmonSub s)
+{
+  SalmonValue pair = new SalmonValue();
+
+  pair.setValue([s.value_at(0), s.value_at(1)]);
+
+  pair.setType(SalType.pair);
+
+  s.returnValue(pair);
+
+  return 0;
+}
+
+int toInteger(SalmonSub s)
+{
   SalmonValue toConvert = s.value_at(0);
 
   toConvert.setType(SalType.number); /* basically flagAsList() but an integer */
@@ -319,7 +333,8 @@ int lispcanFind(SalmonSub i)
   return 0;
 }
 
-int typeofLisp(SalmonSub f) {
+int typeofLisp(SalmonSub f)
+{
   SalmonValue typeString = new SalmonValue();
   typeString.setType(SalType.str);
 
@@ -373,10 +388,69 @@ int truncateList(SalmonSub i)
   return (0);
 }
 
-int substrLisp(SalmonSub i) {
+int importLisp(SalmonSub i)
+{
+  /*
+  File import:
+  auto include = newState;
+    include.CODE = readText(args[1]);
+    execute_salmon(include, lambda, env);
+
+  Dlfcn:
+
+  import core.sys.linux.dlfcn;
+
+        void* hndl = dlopen(("./libs/" ~ argum[0] ~ ".so").toStringz(), RTLD_LAZY);
+
+        int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
+
+        openFunc(env);
+
+  */
+
+  auto target = i.value_at(0);
+
+  SalmonValue pathList = i.environ.env_vars["path"];
+
+  foreach (SalmonValue path; pathList.list_members())
+  {
+    if (!(endsWith(path.getValue(), '/')))
+      path.v = path.getValue() ~ "/";
+    if ((path.getValue() ~ target.getValue() ~ ".so").exists)
+    {
+      import core.sys.linux.dlfcn;
+
+      void* hndl = dlopen((path.getValue() ~ target.getValue() ~ ".so").toStringz(), RTLD_LAZY);
+
+      int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
+
+      openFunc(i.environ);
+      return 0;
+    }
+    else if ((path.getValue() ~ target.getValue() ~ ".asd").exists)
+    {
+      auto include = newState;
+      include.CODE = readText(path.getValue() ~ target.getValue() ~ ".asd");
+      execute_salmon(include, false, i.environ);
+      return 0;
+    }
+    else if ((path.getValue() ~ target.getValue()).exists)
+    {
+      auto include = newState;
+      include.CODE = readText(path.getValue() ~ target.getValue());
+      execute_salmon(include, false, i.environ);
+      return 0;
+    }
+  }
+  return 0;
+}
+
+int substrLisp(SalmonSub i)
+{
   SalmonValue str = i.value_at(0);
 
-  if (str.getType() != SalType.str) {
+  if (str.getType() != SalType.str)
+  {
     note("(substr) expects a `str` type, got " ~ str.getType().to!string);
     // if (_FILEN != "repl") exit(934);
   }
@@ -387,11 +461,20 @@ int substrLisp(SalmonSub i) {
 
   SalmonValue substr = new SalmonValue();
 
-  substr.setValue(str.getValue()[getArgumentAsNumber(beginningRange) .. getArgumentAsNumber(endingRange)]);
+  substr.setValue(str.getValue()[getArgumentAsNumber(
+        beginningRange) .. getArgumentAsNumber(endingRange)]);
   substr.setType(SalType.str);
 
   i.returnValue(substr);
 
+  return 0;
+}
+
+int appendLisp(SalmonSub s)
+{
+  auto val = s.value_at(0);
+  val.g ~= s.value_at(1);
+  s.returnValue(val);
   return 0;
 }
 
@@ -439,15 +522,18 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["assert"] = &assertLisp;
   env.env_funcs["compile"] = &compileLisp;
   env.env_funcs["type"] = &typeLisp;
-  env.env_funcs["type"] = &typeLisp;
+  env.env_funcs["append"] = &appendLisp;
+
   env.env_funcs["probe-file"] = &probeFileLisp;
   env.env_funcs["null"] = &isNull;
+  env.env_funcs["import"] = &importLisp;
   env.env_funcs["truncate"] = &truncateList;
 
   env.env_funcs["eq"] = &checkeq;
   env.env_funcs["getf"] = &returnAt;
   env.env_funcs["read-line"] = &readlineLisp;
   env.env_funcs["write-line"] = &writeLineLisp;
+  env.env_funcs["pair"] = &newPair;
 
   env.env_funcs["print"] = &builtin_print;
   env.env_funcs["println"] = &builtin_dep_println; /* println deprecated */
@@ -463,6 +549,18 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["find"] = &lispcanFind;
   env.env_funcs["type-of"] = &typeofLisp;
 
+  if (!("path" in env.env_vars))
+  {
+    auto samplePath = new SalmonValue();
+    samplePath.flagAsList();
+
+    /* set default paths */
+    listAppendV(convertStringToValue("./libs/"), samplePath);
+    listAppendV(convertStringToValue("/usr/lib/salmon/libs/"), samplePath);
+    listAppendV(convertStringToValue("./"), samplePath);
+
+    env.env_vars["path"] = samplePath;
+  }
 
   string b;
   SalmonValue value = new SalmonValue();
