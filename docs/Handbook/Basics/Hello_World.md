@@ -48,3 +48,11 @@ Symbolic expressions follow this format:
 ## The Code
 
 So, to print "hello world", create a file called `helloWorld.asd` (learn about the adopted file extension [here.](../Tech/File_Extension.md))
+
+Then, write the following:
+
+```commonlisp
+(print "Hello, world!")
+```
+
+Simple! Run the program and you're gonna get `Hello, world!`
