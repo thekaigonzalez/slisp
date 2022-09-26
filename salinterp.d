@@ -390,24 +390,6 @@ int truncateList(SalmonSub i)
 
 int importLisp(SalmonSub i)
 {
-  /*
-  File import:
-  auto include = newState;
-    include.CODE = readText(args[1]);
-    execute_salmon(include, lambda, env);
-
-  Dlfcn:
-
-  import core.sys.linux.dlfcn;
-
-        void* hndl = dlopen(("./libs/" ~ argum[0] ~ ".so").toStringz(), RTLD_LAZY);
-
-        int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
-
-        openFunc(env);
-
-  */
-
   auto target = i.value_at(0);
 
   SalmonValue pathList = i.environ.env_vars["path"];
