@@ -357,6 +357,7 @@ int truncateList(SalmonSub i)
     list_truncated.returnList(i.value_at(0).list_members[i.value_at(1)
         .getValue().to!int .. i.value_at(2).getValue().to!int]);
   }
+
   i.returnValue(list_truncated);
   return (0);
 }

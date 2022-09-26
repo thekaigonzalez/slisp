@@ -1,9 +1,15 @@
 module sal_auxlib;
-
+/+ Contains helper functions for Salmon base types. +/
 import salinterp;
 import sal_shared_api;
 import std.conv;
 
+/** 
+ * Returns the value `v` as a D number.
+ * Params:
+ *   v = SalmonValue()
+ * Returns: v.getValue() as an integer
+ */
 int getArgumentAsNumber(SalmonValue v) {
   if (v.getType() == SalType.number)
     return to!int(v.getValue());
@@ -13,6 +19,7 @@ int getArgumentAsNumber(SalmonValue v) {
   }
 }
 
+/* Convert a SalmonValue() (which has a type of SalType.list) to a string[] */
 string[] valArrayToString(SalmonValue va) {
   string[] n;
 
@@ -24,6 +31,12 @@ string[] valArrayToString(SalmonValue va) {
   return n;
 }
 
+/** 
+ * An overload which allows a raw array instead of just a value.
+ * Params:
+ *   va = Array of SalmonValue.
+ * Returns: string[] of va
+ */
 string[] valArrayToString(SalmonValue[] va) {
   string[] n;
 
@@ -35,10 +48,19 @@ string[] valArrayToString(SalmonValue[] va) {
   return n;
 }
 
+/** 
+ * Appends `v` to `thisList`
+ * Params:
+ *   v = A value.
+ *   thisList = To this list.
+ */
 void listAppendV(SalmonValue v, SalmonValue thisList) {
   thisList.g ~= v;
 }
 
+/** 
+ * A basic Salmon Value.
+ */
 class SalmonValue
 {
 public:
@@ -111,6 +133,10 @@ public:
   }
 }
 
+/** 
+ * Backwards compatible Salmon function class.
+ * Use THIS instead of the `SalmonSub` class.
+ */
 class SalmonSub
 {
 public:
