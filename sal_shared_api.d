@@ -30,6 +30,7 @@ enum SalType
   any,
   func,
   list,
+  pair,
   error,
   boolean
 }
