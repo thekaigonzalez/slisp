@@ -318,6 +318,16 @@ int lispcanFind(SalmonSub i)
   return 0;
 }
 
+int typeofLisp(SalmonSub f) {
+  SalmonValue typeString = new SalmonValue();
+  typeString.setType(SalType.str);
+
+  typeString.setValue(f.value_at(0).getType().to!string);
+
+  f.returnValue(typeString);
+  return 0;
+}
+
 string[] getAvailableTokens()
 {
   auto a = split("!,@,#,$,%,^,&,*,(,),_,+,{,},:,\\,<,>,?,`,~,|", ',');
@@ -449,6 +459,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["intersection"] = &lintersection;
   env.env_funcs["concatenate"] = &concat;
   env.env_funcs["find"] = &lispcanFind;
+  env.env_funcs["type-of"] = &typeofLisp;
+
 
   string b;
   SalmonValue value = new SalmonValue();
