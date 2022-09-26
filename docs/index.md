@@ -5,3 +5,4 @@ SalmonLisp is a part of the Lisp family (*obviously adopted*), Salmon has been d
 - [Technical Language Info](./Language/index.md)
 - [Packages](./Standard/index.md)
 - [The D API](./Language/D_API/index.md)
+- [D API Documentation](./API/index.md)
