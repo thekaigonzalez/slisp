@@ -390,6 +390,7 @@ int truncateList(SalmonSub i)
 
 int importLisp(SalmonSub i)
 {
+  int _found = 0;
   auto target = i.value_at(0);
 
   SalmonValue pathList = i.environ.env_vars["path"];
@@ -400,6 +401,7 @@ int importLisp(SalmonSub i)
       path.v = path.getValue() ~ "/";
     if ((path.getValue() ~ target.getValue() ~ ".so").exists)
     {
+      _found = 1;
       import core.sys.linux.dlfcn;
 
       void* hndl = dlopen((path.getValue() ~ target.getValue() ~ ".so").toStringz(), RTLD_LAZY);
@@ -411,6 +413,8 @@ int importLisp(SalmonSub i)
     }
     else if ((path.getValue() ~ target.getValue() ~ ".asd").exists)
     {
+      _found = 1;
+
       auto include = newState;
       include.CODE = readText(path.getValue() ~ target.getValue() ~ ".asd");
       execute_salmon(include, false, i.environ);
@@ -418,12 +422,17 @@ int importLisp(SalmonSub i)
     }
     else if ((path.getValue() ~ target.getValue()).exists)
     {
+      _found = 1;
+
       auto include = newState;
       include.CODE = readText(path.getValue() ~ target.getValue());
       execute_salmon(include, false, i.environ);
       return 0;
     }
   }
+
+  if (_found == 0)
+    i.returnValue(salmonThrowError("importFailure", "Could not find module, " ~ target.getValue(), 100));
   return 0;
 }
 
@@ -461,7 +470,6 @@ int appendLisp(SalmonSub s)
 }
 
 string _FILEN = "";
-
 SalmonValue quickRun(string c, SalmonEnvironment env, bool lambda = true)
 {
   auto sc = newState();
