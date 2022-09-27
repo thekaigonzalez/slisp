@@ -190,3 +190,13 @@ public:
 
   SalmonEnvironment environ = new SalmonEnvironment();
 }
+
+SalmonValue salmonThrowError(string thisError, string withThisMessage, int thatHasThisErrorCode, int atThisLine = 0) {
+  err(thisError ~ ": " ~ withThisMessage, atThisLine, _FILEN);
+  import core.stdc.stdlib;
+  if (_FILEN != "repl") {
+    exit(thatHasThisErrorCode);
+  }
+
+  return new SalmonValue();
+}
