@@ -104,6 +104,7 @@ string[] parseParamList(string mf)
   }
   return pi;
 }
+
 string[] spaceSeparatedList(string mf)
 {
   int st = 0;
@@ -536,51 +537,54 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
     "progn": 10,
   ];
 
-  env.env_funcs["+"] = &builtin_add;
-  env.env_funcs["-"] = &builtin_min;
-  env.env_funcs["/"] = &builtin_div;
+  if (env.settings.setBuiltins)
+  {
+    env.env_funcs["+"] = &builtin_add;
+    env.env_funcs["-"] = &builtin_min;
+    env.env_funcs["/"] = &builtin_div;
 
-  env.env_funcs["<"] = &checkbet;
-  env.env_funcs[">"] = &checkgre;
-  env.env_funcs[">="] = &checkgree;
-  env.env_funcs["<="] = &checkbete;
+    env.env_funcs["<"] = &checkbet;
+    env.env_funcs[">"] = &checkgre;
+    env.env_funcs[">="] = &checkgree;
+    env.env_funcs["<="] = &checkbete;
 
-  env.env_funcs["*"] = &builtin_mul;
+    env.env_funcs["*"] = &builtin_mul;
 
-  env.env_funcs["="] = &checkeq;
-  env.env_funcs["not"] = &checkxq;
-  env.env_funcs["length"] = &lengthLisp;
-  env.env_funcs["replace"] = &replaceLisp;
-  env.env_funcs["return"] = &returnLisp;
-  env.env_funcs["assert"] = &assertLisp;
-  env.env_funcs["compile"] = &compileLisp;
-  env.env_funcs["type"] = &typeLisp;
-  env.env_funcs["append"] = &appendLisp;
+    env.env_funcs["="] = &checkeq;
+    env.env_funcs["not"] = &checkxq;
+    env.env_funcs["length"] = &lengthLisp;
+    env.env_funcs["replace"] = &replaceLisp;
+    env.env_funcs["return"] = &returnLisp;
+    env.env_funcs["assert"] = &assertLisp;
+    env.env_funcs["compile"] = &compileLisp;
+    env.env_funcs["type"] = &typeLisp;
+    env.env_funcs["append"] = &appendLisp;
 
-  env.env_funcs["probe-file"] = &probeFileLisp;
-  env.env_funcs["null"] = &isNull;
-  env.env_funcs["import"] = &importLisp;
-  env.env_funcs["truncate"] = &truncateList;
+    env.env_funcs["probe-file"] = &probeFileLisp;
+    env.env_funcs["null"] = &isNull;
+    env.env_funcs["import"] = &importLisp;
+    env.env_funcs["truncate"] = &truncateList;
 
-  env.env_funcs["eq"] = &checkeq;
-  env.env_funcs["getf"] = &returnAt;
-  env.env_funcs["read-line"] = &readlineLisp;
-  env.env_funcs["write-line"] = &writeLineLisp;
-  env.env_funcs["pair"] = &newPair;
+    env.env_funcs["eq"] = &checkeq;
+    env.env_funcs["getf"] = &returnAt;
+    env.env_funcs["read-line"] = &readlineLisp;
+    env.env_funcs["write-line"] = &writeLineLisp;
+    env.env_funcs["pair"] = &newPair;
 
-  env.env_funcs["print"] = &builtin_print;
-  env.env_funcs["println"] = &builtin_dep_println; /* println deprecated */
-  env.env_funcs["strcat"] = &builtin_strcat;
-  env.env_funcs["string-trim"] = &builtin_trim;
-  env.env_funcs["get"] = &builtin_access;
-  env.env_funcs["istrcat"] = &istrcat;
-  env.env_funcs["substr"] = &substrLisp;
-  env.env_funcs["getq"] = &builtin_accessq;
-  env.env_funcs["position"] = &positionLisp;
-  env.env_funcs["intersection"] = &lintersection;
-  env.env_funcs["concatenate"] = &concat;
-  env.env_funcs["find"] = &lispcanFind;
-  env.env_funcs["type-of"] = &typeofLisp;
+    env.env_funcs["print"] = &builtin_print;
+    env.env_funcs["println"] = &builtin_dep_println; /* println deprecated */
+    env.env_funcs["strcat"] = &builtin_strcat;
+    env.env_funcs["string-trim"] = &builtin_trim;
+    env.env_funcs["get"] = &builtin_access;
+    env.env_funcs["istrcat"] = &istrcat;
+    env.env_funcs["substr"] = &substrLisp;
+    env.env_funcs["getq"] = &builtin_accessq;
+    env.env_funcs["position"] = &positionLisp;
+    env.env_funcs["intersection"] = &lintersection;
+    env.env_funcs["concatenate"] = &concat;
+    env.env_funcs["find"] = &lispcanFind;
+    env.env_funcs["type-of"] = &typeofLisp;
+  }
 
   if (env.settings.handlePath)
     populateEnvironment(env);
@@ -641,7 +645,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
     else if (n == ')' && m == 1 && st == 1)
     {
       string[] args = _sep(b.strip);
-      for (int k = 0 ; k < args.length; ++ k) {
+      for (int k = 0; k < args.length; ++k)
+      {
         args[k] = args[k].strip;
       }
       // for (int ia = 0 ; ia < args.length ; ++ ia) {
@@ -690,7 +695,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           string code = join(args[2 .. $]);
 
           quickRun(code, env_arch, false);
-        } else {
+        }
+        else
+        {
           env.env_vars[name] = val;
         }
       }
@@ -698,12 +705,16 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       else if (args[0] == "progn")
       {
         int ia = 0;
-        foreach (string stat; args) {
+        foreach (string stat; args)
+        {
           ia += 1;
-          if (ia == args.length) {
+          if (ia == args.length)
+          {
             value.returnValue(quickRun(stat, env));
             return value;
-          } else {
+          }
+          else
+          {
             quickRun(stat, env, false);
           }
         }
