@@ -96,7 +96,12 @@ public:
   string[string] env_definitions;
   SalmonEnvironment copy()
   {
-    return new SalmonEnvironment();
+    auto en = new SalmonEnvironment();
+    en.env_funcs = this.env_funcs;
+    en.env_lists = this.env_lists;
+    en.env_definitions = this.env_definitions;
+    en.env_vars = this.env_vars;
+    return en;
   }
 
   SalmonSettings settings = new SalmonSettings();
