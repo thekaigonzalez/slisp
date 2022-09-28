@@ -55,19 +55,27 @@ public:
 
 /* value: type */
 
-string[] valuesToList(SalmonValue[] l, SalmonEnvironment env) {
+string[] valuesToList(SalmonValue[] l, SalmonEnvironment env)
+{
   /** 
    * Converts `l` to a `SalmonValue[]`
    */
   string[] n = [];
   int iterator = 0;
 
-  foreach (SalmonValue s; l) {
+  foreach (SalmonValue s; l)
+  {
     n ~= s.v;
     iterator += 1;
-  }  
+  }
 
   return n;
+}
+
+class SalmonSettings
+{
+  public:
+    bool handlePath = true; /* if set to true, it will handle the path automatically, otherwise you'll need to specify them yourself. */
 }
 
 class SalmonFunction
@@ -91,6 +99,8 @@ public:
     return new SalmonEnvironment();
   }
 
+  SalmonSettings settings = new SalmonSettings();
+
   SalmonFunction[string] env_userdefined;
 }
 
@@ -103,7 +113,8 @@ SalType checkSalmonType(string s, SalmonEnvironment optional_environment = new S
     return SalType.boolean;
   }
 
-  if (s in optional_environment.env_userdefined) {
+  if (s in optional_environment.env_userdefined)
+  {
     return SalType.func;
   }
 
