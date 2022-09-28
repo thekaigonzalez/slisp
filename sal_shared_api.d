@@ -76,6 +76,7 @@ class SalmonSettings
 {
   public:
     bool handlePath = true; /* if set to true, it will handle the path automatically, otherwise you'll need to specify them yourself. */
+    bool setBuiltins = true; /* do not set this to false unless you're wanting to define the functions yourself */
 }
 
 class SalmonFunction
