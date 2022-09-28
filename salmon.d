@@ -9,14 +9,18 @@ static import core.exception;
 import salinterp;
 
 import sal_shared_api;
+import sal_auxlib;
 
 int main(string[] args)
 {
   SalmonEnvironment env = new SalmonEnvironment();
+  env.settings.handlePath = false;
   env.env_vars["salmon_version"] = quickRun("30", env);
   env.env_vars["compiler_system"] = quickRun(getTargetSystem(), env);
   env.env_lists["arg"] = args[1 .. $];
   GetoptResult optional_arg;
+
+  string[] optional_paths;
 
   bool ver = false;
 
@@ -24,7 +28,8 @@ int main(string[] args)
   {
     optional_arg = getopt(
       args, std.getopt.config.bundling,
-      "version|v", "Print version and exit", &ver
+      "version|v", "Print version and exit", &ver,
+      "I", "directories to add to PATH.", &optional_paths
     );
   }
   catch (GetOptException e)
@@ -36,6 +41,14 @@ int main(string[] args)
   if (ver) {
     writefln("Salmon Version: %s", env.env_vars["salmon_version"].getValue());
     return 0;
+  }
+  
+  populateEnvironment(env);
+
+  foreach (string s; optional_paths) {
+    SalmonValue pathVariable = getEnvironmentVariable(env, "path");
+
+    pathVariable.append(convertStringToValue(s));
   }
 
   if (optional_arg.helpWanted)
