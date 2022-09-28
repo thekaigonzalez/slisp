@@ -104,6 +104,47 @@ string[] parseParamList(string mf)
   }
   return pi;
 }
+string[] spaceSeparatedList(string mf)
+{
+  int st = 0;
+  string b = "";
+  string[] pi;
+
+  foreach (char s; mf)
+  {
+    if (s == '(' && st == 0)
+    {
+      st = 1;
+    }
+    else if (s == ')' && st == 1)
+    {
+      if (b.strip.length > 0)
+      {
+        pi ~= b.strip;
+      }
+
+      return pi;
+    }
+    else if (s == '(' && st != 0)
+    {
+      st += 5;
+    }
+    else if (s == ')' && st > 1)
+    {
+      st -= 5;
+    }
+    else if (s == ' ' && st == 1)
+    {
+      pi ~= b.strip;
+      b = "";
+    }
+    else
+    {
+      b ~= s;
+    }
+  }
+  return pi;
+}
 
 int checkeq(SalmonSub s)
 {
@@ -491,6 +532,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
     "case": 6,
     "&thread": 7,
     "await": 8,
+    "let": 9,
   ];
 
   env.env_funcs["+"] = &builtin_add;
@@ -630,6 +672,25 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
 
         if (lambda)
           value.returnValue(f, SalType.any);
+      }
+
+      else if (args[0] == "let")
+      {
+        string[] theLetList = spaceSeparatedList(args[1].strip);
+        string name = theLetList[0];
+        SalmonValue val = quickRun(theLetList[1].strip, env);
+
+        if (args.length >= 3)
+        {
+          auto env_arch = new SalmonEnvironment();
+
+          env_arch.env_vars[name] = val;
+          string code = join(args[2 .. $]);
+
+          quickRun(code, env_arch, false);
+        } else {
+          env.env_vars[name] = val;
+        }
       }
 
       else if (args[0] == "while")
