@@ -10,17 +10,21 @@ import std.conv;
  *   v = SalmonValue()
  * Returns: v.getValue() as an integer
  */
-int getArgumentAsNumber(SalmonValue v) {
+int getArgumentAsNumber(SalmonValue v)
+{
   if (v.getType() == SalType.number)
     return to!int(v.getValue());
-  else {
-    err("Could not convert type \033[;1m`" ~ v.getType().to!string ~ "`\033[0m to \033[;1mnumber\033[0m.");
+  else
+  {
+    err("Could not convert type \033[;1m`" ~ v.getType()
+        .to!string ~ "`\033[0m to \033[;1mnumber\033[0m.");
     return -9;
   }
 }
 
 /* Convert a SalmonValue() (which has a type of SalType.list) to a string[] */
-string[] valArrayToString(SalmonValue va) {
+string[] valArrayToString(SalmonValue va)
+{
   string[] n;
 
   foreach (SalmonValue v; va.g)
@@ -37,7 +41,8 @@ string[] valArrayToString(SalmonValue va) {
  *   va = Array of SalmonValue.
  * Returns: string[] of va
  */
-string[] valArrayToString(SalmonValue[] va) {
+string[] valArrayToString(SalmonValue[] va)
+{
   string[] n;
 
   foreach (SalmonValue v; va)
@@ -54,7 +59,8 @@ string[] valArrayToString(SalmonValue[] va) {
  *   v = A value.
  *   thisList = To this list.
  */
-void listAppendV(SalmonValue v, SalmonValue thisList) {
+void listAppendV(SalmonValue v, SalmonValue thisList)
+{
   thisList.g ~= v;
 }
 
@@ -76,47 +82,61 @@ public:
   }
 
   // Appends @thisValue to the current list (if any)
-  void append(SalmonValue thisValue) {
+  void append(SalmonValue thisValue)
+  {
     g ~= thisValue;
   }
 
-  void returnValue(SalmonValue n) {
-    if (n.getType() == SalType.list || n.getType() == SalType.pair) {
+  void returnValue(SalmonValue n)
+  {
+    if (n.getType() == SalType.list || n.getType() == SalType.pair)
+    {
       g = n.g;
-    } else 
+    }
+    else
       v = n.v;
 
     t = n.getType();
   }
 
-  void setType(SalType ty) {
+  void setType(SalType ty)
+  {
     t = ty;
   }
 
-  void setValue(string value) {
+  void setValue(string value)
+  {
     v = value;
   }
 
-  void setValue(SalmonValue[] value) {
+  void setValue(SalmonValue[] value)
+  {
     g = value;
   }
 
-  void returnValue(SalmonValue n, SalType p) {
+  void returnValue(SalmonValue n, SalType p)
+  {
     v = n.v;
     t = p;
   }
 
-  SalmonValue[] list_members() {
-    if (t != SalType.list) {
+  SalmonValue[] list_members()
+  {
+    if (t != SalType.list)
+    {
       note("[From D]: running list_members() on a type \033[;1m" ~ t.to!string ~ "\033[0m", __LINE__, __FILE__);
       return [new SalmonValue()];
-    } else {
+    }
+    else
+    {
       return this.g;
     }
   }
 
-  SalmonValue[] list_pair() {
-    if (this.getType() != SalType.pair) {
+  SalmonValue[] list_pair()
+  {
+    if (this.getType() != SalType.pair)
+    {
       note("[From D]: running list_members() on a type \033[;1m" ~ t.to!string ~ "\033[0m", __LINE__, __FILE__);
       return [new SalmonValue()];
     }
@@ -145,12 +165,14 @@ public:
     v = "nil";
   }
 
-  void flagAsList() {
+  void flagAsList()
+  {
     t = SalType.list;
   }
 }
 
-SalmonValue convertStringToValue(string str) {
+SalmonValue convertStringToValue(string str)
+{
   auto v = new SalmonValue();
 
   v.setValue(str);
@@ -159,8 +181,14 @@ SalmonValue convertStringToValue(string str) {
   return v;
 }
 
-SalmonValue getEnvironmentVariable(SalmonEnvironment env, string var) {
+SalmonValue getEnvironmentVariable(SalmonEnvironment env, string var)
+{
   return env.env_vars[var];
+}
+
+void addDefinition(string definition, string forThisFunction, SalmonEnvironment inThisEnv)
+{
+  inThisEnv.env_definitions[forThisFunction] = definition;
 }
 
 /** 
@@ -188,9 +216,11 @@ public:
     rvalue = quickRun(value, environ);
   }
 
-  SalmonValue value_at(int pos) {
+  SalmonValue value_at(int pos)
+  {
     return newArg[pos];
   }
+
   void returnValue(string value, SalType t)
   {
     rvalue = quickRun(value, this.environ);
@@ -200,7 +230,8 @@ public:
   SalmonEnvironment environ = new SalmonEnvironment();
 }
 
-void populateEnvironment(SalmonEnvironment env) {
+void populateEnvironment(SalmonEnvironment env)
+{
   if (!("path" in env.env_vars))
   {
     auto samplePath = new SalmonValue();
@@ -215,10 +246,13 @@ void populateEnvironment(SalmonEnvironment env) {
   }
 }
 
-SalmonValue salmonThrowError(string thisError, string withThisMessage, int thatHasThisErrorCode, int atThisLine = 0) {
+SalmonValue salmonThrowError(string thisError, string withThisMessage, int thatHasThisErrorCode, int atThisLine = 0)
+{
   err(thisError ~ ": " ~ withThisMessage, atThisLine, _FILEN);
   import core.stdc.stdlib;
-  if (_FILEN != "repl") {
+
+  if (_FILEN != "repl")
+  {
     exit(thatHasThisErrorCode);
   }
 
