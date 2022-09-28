@@ -75,6 +75,11 @@ public:
     v = value;
   }
 
+  // Appends @thisValue to the current list (if any)
+  void append(SalmonValue thisValue) {
+    g ~= thisValue;
+  }
+
   void returnValue(SalmonValue n) {
     if (n.getType() == SalType.list || n.getType() == SalType.pair) {
       g = n.g;
@@ -154,6 +159,10 @@ SalmonValue convertStringToValue(string str) {
   return v;
 }
 
+SalmonValue getEnvironmentVariable(SalmonEnvironment env, string var) {
+  return env.env_vars[var];
+}
+
 /** 
  * Backwards compatible Salmon function class.
  * Use THIS instead of the `SalmonSub` class.
@@ -189,6 +198,21 @@ public:
   }
 
   SalmonEnvironment environ = new SalmonEnvironment();
+}
+
+void populateEnvironment(SalmonEnvironment env) {
+  if (!("path" in env.env_vars))
+  {
+    auto samplePath = new SalmonValue();
+    samplePath.flagAsList();
+
+    /* set default paths */
+    listAppendV(convertStringToValue("./libs/"), samplePath);
+    listAppendV(convertStringToValue("/usr/lib/salmon/libs/"), samplePath);
+    listAppendV(convertStringToValue("./"), samplePath);
+
+    env.env_vars["path"] = samplePath;
+  }
 }
 
 SalmonValue salmonThrowError(string thisError, string withThisMessage, int thatHasThisErrorCode, int atThisLine = 0) {
