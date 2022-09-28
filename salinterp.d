@@ -539,18 +539,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
   env.env_funcs["find"] = &lispcanFind;
   env.env_funcs["type-of"] = &typeofLisp;
 
-  if (!("path" in env.env_vars))
-  {
-    auto samplePath = new SalmonValue();
-    samplePath.flagAsList();
-
-    /* set default paths */
-    listAppendV(convertStringToValue("./libs/"), samplePath);
-    listAppendV(convertStringToValue("/usr/lib/salmon/libs/"), samplePath);
-    listAppendV(convertStringToValue("./"), samplePath);
-
-    env.env_vars["path"] = samplePath;
-  }
+  if (env.settings.handlePath)
+    populateEnvironment(env);
 
   string b;
   SalmonValue value = new SalmonValue();
