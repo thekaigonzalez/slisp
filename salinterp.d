@@ -533,6 +533,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
     "&thread": 7,
     "await": 8,
     "let": 9,
+    "progn": 10,
   ];
 
   env.env_funcs["+"] = &builtin_add;
@@ -583,7 +584,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
 
   if (env.settings.handlePath)
     populateEnvironment(env);
-
   string b;
   SalmonValue value = new SalmonValue();
   int st = 0;
@@ -641,7 +641,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
     else if (n == ')' && m == 1 && st == 1)
     {
       string[] args = _sep(b.strip);
-
+      for (int k = 0 ; k < args.length; ++ k) {
+        args[k] = args[k].strip;
+      }
       // for (int ia = 0 ; ia < args.length ; ++ ia) {
       //   args[ia] = strip(args[ia]);
       // }
@@ -690,6 +692,20 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           quickRun(code, env_arch, false);
         } else {
           env.env_vars[name] = val;
+        }
+      }
+
+      else if (args[0] == "progn")
+      {
+        int ia = 0;
+        foreach (string stat; args) {
+          ia += 1;
+          if (ia == args.length) {
+            value.returnValue(quickRun(stat, env));
+            return value;
+          } else {
+            quickRun(stat, env, false);
+          }
         }
       }
 
