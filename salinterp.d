@@ -386,6 +386,23 @@ int typeofLisp(SalmonSub f)
   return 0;
 }
 
+int mergeLisp(SalmonSub f)
+{
+  SalmonValue[] list1 = f.value_at(0).list_members();
+  SalmonValue[] list2 = f.value_at(1).list_members();
+
+  SalmonValue[] list3 = list1 ~ list2;
+
+  SalmonValue final_list = new SalmonValue();
+
+  final_list.setValue(list3);
+  final_list.flagAsList();
+
+  f.returnValue(final_list);
+
+  return 0;
+}
+
 string[] getAvailableTokens()
 {
   auto a = split("!,@,#,$,%,^,&,*,(,),_,+,{,},:,\\,<,>,?,`,~,|", ',');
@@ -584,6 +601,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
     env.env_funcs["concatenate"] = &concat;
     env.env_funcs["find"] = &lispcanFind;
     env.env_funcs["type-of"] = &typeofLisp;
+    env.env_funcs["merge"] = &mergeLisp;
   }
 
   if (env.settings.handlePath)
