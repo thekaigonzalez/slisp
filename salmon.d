@@ -20,6 +20,8 @@ int main(string[] args)
   env.env_lists["arg"] = args[1 .. $];
   GetoptResult optional_arg;
 
+  string mode = "normal";
+
   string[] optional_paths;
 
   bool ver = false;
@@ -29,7 +31,8 @@ int main(string[] args)
     optional_arg = getopt(
       args, std.getopt.config.bundling,
       "version|v", "Print version and exit", &ver,
-      "I", "directories to add to PATH.", &optional_paths
+      "I", "directories to add to PATH.", &optional_paths,
+      "m|mode", "The compiler mode. Please see: \033[;1mhttps://thekaigonzalez.github.io/slisp\033[0m", &mode
     );
   }
   catch (GetOptException e)
@@ -42,8 +45,13 @@ int main(string[] args)
     writefln("Salmon Version: %s", env.env_vars["salmon_version"].getValue());
     return 0;
   }
-  
-  populateEnvironment(env);
+  if (mode == "normal")
+    populateEnvironment(env);
+  else {
+    if (mode.strip == "bare") {
+      env.settings.setBuiltins = false;
+    }
+  }
 
   foreach (string s; optional_paths) {
     SalmonValue pathVariable = getEnvironmentVariable(env, "path");
@@ -56,8 +64,7 @@ int main(string[] args)
     writeln("Options:");
     foreach (it; optional_arg.options)
     {
-      writefln("\t%s (%s)\t%s", it.optShort,
-        it.optLong, it.help);
+      writefln("\t%s\t%s", it.optShort, it.help);
     }
     writeln("\nPositional (Optional) arguments:\n\tfile(s)\tThe file(s) to run. You may specify more than one.");
     writeln("\nThis is the official Salmon command-line-interface.");
@@ -68,12 +75,16 @@ int main(string[] args)
 
   if (args.length == 1)
   {
-    writeln("** SALMON LISP REPL **");
     SalmonState input = new SalmonState();
     _FILEN = "repl";
+    writeln("\033[;1mWelcome to..\033[0;0m \033[32;1mSalmon\033[0;0m\033[36;1mLisp\033[0;0m!");
+
+    writeln("To learn \033[;1mSLisp\033[0m, please \033[33;1mvisit the\033[0;0m\033[34;1m SLisp "
+    ~ "\033[0;0mwebsite:\033[0;0m \033[33;1mhttps://thekaigonzalez.github.io/slisp\033[0;0m");
+
     while (true)
     {
-      write("Lisp> ");
+      write("> ");
       string n = readln();
       salmon_push_code(input, n);
       try
