@@ -741,7 +741,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
       else if (args[0] == "while")
       {
         string codee = args[1];
-
         auto scopem = newState();
         salmon_push_code(scopem, codee);
         auto condition = execute_salmon(scopem, true, env);
@@ -1029,7 +1028,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           if (lambda)
           {
             auto sala = execute_salmon(sl2, true, env);
-            value.returnValue(sala.getValue(), sala.getType());
+            value.returnValue(sala);
             return value;
           }
 
@@ -1059,6 +1058,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false, SalmonEnvironment
           }
           catch (ConvException e)
           {
+            writeln(s.CODE);
             err(e.msg, LINE_NUMBER, _FILEN);
             value.returnValue("convException", SalType.error);
             exit(13);
