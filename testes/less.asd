@@ -14,7 +14,8 @@
     ; to the new smallest.
     ; Kind of like a leadership algorithm
     (if (< (position list1 iterator) smallest)
-        (set smallest (position list1 iterator))))
+      (progn
+        (set smallest (position list1 iterator)))))
 
   (return smallest))
 

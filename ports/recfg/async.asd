@@ -4,6 +4,6 @@
 (set b 2)
 
 (defun multiply (a, b)
-  (* a b)))
+  (* a b))
 
 (print (multiply 5 10))
