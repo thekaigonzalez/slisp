@@ -460,6 +460,7 @@ int importLisp(SalmonSub i)
       path.v = path.getValue() ~ "/";
     if ((path.getValue() ~ target.getValue() ~ ".so").exists)
     {
+      version (linux) {
       _found = 1;
       import core.sys.linux.dlfcn;
 
@@ -469,6 +470,7 @@ int importLisp(SalmonSub i)
 
       openFunc(i.environ);
       return 0;
+      }
     }
     else if ((path.getValue() ~ target.getValue() ~ ".asd").exists)
     {
