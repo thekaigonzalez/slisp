@@ -11,6 +11,8 @@ import salinterp;
 import sal_shared_api;
 import sal_auxlib;
 
+extern (C) char* readline(const char*);
+
 int main(string[] args)
 {
   SalmonEnvironment env = new SalmonEnvironment();
@@ -84,8 +86,7 @@ int main(string[] args)
 
     while (true)
     {
-      write("> ");
-      string n = readln();
+      string n = readline(">").to!string;
       salmon_push_code(input, n);
       try
       {

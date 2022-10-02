@@ -1,6 +1,8 @@
 project('salmon', 'd')
 
-add_global_arguments(['-L-static'], language : 'd')
+add_global_arguments(['-L-static', '-lreadline'], language : 'd')
+
+libreadline = dependency('readline')
 
 executable(
   'salmon-' + build_machine.system().to_lower() + '-' + build_machine.cpu(),
@@ -12,7 +14,8 @@ executable(
     './sal_auxlib.d',
     './sal_builtins.d'
   ],
-  install: true
+  install: true,
+  dependencies: [libreadline]
 )
 
 executable('sal-test', 'sal_test.d', install : true)
