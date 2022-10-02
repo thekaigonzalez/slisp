@@ -1,6 +1,6 @@
 project('salmon', 'd')
 
-add_global_arguments(['-L-static', '-lreadline'], language : 'd')
+add_global_arguments(['-L-static'], language : 'd')
 
 libreadline = dependency('readline')
 
