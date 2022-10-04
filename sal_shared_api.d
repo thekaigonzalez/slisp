@@ -122,6 +122,7 @@ SalType checkSalmonType(string s, SalmonEnvironment optional_environment = new S
 }
 
 string parse_string(string n) {
+    n = replace(n, "\\033", "\033");
     if (!startsWith(n.strip, '"'))
         return "nil";
 

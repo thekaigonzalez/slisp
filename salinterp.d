@@ -573,6 +573,14 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
             m = 0;
             b = "";
         }
+        else if (n == '"' && st == 1) {
+            st = 10200;
+            b ~= n;
+        }
+        else if (n == '"' && st == 10200) {
+            st = 1;
+            b ~= n;
+        }
         else if (n == ')' && m == 1 && st == 1) {
             string[] args = _sep(b.strip);
             for (int k = 0; k < args.length; ++k) {
