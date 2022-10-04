@@ -204,7 +204,7 @@ int builtin_access(SalmonSub i) {
 
 int builtin_accessq(SalmonSub i) {
     deprecate("\033[;1m`getq'\033[0m is deprecated, please use \033[;1m`get'\033[0m.",
-            __LINE__, "[D]");
+        __LINE__, "[D]");
     return 0;
 }
 
@@ -216,7 +216,7 @@ string toSyntax(string fun, string noted, string arg2, int lineno = 0) {
 
 int returnAt(SalmonSub inf) {
     deprecate("\033[;1m`getf'\033[0m is deprecated, please use \033[;1m`position'\033[0m.",
-            __LINE__, "[D]");
+        __LINE__, "[D]");
     // inf.returnValue(inf.environ.env_lists[inf.aA[0]][to!int(inf.aA[1])], SalType.any);
     return 0;
 }
@@ -402,7 +402,7 @@ int importLisp(SalmonSub i) {
                         .toStringz(), RTLD_LAZY);
 
                 int function(SalmonEnvironment) openFunc = cast(int function(SalmonEnvironment)) dlsym(hndl,
-                        "sal_lib_init");
+                    "sal_lib_init");
 
                 openFunc(i.environ);
                 return 0;
@@ -471,7 +471,7 @@ SalmonValue quickRun(string c, SalmonEnvironment env, bool lambda = true) {
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
 SalmonValue execute_salmon(SalmonState s, bool lambda = false,
-        SalmonEnvironment env = new SalmonEnvironment()) {
+    SalmonEnvironment env = new SalmonEnvironment()) {
     int LINE_NUMBER = 1;
     int[string] reserves = [
         "set": 0, "require": 1, "list": 2, "each": 3, "if": 4, "defun": 5,
@@ -564,7 +564,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
             m += 1;
             b ~= n;
         }
-        else if (n == ';' || n == '#' && st == 0) {
+        else if ((n == ';' || n == '#') && st == 0) {
             st = -100;
             m = -1;
         }
@@ -574,11 +574,13 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
             b = "";
         }
         else if (n == '"' && st == 1) {
-            st = 10200;
+            st = 10_200;
+            m = 12030;
             b ~= n;
         }
-        else if (n == '"' && st == 10200) {
+        else if (n == '"' && st == 10_200) {
             st = 1;
+            m = 1;
             b ~= n;
         }
         else if (n == ')' && m == 1 && st == 1) {
@@ -659,7 +661,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                     err("Type `" ~ condition.getType()
                             .to!string ~ "`, expected `boolean`.", LINE_NUMBER, _FILEN);
                     note("Does the statement `" ~ scopem.CODE.strip ~ "' return a `true/false` value?",
-                            LINE_NUMBER, _FILEN);
+                        LINE_NUMBER, _FILEN);
                     return value;
                 }
 
@@ -741,9 +743,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
             }
 
             if (!(args[0] in env.env_funcs)
-                    && !(args[0] in env.env_userdefined) && !(args[0] in reserves)) {
+                && !(args[0] in env.env_userdefined) && !(args[0] in reserves)) {
                 err("function \033[;1m`" ~ args[0] ~ "`\033[0m is not defined.",
-                        LINE_NUMBER, _FILEN);
+                    LINE_NUMBER, _FILEN);
                 foreach (string f; keys(env.env_funcs)) {
                     if (f.length < 5)
                         continue;
@@ -809,10 +811,10 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                             import core.sys.linux.dlfcn;
 
                             void* hndl = dlopen(("./libs/" ~ argum[0] ~ ".so").toStringz(),
-                                    RTLD_LAZY);
+                                RTLD_LAZY);
 
                             int function(SalmonEnvironment) openFunc = cast(
-                                    int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
+                                int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
 
                             openFunc(env);
                         }
@@ -823,19 +825,19 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                                     .toStringz(), RTLD_LAZY);
 
                             int function(SalmonEnvironment) openFunc = cast(
-                                    int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
+                                int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
 
                             openFunc(env);
                         }
                         else {
                             err("require '" ~ argum[0] ~ "' - library not found in any supported path(s).",
-                                    LINE_NUMBER, _FILEN);
+                                LINE_NUMBER, _FILEN);
                             note("required here:\n\t" ~ toSyntax("require",
                                     "\"" ~ argum[0] ~ "\"", "...", LINE_NUMBER),
-                                    LINE_NUMBER, _FILEN);
+                                LINE_NUMBER, _FILEN);
 
                             if (exists("/usr/local/lib/salmon/libs/" ~ argum[0].toLower ~ ".so")
-                                    || exists("./libs/" ~ argum[0].toLower)) {
+                                || exists("./libs/" ~ argum[0].toLower)) {
                                 writeln("\033[;1mTip!\033[0m '" ~ argum[0] ~ "' does not exist, but \033[;1m\"" ~ argum[0]
                                         .toLower ~ "\"\033[0m does. Did you mean, \033[;1m(\033[35;1mrequire\033[;1m \""
                                         ~ argum[0].toLower ~ "\")\033[0m ?");
@@ -898,7 +900,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                         }
                         catch (core.exception.ArrayIndexError) {
                             err("parameter `" ~ fn.template_params[f1] ~ "` not supplied.",
-                                    LINE_NUMBER, _FILEN);
+                                LINE_NUMBER, _FILEN);
                             note("defined here:\n  (\033[35;1mdefun\033[0m \033[36;1m" ~ args[0] ~ "\033[;0m (" ~ join(
                                     fn.template_params, ", ") ~ ") ...", LINE_NUMBER, _FILEN);
                             writeln("\t\033[36;1m ^~~~~~~~~~~~\033[0m");
