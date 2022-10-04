@@ -16,7 +16,16 @@ extern (C) char* readline(const char*);
 int main(string[] args) {
     SalmonEnvironment env = new SalmonEnvironment();
     env.settings.handlePath = false;
-    env.env_vars["salmon_version"] = quickRun("30", env);
+    SalmonValue version_string = new SalmonValue();
+
+    auto version_major = quickRun("3", env);
+    auto version_minor = quickRun("0", env);
+
+    version_string.flagAsList();
+
+    version_string.setValue([version_major, version_minor]);
+
+    env.env_vars["salmon_version"] = version_string;
     env.env_vars["compiler_system"] = quickRun(getTargetSystem(), env);
     auto argValue = new SalmonValue();
 
