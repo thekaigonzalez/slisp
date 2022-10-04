@@ -18,10 +18,17 @@ int main(string[] args) {
     env.settings.handlePath = false;
     env.env_vars["salmon_version"] = quickRun("30", env);
     env.env_vars["compiler_system"] = quickRun(getTargetSystem(), env);
-    env.env_lists["arg"] = args[1 .. $];
+    auto argValue = new SalmonValue();
+
+    argValue.flagAsList();
+    argValue.setValue(listToValues(args[1 .. $], env));
+
+    env.env_vars["arg"] = argValue;
     GetoptResult optional_arg;
 
     string mode = "normal";
+
+    bool one = false;
 
     string[] optional_paths;
 
@@ -29,10 +36,12 @@ int main(string[] args) {
 
     try {
         optional_arg = getopt(args, std.getopt.config.bundling, "version|v",
-                "Print version and exit", &ver, "I", "directories to add to PATH.",
-                &optional_paths, "m|mode",
-                "The compiler mode. Please see: \033[;1mhttps://thekaigonzalez.github.io/slisp\033[0m",
-                &mode);
+            "Print version and exit", &ver, "I", "directories to add to PATH.",
+            &optional_paths, "m|mode",
+            "The compiler mode. Please see: \033[;1mhttps://thekaigonzalez.github.io/slisp\033[0m",
+            &mode,
+            "o|one", "Specify one file, allowing arguments",
+            &one);
     }
     catch (GetOptException e) {
         err(e.msg, 0, "cli");
@@ -63,7 +72,7 @@ int main(string[] args) {
             writefln("\t%s\t%s", it.optShort, it.help);
         }
         writeln(
-                "\nPositional (Optional) arguments:\n\tfile(s)\tThe file(s) to run. You may specify more than one.");
+            "\nPositional (Optional) arguments:\n\tfile(s)\tThe file(s) to run. You may specify more than one.");
         writeln("\nThis is the official Salmon command-line-interface.");
         writeln("Any questions? Email me! <gkai70264@gmail.com>");
 
@@ -104,13 +113,23 @@ int main(string[] args) {
         return 2;
     }
 
-    foreach (string f; args[1 .. $]) {
-        _FILEN = f;
-        if (!exists(f)) {
+    if (!one) {
+        foreach (string f; args[1 .. $]) {
+            _FILEN = f;
+            if (!exists(f)) {
+                err("file not found.", 0, "commandline");
+                return -1;
+            }
+            quickRun(readText(f), env, false);
+        }
+    }
+    else {
+        _FILEN = args[1];
+        if (!exists(args[1])) {
             err("file not found.", 0, "commandline");
             return -1;
         }
-        quickRun(readText(f), env, false);
+        quickRun(readText(args[1]), env, false);
     }
     return 0;
 }
