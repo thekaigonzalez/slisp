@@ -549,7 +549,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
             value.returnNil();
         }
     }
-    else if (!startsWith(s.CODE.strip, '(') && !lambda && !startsWith(s.CODE.strip, ';')) {
+    else if (!startsWith(s.CODE.strip, '(') && !lambda && !startsWith(s.CODE.strip, ';') || !startsWith(s.CODE.strip, '#')) {
         // writeln("(syntax warning) this style of syntax is deprecated: `<function> (args)`.\nPlease use the modern" ~
         // "`(<function> <args>)' format.");
     }
@@ -564,7 +564,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
             m += 1;
             b ~= n;
         }
-        else if (n == ';' && st == 0) {
+        else if (n == ';' || n == '#' && st == 0) {
             st = -100;
             m = -1;
         }
