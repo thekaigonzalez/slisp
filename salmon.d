@@ -24,6 +24,7 @@ int main(string[] args) {
     argValue.setValue(listToValues(args[1 .. $], env));
 
     env.env_vars["arg"] = argValue;
+
     GetoptResult optional_arg;
 
     string mode = "normal";
