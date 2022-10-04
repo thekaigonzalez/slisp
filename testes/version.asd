@@ -1,0 +1,1 @@
+(print "Your current version is Salmon " (strcat (position salmon_version 0) (position salmon_version 1)))
