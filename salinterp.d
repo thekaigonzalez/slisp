@@ -575,7 +575,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         }
         else if (n == '"' && st == 1) {
             st = 10_200;
-            m = 12030;
+            m = 12_030;
             b ~= n;
         }
         else if (n == '"' && st == 10_200) {
