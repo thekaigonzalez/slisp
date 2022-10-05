@@ -189,6 +189,12 @@ public:
     SalmonValue value_at(int pos) {
         return newArg[pos];
     }
+    
+    /* Essentially the &rest parameter in Common Lisp. */
+    /* Gets the args from the @from parameter to the last one. */
+    SalmonValue[] rest(int from = 0) {
+        return newArg[from..$];
+    }
 
     void returnValue(string value, SalType t) {
         rvalue = quickRun(value, this.environ);
