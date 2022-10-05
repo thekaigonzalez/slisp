@@ -85,7 +85,7 @@ public:
     SalmonValue[string] env_vars;
     string[][string] env_lists;
     string[string] env_definitions;
-    int function(string[], SalmonEnvironment)[string] pluginKeywords;
+    SalmonValue function(string[], SalmonEnvironment)[string] pluginKeywords;
 
     SalmonEnvironment copy() {
         auto en = new SalmonEnvironment();
