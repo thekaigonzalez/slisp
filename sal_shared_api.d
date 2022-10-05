@@ -25,6 +25,7 @@ enum SalType {
     number,
     any,
     func,
+    builtin,
     list,
     pair,
     error,
@@ -84,12 +85,14 @@ public:
     SalmonValue[string] env_vars;
     string[][string] env_lists;
     string[string] env_definitions;
+    int function(string[], SalmonEnvironment)[string] pluginKeywords;
+
     SalmonEnvironment copy() {
         auto en = new SalmonEnvironment();
-        // en.env_funcs = this.env_funcs;
-        // en.env_lists = this.env_lists;
-        // en.env_definitions = this.env_definitions;
-        // en.env_vars = this.env_vars;
+        en.env_funcs = this.env_funcs;
+        en.env_lists = this.env_lists;
+        en.env_definitions = this.env_definitions;
+        en.env_vars = this.env_vars;
         return en;
     }
 
