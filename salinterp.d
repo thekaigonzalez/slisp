@@ -726,7 +726,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                 salmon_push_code(scopeg, (args[2]));
 
                 auto scopef = newState();
-                writeln(args);
                 salmon_push_code(scopef, (args[3]));
                 if (condition == "true" || condition == "1") {
                     auto exe = execute_salmon(scopeg, true, env);
