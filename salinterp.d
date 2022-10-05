@@ -478,6 +478,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         "case": 6, "&thread": 7, "await": 8, "let": 9, "progn": 10,
     ];
 
+    int pmv = 0;
+
     if (env.settings.setBuiltins) {
         env.env_funcs["+"] = &builtin_add;
         env.env_funcs["-"] = &builtin_min;
@@ -575,12 +577,13 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         }
         else if (n == '"' && st == 1) {
             st = 10_200;
+            pmv = m;
             m = 12_030;
             b ~= n;
         }
         else if (n == '"' && st == 10_200) {
             st = 1;
-            m = 1;
+            m = pmv; /* try to recover */
             b ~= n;
         }
         else if (n == ')' && m == 1 && st == 1) {
@@ -723,6 +726,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                 salmon_push_code(scopeg, (args[2]));
 
                 auto scopef = newState();
+                writeln(args);
                 salmon_push_code(scopef, (args[3]));
                 if (condition == "true" || condition == "1") {
                     auto exe = execute_salmon(scopeg, true, env);
