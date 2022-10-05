@@ -6,6 +6,4 @@
 
 (set a (merge n q))
 
-(set a (less a))
-
 (print (concatenate a))
