@@ -10,7 +10,8 @@ srcs = [
     './sal_type.d',
     './sal_shared_api.d',
     './sal_auxlib.d',
-    './sal_builtins.d'
+    './sal_builtins.d',
+    './sal_std.d'
 ]
 
 executable(
