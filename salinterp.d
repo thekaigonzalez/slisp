@@ -10,6 +10,7 @@ import std.concurrency;
 import std.file;
 import core.thread;
 import sal_builtins;
+import sal_std;
 import core.stdc.stdlib;
 import std.math;
 import sal_auxlib;
@@ -476,7 +477,7 @@ SalmonValue _Ksort(string[] debug_args, SalmonEnvironment environment) {
     */
 
     auto members = list0.list_members();
-    for (int i = 0 ; i < members.length; ++i) {
+    for (int i = 0; i < members.length; ++i) {
         if (i == 0) {
             smallest = members[i];
         }
@@ -501,6 +502,14 @@ SalmonValue quickRun(string c, SalmonEnvironment env, bool lambda = true) {
     auto sc = newState();
     salmon_push_code(sc, c);
     return execute_salmon(sc, lambda, env);
+}
+
+void saL_closure(SalmonEnvironment env, int function(SalmonEnvironment) fn) {
+    fn(env);
+}
+
+void saL_register(SalmonEnvironment env, string funcname, int function(SalmonSub) fn) {
+    env.env_funcs[funcname] = fn;
 }
 
 /* STRING because it will return a value to be reparsed if needed. Fight me */
@@ -564,6 +573,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         env.env_funcs["find"] = &lispcanFind;
         env.env_funcs["type-of"] = &typeofLisp;
         env.env_funcs["merge"] = &mergeLisp;
+
+        // Add more standard functions
+        saL_closure(env, &loadlib_std);
     }
 
     if (env.settings.handlePath)
