@@ -462,6 +462,40 @@ int appendLisp(SalmonSub s) {
     return 0;
 }
 
+SalmonValue _Ksort(string[] debug_args, SalmonEnvironment environment) {
+    SalmonValue list0 = quickRun(debug_args[1], environment);
+
+    SalmonValue smallest = new SalmonValue();
+    // finalList.flagAsList();
+
+    string algorithm_code = debug_args[2];
+
+    /*
+    (set v (list 1 2 3 4))
+    (set q (sort v (< a b)))
+    */
+
+    auto members = list0.list_members();
+    for (int i = 0 ; i < members.length; ++i) {
+        if (i == 0) {
+            smallest = members[i];
+        }
+
+        auto mockEnv = environment.copy();
+
+        mockEnv.env_vars["a"] = smallest;
+        mockEnv.env_vars["b"] = members[i];
+
+        auto predicate = quickRun(algorithm_code, mockEnv);
+
+        if (predicate.getValue() == "true") {
+            smallest = members[i];
+        }
+    }
+
+    return smallest;
+}
+
 string _FILEN = "";
 SalmonValue quickRun(string c, SalmonEnvironment env, bool lambda = true) {
     auto sc = newState();
@@ -480,7 +514,10 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
 
     int pmv = 0;
 
+    env.pluginKeywords["first"] = &_Ksort;
+
     if (env.settings.setBuiltins) {
+
         env.env_funcs["+"] = &builtin_add;
         env.env_funcs["-"] = &builtin_min;
         env.env_funcs["/"] = &builtin_div;
@@ -742,6 +779,11 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                         return value;
                     }
                     condition = execute_salmon(scopem, true, env).getValue();
+                }
+            }
+            else {
+                if (args[0] in env.pluginKeywords) {
+                    return env.pluginKeywords[args[0]](args, env);
                 }
             }
 
