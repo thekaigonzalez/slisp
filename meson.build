@@ -14,18 +14,17 @@ srcs = [
     './sal_std.d'
 ]
 
-executable(
-  'salmon-' + build_machine.system().to_lower() + '-' + build_machine.cpu(),
-  srcs + ['./salmon.d'],
-  install: true,
-  dependencies: [libreadline]
-)
-
-shared_library('salmon',
+slib = shared_library('salmon',
               srcs,
               install : true)
 
 executable('sal-test', 'sal_test.d', install : true)
+
+# ['./salmon.d']
+executable('salmon-' + build_machine.system().to_lower() + '-' + build_machine.cpu(),
+          './salmon.d',
+          link_with : slib,
+          dependencies: [libreadline])
 
 install_subdir('salmon', install_dir: 'lib')
 install_subdir('salmon/libs', install_dir: 'lib/salmon')
