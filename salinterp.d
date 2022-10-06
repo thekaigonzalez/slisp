@@ -675,9 +675,10 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                 SalmonValue val = quickRun(theLetList[1].strip, env);
 
                 if (args.length >= 3) {
-                    auto env_arch = new SalmonEnvironment();
+                    auto env_arch = env.copy();
 
                     env_arch.env_vars[name] = val;
+                    
                     string code = join(args[2 .. $]);
 
                     quickRun(code, env_arch, false);
@@ -708,6 +709,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                 auto condition = execute_salmon(scopem, true, env);
                 auto scopeg = newState();
                 salmon_push_code(scopeg, args[2 .. $].join(' '));
+                writeln(env.env_vars);
 
                 if (condition.getType() != SalType.boolean) {
                     err("Type `" ~ condition.getType()
@@ -718,6 +720,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                 }
 
                 while (condition.getValue == "true" || condition.getValue == "1") {
+
                     execute_salmon(scopeg, false, env);
                     condition = execute_salmon(scopem, true, env);
                 }
@@ -725,6 +728,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
             }
 
             else if (args[0] == "defun") {
+                writeln("n");
                 string codee = args[1];
 
                 auto scopem = newState();
@@ -948,6 +952,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                     salmon_push_code(sl2, rv);
 
                     auto env_arch = env.copy;
+                    writeln("hi");
 
                     for (int f1 = 0; f1 < fn.template_params.length; ++f1) {
                         try {
