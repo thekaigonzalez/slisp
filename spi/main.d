@@ -8,6 +8,23 @@ import sal_auxlib;
 import sal_shared_api;
 import std.process;
 
+void runProject(string d) {
+  chdir(d);
+  SalmonEnvironment pkgEnv = new SalmonEnvironment();
+  // string PKG_DISPNAME = "";
+
+  quickRun(readText("package.spi"), pkgEnv, false);
+
+  string pkgName = pkgEnv.env_vars["package"].getValue();
+
+  writeln("Package name: \033[1m" ~ pkgName ~ "\033[0m");
+
+  auto pkgList = pkgEnv.env_vars["sources"];
+  foreach (SalmonValue file; pkgList.list_members()) {
+    quickRun(readText(file.getValue()), new SalmonEnvironment(), false);
+  }
+}
+
 int main(string[] args) {
   GetoptResult opt;
   bool nomod = false;
@@ -40,17 +57,7 @@ int main(string[] args) {
     }
     else {
       writeln("\033[33;1mcloned!\033[0m");
-      chdir("libs/" ~ baseName(args[2]));
-      SalmonEnvironment pkgEnv = new SalmonEnvironment();
-      // string PKG_DISPNAME = "";
-
-      quickRun(readText("package.spi"), pkgEnv, false);
-
-      writeln("Package name: \033[1m" ~ pkgEnv.env_vars["package"].getValue() ~ "\033[0m");
-
-      foreach (SalmonValue file; pkgEnv.env_vars["sources"].list_members()) {
-        quickRun(readText(file.getValue()), new SalmonEnvironment(), false);
-      }
+      runProject("libs/" ~ baseName(args[2]));
     }
   }
   return 0;
