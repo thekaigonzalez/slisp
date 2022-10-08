@@ -160,6 +160,7 @@ int typeLisp(SalmonSub s) {
 int lengthLisp(SalmonSub s) {
     auto Length = new SalmonValue();
     auto lengthOf = s.value_at(0);
+
     if (lengthOf.getType() == SalType.list) {
         Length.returnValue(lengthOf.list_members().length.to!string, SalType.number);
     }
@@ -709,7 +710,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                 auto condition = execute_salmon(scopem, true, env);
                 auto scopeg = newState();
                 salmon_push_code(scopeg, args[2 .. $].join(' '));
-                writeln(env.env_vars);
 
                 if (condition.getType() != SalType.boolean) {
                     err("Type `" ~ condition.getType()
@@ -728,7 +728,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
             }
 
             else if (args[0] == "defun") {
-                writeln("n");
                 string codee = args[1];
 
                 auto scopem = newState();
@@ -952,7 +951,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                     salmon_push_code(sl2, rv);
 
                     auto env_arch = env.copy;
-                    writeln("hi");
 
                     for (int f1 = 0; f1 < fn.template_params.length; ++f1) {
                         try {
