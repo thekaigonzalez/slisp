@@ -8,7 +8,7 @@ import std.string;
 void main() {
     int files = 0;
     foreach (string s; dirEntries(".", SpanMode.depth)) {
-        if (s.endsWith(".asd")) {
+        if (s.endsWith(".asd") || s.endsWith(".lisp")) {
             files += 1;
         }
     }
