@@ -638,6 +638,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         }
         else if (n == ')' && m == 1 && st == 1) {
             string[] args = _sep(b.strip);
+
             for (int k = 0; k < args.length; ++k) {
                 args[k] = args[k].strip;
             }
