@@ -964,7 +964,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                             note("defined here:\n  (\033[35;1mdefun\033[0m \033[36;1m" ~ args[0] ~ "\033[;0m (" ~ join(
                                     fn.template_params, ", ") ~ ") ...", LINE_NUMBER, _FILEN);
                             writeln("\t\033[36;1m ^~~~~~~~~~~~\033[0m");
-                            exit(9);
+                            if (_FILEN != "repl") /* don't exit in a repl */
+                                exit(9);
                         }
                     }
 
