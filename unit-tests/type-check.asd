@@ -1,3 +1,5 @@
+# Type checking
+
 (set i 1)
 (set str "hello")
 
