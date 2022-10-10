@@ -5,4 +5,4 @@
               (bog-fib (- n 1)) 
               (bog-fib (- n 2))))))
 
-(print (bog-fib 5))
+(print (bog-fib 150))
