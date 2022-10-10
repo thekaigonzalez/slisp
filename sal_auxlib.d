@@ -6,7 +6,7 @@ module sal_auxlib;
 /+ Contains helper functions for Salmon base types. +/
 import salinterp;
 import sal_shared_api;
-import std.conv;
+import std.conv : to;
 
 /** 
  * Returns the value `v` as a D number.
@@ -89,6 +89,17 @@ public:
             v = n.v;
 
         t = n.getType();
+    }
+
+    bool numeric() {
+        import std.string : n = isNumeric;
+        return n(this.getValue());
+    }
+
+    template value( T ) {
+        T convert() {
+            return this.getValue().to!T;
+        }
     }
 
     void setType(SalType ty) {
