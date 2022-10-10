@@ -7,20 +7,27 @@
 
 module salinterp;
 
+import sal_builtins;
+import sal_std;
+import sal_auxlib;
+import sal_shared_api;
+
+/* standard library (compiled) */
+import mathstd;
+
 import std.stdio;
 import std.conv;
 import std.string;
 import std.concurrency;
 import std.file;
-import core.thread;
-import sal_builtins;
-import sal_std;
-import core.stdc.stdlib;
 import std.math;
-import sal_auxlib;
 import std.algorithm : levenshteinDistance, canFind;
-import sal_shared_api;
+
+import core.thread;
+import core.stdc.stdlib;
+
 static import core.exception;
+
 
 string[] _sep(string lisp) {
     string b = "";
@@ -581,8 +588,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
 
         // Add more standard functions
         saL_closure(env, &loadlib_std);
+        saL_closure(env, &sal_mathstd_init);
+        // sal_mathstd_init(env);
     }
-
     if (env.settings.handlePath)
         populateEnvironment(env);
     string b;
