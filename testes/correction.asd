@@ -7,10 +7,12 @@
 (set word (string-trim (read-line)))
 
 (defun most_similar (n)
-    (set similarest 5)
-    
+    (set similarest nil)
+
     (each words
         (progn
+            (if (= similarest nil) (set similarest @))
+            
             (if (< (distance n @)
                     (distance similarest @))
                 (set similarest @))))
