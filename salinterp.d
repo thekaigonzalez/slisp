@@ -13,6 +13,7 @@ import sal_auxlib;
 import sal_shared_api;
 import extraops;
 import operators;
+import iterating;
 import sarithmetic;
 
 /* standard library (compiled) */
@@ -476,6 +477,10 @@ void saL_register(SalmonEnvironment env, string funcname, int function(SalmonSub
     env.env_funcs[funcname] = fn;
 }
 
+void saL_keyword(SalmonEnvironment env, string kname, SalmonValue function(string[], SalmonEnvironment) fn) {
+    env.pluginKeywords[kname] = fn;
+}
+
 /* STRING because it will return a value to be reparsed if needed. Fight me */
 SalmonValue execute_salmon(SalmonState s, bool lambda = false,
     SalmonEnvironment env = new SalmonEnvironment()) {
@@ -504,6 +509,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         // env.env_funcs["="] = &checkeq;
         // env.env_funcs["not"] = &checkxq;
         saL_closure(env, &salOperators);
+        saL_closure(env, &salIteratingTools);
+
 
         env.env_funcs["length"] = &lengthLisp;
         env.env_funcs["replace"] = &replaceLisp;
