@@ -19,8 +19,7 @@ import std.math :
                 tan, 
                 atan, 
                 asin, 
-                asinh, 
-                tan;
+                asinh;
 import std.conv : to;
 
 int _atan(SalmonSub f) {
