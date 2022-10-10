@@ -11,7 +11,8 @@ srcs = [
     './sal_shared_api.d',
     './sal_auxlib.d',
     './sal_builtins.d',
-    './sal_std.d'
+    './sal_std.d',
+    './mathstd.d'
 ]
 
 slib = shared_library('salmon',
@@ -29,3 +30,5 @@ executable('salmon-' + build_machine.system().to_lower() + '-' + build_machine.c
 
 install_subdir('salmon', install_dir: 'lib')
 install_subdir('salmon/libs', install_dir: 'lib/salmon')
+
+# meson.add_install_script('./copy-success.sh')
