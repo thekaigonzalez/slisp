@@ -12,6 +12,8 @@ import sal_std;
 import sal_auxlib;
 import sal_shared_api;
 import extraops;
+import operators;
+import sarithmetic;
 
 /* standard library (compiled) */
 import mathstd;
@@ -115,37 +117,6 @@ string[] spaceSeparatedList(string mf) {
         }
     }
     return pi;
-}
-
-int checkeq(SalmonSub s) {
-    s.returnValue(to!string(s.aA[0] == s.aA[1]), SalType.boolean);
-    return 0;
-}
-
-int checkbet(SalmonSub s) {
-    s.returnValue(to!string(s.newArg[0].getValue().to!int < s.aA[1].to!int), SalType.boolean);
-    return 0;
-}
-
-int checkgre(SalmonSub s) {
-    s.returnValue(to!string(s.aA[0].to!int > s.aA[1].to!int), SalType.boolean);
-    return 0;
-}
-
-int checkbete(SalmonSub s) {
-    s.returnValue(to!string(s.aA[0].to!int <= s.aA[1].to!int), SalType.boolean);
-    return 0;
-}
-
-int checkgree(SalmonSub s) {
-    s.returnValue(to!string(s.aA[0].to!int >= s.aA[1].to!int), SalType.boolean);
-    return 0;
-}
-
-int checkxq(SalmonSub s) {
-    string truf = to!string(!(s.aA[0] == s.aA[1]));
-    s.returnValue(truf, SalType.boolean);
-    return 0;
 }
 
 int typeLisp(SalmonSub s) {
@@ -520,19 +491,20 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
 
     if (env.settings.setBuiltins) {
 
-        env.env_funcs["+"] = &builtin_add;
-        env.env_funcs["-"] = &builtin_min;
-        env.env_funcs["/"] = &builtin_div;
+        // env.env_funcs["+"] = &builtin_add;
+        // env.env_funcs["-"] = &builtin_min;
+        // env.env_funcs["/"] = &builtin_div;
+        // env.env_funcs["*"] = &builtin_mul;
+        saL_closure(env, &salArithmetic);
 
-        env.env_funcs["<"] = &checkbet;
-        env.env_funcs[">"] = &checkgre;
-        env.env_funcs[">="] = &checkgree;
-        env.env_funcs["<="] = &checkbete;
+        // env.env_funcs["<"] = &checkbet;
+        // env.env_funcs[">"] = &checkgre;
+        // env.env_funcs[">="] = &checkgree;
+        // env.env_funcs["<="] = &checkbete;
+        // env.env_funcs["="] = &checkeq;
+        // env.env_funcs["not"] = &checkxq;
+        saL_closure(env, &salOperators);
 
-        env.env_funcs["*"] = &builtin_mul;
-
-        env.env_funcs["="] = &checkeq;
-        env.env_funcs["not"] = &checkxq;
         env.env_funcs["length"] = &lengthLisp;
         env.env_funcs["replace"] = &replaceLisp;
         env.env_funcs["return"] = &returnLisp;
@@ -546,7 +518,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         env.env_funcs["import"] = &importLisp;
         env.env_funcs["truncate"] = &truncateList;
 
-        env.env_funcs["eq"] = &checkeq;
         env.env_funcs["getf"] = &returnAt;
         env.env_funcs["read-line"] = &readlineLisp;
         env.env_funcs["write-line"] = &writeLineLisp;
