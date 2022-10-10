@@ -15,7 +15,8 @@ srcs = [
     './mathstd.d',
     './extraops.d',
     './operators.d',
-    './sarithmetic.d'
+    './sarithmetic.d',
+    './iterating.d'
 ]
 
 slib = shared_library('salmon',
