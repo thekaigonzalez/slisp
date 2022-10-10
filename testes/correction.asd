@@ -8,6 +8,7 @@
 
 (defun most_similar (n)
     (set similarest 5)
+    
     (each words
         (progn
             (if (< (distance n @)
