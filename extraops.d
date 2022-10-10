@@ -17,7 +17,7 @@ int modulo(SalmonSub s) {
     SalmonValue newValue = new SalmonValue();
 
     newValue.setType(SalType.number);
-    newValue.setValue((s.value_at(0).value!real.convert() % s.value_at(1).value!real.convert()).to!string);
+    newValue.setValue((s.value_at(0).as!real.convert() % s.value_at(1).as!real.convert()).to!string);
 
     s.returnValue(newValue);
 
