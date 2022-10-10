@@ -28,7 +28,6 @@ import core.stdc.stdlib;
 
 static import core.exception;
 
-
 string[] _sep(string lisp) {
     string b = "";
     int s = 0;
@@ -38,24 +37,19 @@ string[] _sep(string lisp) {
         if (n == ' ' && s == 0 && b.strip.length > 0) {
             final_ ~= b;
             b = "";
-        }
-        else if (n == '(' && s != 1237) {
+        } else if (n == '(' && s != 1237) {
             s += 120;
             b ~= n;
-        }
-        else if (n == ')' && s != 1237) {
+        } else if (n == ')' && s != 1237) {
             s -= 120;
             b ~= n;
-        }
-        else if (n == '"' && s == 0) {
+        } else if (n == '"' && s == 0) {
             s = 1237;
             b ~= n;
-        }
-        else if (n == '"' && s == 1237) {
+        } else if (n == '"' && s == 1237) {
             s = 0;
             b ~= n;
-        }
-        else {
+        } else {
             b ~= n;
         }
     }
@@ -74,25 +68,20 @@ string[] parseParamList(string mf) {
     foreach (char s; mf) {
         if (s == '(' && st == 0) {
             st = 1;
-        }
-        else if (s == ')' && st == 1) {
+        } else if (s == ')' && st == 1) {
             if (b.strip.length > 0) {
                 pi ~= b.strip;
             }
 
             return pi;
-        }
-        else if (s == '(' && st != 0) {
+        } else if (s == '(' && st != 0) {
             st += 5;
-        }
-        else if (s == ')' && st > 1) {
+        } else if (s == ')' && st > 1) {
             st -= 5;
-        }
-        else if (s == ',' && st == 1) {
+        } else if (s == ',' && st == 1) {
             pi ~= b.strip;
             b = "";
-        }
-        else {
+        } else {
             b ~= s;
         }
     }
@@ -107,25 +96,20 @@ string[] spaceSeparatedList(string mf) {
     foreach (char s; mf) {
         if (s == '(' && st == 0) {
             st = 1;
-        }
-        else if (s == ')' && st == 1) {
+        } else if (s == ')' && st == 1) {
             if (b.strip.length > 0) {
                 pi ~= b.strip;
             }
 
             return pi;
-        }
-        else if (s == '(' && st != 0) {
+        } else if (s == '(' && st != 0) {
             st += 5;
-        }
-        else if (s == ')' && st > 1) {
+        } else if (s == ')' && st > 1) {
             st -= 5;
-        }
-        else if (s == ' ' && st == 1) {
+        } else if (s == ' ' && st == 1) {
             pi ~= b.strip;
             b = "";
-        }
-        else {
+        } else {
             b ~= s;
         }
     }
@@ -174,8 +158,7 @@ int lengthLisp(SalmonSub s) {
 
     if (lengthOf.getType() == SalType.list) {
         Length.returnValue(lengthOf.list_members().length.to!string, SalType.number);
-    }
-    else if (lengthOf.getType() == SalType.str) {
+    } else if (lengthOf.getType() == SalType.str) {
         Length.returnValue(lengthOf.getValue().length.to!string, SalType.number);
     }
 
@@ -387,8 +370,7 @@ int truncateList(SalmonSub i) {
 
     if (i.value_at(2).getValue() == "*") {
         list_truncated.returnList(i.value_at(0).list_members[i.value_at(1).getValue().to!int .. $]);
-    }
-    else {
+    } else {
         list_truncated.returnList(i.value_at(0).list_members[i.value_at(1)
                 .getValue().to!int .. i.value_at(2).getValue().to!int]);
     }
@@ -420,16 +402,14 @@ int importLisp(SalmonSub i) {
                 openFunc(i.environ);
                 return 0;
             }
-        }
-        else if ((path.getValue() ~ target.getValue() ~ ".asd").exists) {
+        } else if ((path.getValue() ~ target.getValue() ~ ".asd").exists) {
             _found = 1;
 
             auto include = newState;
             include.CODE = readText(path.getValue() ~ target.getValue() ~ ".asd");
             execute_salmon(include, false, i.environ);
             return 0;
-        }
-        else if ((path.getValue() ~ target.getValue()).exists) {
+        } else if ((path.getValue() ~ target.getValue()).exists) {
             _found = 1;
 
             auto include = newState;
@@ -589,6 +569,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         // Add more standard functions
         saL_closure(env, &loadlib_std);
         saL_closure(env, &sal_mathstd_init);
+        saL_closure(env, &sal_ops);
+
         // sal_mathstd_init(env);
     }
     if (env.settings.handlePath)
@@ -605,15 +587,13 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                 auto var = env.env_vars[s.CODE.strip];
                 value.returnValue(var);
                 return value;
-            }
-            else {
+            } else {
                 value.returnValue(s.CODE.strip, checkSalmonType(s.CODE.strip)); /* Return the value */
                 return value;
             }
             value.returnNil();
         }
-    }
-    else if (!startsWith(s.CODE.strip, '(') && !lambda && !startsWith(s.CODE.strip, ';') || !startsWith(s.CODE.strip, '#')) {
+    } else if (!startsWith(s.CODE.strip, '(') && !lambda && !startsWith(s.CODE.strip, ';') || !startsWith(s.CODE.strip, '#')) {
         // writeln("(syntax warning) this style of syntax is deprecated: `<function> (args)`.\nPlease use the modern" ~
         // "`(<function> <args>)' format.");
     }
@@ -623,32 +603,26 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         if (n == '(' && st == 0 && m == 0) {
             m = 1;
             st = 1;
-        }
-        else if (n == '(' && m != 0) {
+        } else if (n == '(' && m != 0) {
             m += 1;
             b ~= n;
-        }
-        else if ((n == ';' || n == '#') && st == 0) {
+        } else if ((n == ';' || n == '#') && st == 0) {
             st = -100;
             m = -1;
-        }
-        else if (n == '\n' && st == -100) {
+        } else if (n == '\n' && st == -100) {
             st = 0;
             m = 0;
             b = "";
-        }
-        else if (n == '"' && st == 1) {
+        } else if (n == '"' && st == 1) {
             st = 10_200;
             pmv = m;
             m = 12_030;
             b ~= n;
-        }
-        else if (n == '"' && st == 10_200) {
+        } else if (n == '"' && st == 10_200) {
             st = 1;
             m = pmv; /* try to recover */
             b ~= n;
-        }
-        else if (n == ')' && m == 1 && st == 1) {
+        } else if (n == ')' && m == 1 && st == 1) {
             string[] args = _sep(b.strip);
 
             for (int k = 0; k < args.length; ++k) {
@@ -668,9 +642,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                     salmon_push_code(scopem, codee);
                     execute_salmon(scopem, false, env);
                 }
-            }
-
-            else if (args[0] == "&thread") {
+            } else if (args[0] == "&thread") {
                 string codee = args[1];
                 auto scopem = newState();
                 salmon_push_code(scopem, codee);
@@ -681,9 +653,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
 
                 if (lambda)
                     value.returnValue(f, SalType.any);
-            }
-
-            else if (args[0] == "let") {
+            } else if (args[0] == "let") {
                 string[] theLetList = spaceSeparatedList(args[1].strip);
                 string name = theLetList[0];
                 SalmonValue val = quickRun(theLetList[1].strip, env);
@@ -692,31 +662,25 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                     auto env_arch = env.copy();
 
                     env_arch.env_vars[name] = val;
-                    
+
                     string code = join(args[2 .. $]);
 
                     quickRun(code, env_arch, false);
-                }
-                else {
+                } else {
                     env.env_vars[name] = val;
                 }
-            }
-
-            else if (args[0] == "progn") {
+            } else if (args[0] == "progn") {
                 int ia = 0;
                 foreach (string stat; args) {
                     ia += 1;
                     if (ia == args.length) {
                         value.returnValue(quickRun(stat, env));
                         return value;
-                    }
-                    else {
+                    } else {
                         quickRun(stat, env, false);
                     }
                 }
-            }
-
-            else if (args[0] == "while") {
+            } else if (args[0] == "while") {
                 string codee = args[1];
                 auto scopem = newState();
                 salmon_push_code(scopem, codee);
@@ -738,9 +702,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                     condition = execute_salmon(scopem, true, env);
                 }
                 return value;
-            }
-
-            else if (args[0] == "defun") {
+            } else if (args[0] == "defun") {
                 string codee = args[1];
 
                 auto scopem = newState();
@@ -758,9 +720,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
 
                 env.env_userdefined[name] = Func;
                 env.env_definitions[name] = args.join(' ');
-            }
-
-            else if (args[0] == "if") {
+            } else if (args[0] == "if") {
                 string codee = args[1];
 
                 auto scopem = newState();
@@ -775,14 +735,10 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                     execute_salmon(scopeg, false, env);
                     condition = execute_salmon(scopem, true, env).getValue();
                 }
-            }
-
-            else if (args[0] == "await") {
+            } else if (args[0] == "await") {
                 thread_joinAll();
                 value.returnNil();
-            }
-
-            else if (args[0] == "case") {
+            } else if (args[0] == "case") {
                 string codee = args[1];
                 auto scopem = newState();
                 salmon_push_code(scopem, codee);
@@ -799,8 +755,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                         return value;
                     }
                     condition = execute_salmon(scopem, true, env).getValue();
-                }
-                else {
+                } else {
                     auto exe2 = execute_salmon(scopef, true, env);
                     if (lambda) {
                         value.returnValue(exe2.getValue(), exe2.getType());
@@ -808,8 +763,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                     }
                     condition = execute_salmon(scopem, true, env).getValue();
                 }
-            }
-            else {
+            } else {
                 if (args[0] in env.pluginKeywords) {
                     return env.pluginKeywords[args[0]](args, env);
                 }
@@ -865,20 +819,17 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
             if (args[0] == "set") {
                 SalmonValue outVal = quickRun(argum[1], env);
                 env.env_vars[argum[0]] = outVal;
-            }
-            else if (args[0] == "require") {
+            } else if (args[0] == "require") {
                 args[1] = parse_string(args[1]);
                 if (exists(args[1]) && isFile(args[1])) {
                     auto include = newState;
                     include.CODE = readText(args[1]);
                     execute_salmon(include, lambda, env);
-                }
-                else if (exists(args[1]) && isDir(args[1])) {
+                } else if (exists(args[1]) && isDir(args[1])) {
                     auto include = newState;
                     include.CODE = readText(args[1] ~ "/init.asd");
                     execute_salmon(include, lambda, env);
-                }
-                else {
+                } else {
                     version (linux) {
                         if (exists("./libs/" ~ argum[0] ~ ".so")) {
                             import core.sys.linux.dlfcn;
@@ -890,8 +841,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                                 int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
 
                             openFunc(env);
-                        }
-                        else if (exists("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so")) {
+                        } else if (exists("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so")) {
                             import core.sys.linux.dlfcn;
 
                             void* hndl = dlopen(("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so")
@@ -901,8 +851,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                                 int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
 
                             openFunc(env);
-                        }
-                        else {
+                        } else {
                             err("require '" ~ argum[0] ~ "' - library not found in any supported path(s).",
                                 LINE_NUMBER, _FILEN);
                             note("required here:\n\t" ~ toSyntax("require",
@@ -924,14 +873,12 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                     }
 
                 }
-            }
-            else if (args[0] == "list") {
+            } else if (args[0] == "list") {
                 value.returnList(listToValues(argum[0 .. $], env));
                 value.t = SalType.list;
 
                 return value;
-            }
-            else if (args[0] == "format") {
+            } else if (args[0] == "format") {
                 string target = "nil";
 
                 if (argum[0] in env.env_vars)
@@ -952,8 +899,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
 
                 execute_salmon(Scope2, true, env_loop);
 
-            }
-            else {
+            } else {
                 if (args[0] in env.env_userdefined) {
                     auto sl = newState();
                     auto sl2 = newState();
@@ -970,8 +916,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                             auto argcodew = rargum[f1];
 
                             env.env_vars[fn.template_params[f1]] = argcodew;
-                        }
-                        catch (core.exception.ArrayIndexError) {
+                        } catch (core.exception.ArrayIndexError) {
                             err("parameter `" ~ fn.template_params[f1] ~ "` not supplied.",
                                 LINE_NUMBER, _FILEN);
                             note("defined here:\n  (\033[35;1mdefun\033[0m \033[36;1m" ~ args[0] ~ "\033[;0m (" ~ join(
@@ -991,34 +936,27 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                     }
 
                     env = env_arch;
-                }
-                else if (!(args[0] in reserves)) {
+                } else if (!(args[0] in reserves)) {
                     try {
                         env.env_funcs[args[0]](tmp);
-                    }
-                    catch (core.exception.ArraySliceError e) {
+                    } catch (core.exception.ArraySliceError e) {
                         err("could not truncate: bad statement", LINE_NUMBER, _FILEN);
                         note("statement length: " ~ s.CODE.length.to!string, LINE_NUMBER, _FILEN);
-                    }
-                    catch (core.exception.ArrayIndexError e) {
+                    } catch (core.exception.ArrayIndexError e) {
                         value.returnNil();
-                    }
-                    catch (core.exception.RangeError e) {
+                    } catch (core.exception.RangeError e) {
                         // err("tried to access unknown value", LINE_NUMBER, _FILEN);
                         // note("line here:\n\t" ~ toSyntax(args[0], args[1], "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
                         // exit(10);
                         value.returnNil();
-                    }
-                    catch (ConvException e) {
+                    } catch (ConvException e) {
                         writeln(s.CODE);
                         err(e.msg, LINE_NUMBER, _FILEN);
                         value.returnValue("convException", SalType.error);
                         exit(13);
-                    }
-                    catch (FileException e) {
+                    } catch (FileException e) {
                         value.returnNil();
-                    }
-                    catch (core.exception.AssertError e) {
+                    } catch (core.exception.AssertError e) {
                         err(e.msg, LINE_NUMBER, _FILEN);
                         note("condition:\n\t" ~ toSyntax(args[0], args[1],
                                 "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
@@ -1036,12 +974,10 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
             m = 0;
             st = 0;
             b = "";
-        }
-        else if (n == ')' && m != 1) {
+        } else if (n == ')' && m != 1) {
             m -= 1;
             b ~= n;
-        }
-        else {
+        } else {
             b ~= n;
 
             // if (canFind(getAvailableTokens(), n.to!string) && st == 0 && m == 0) {
@@ -1072,8 +1008,7 @@ string getTargetSystem() {
     }
     version (OSX) {
         return "macOS/OSX-based";
-    }
-    else {
+    } else {
         return "Unknown";
     }
 }
