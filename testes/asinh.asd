@@ -1,0 +1,1 @@
+(print (asinh 1))
