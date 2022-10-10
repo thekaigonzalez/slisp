@@ -96,10 +96,14 @@ public:
         return n(this.getValue());
     }
 
-    template value( T ) {
+    template as( T ) {
         T convert() {
             return this.getValue().to!T;
         }
+    }
+
+    float asFloat() {
+        return (this.numeric()) ? this.getValue().to!float : -1;
     }
 
     void setType(SalType ty) {
@@ -243,4 +247,18 @@ SalmonValue salmonThrowError(string thisError, string withThisMessage,
     }
 
     return new SalmonValue();
+}
+
+SalmonValue asSBool(bool b) {
+    auto n = new SalmonValue();
+    n.setType(SalType.boolean);
+    n.setValue(to!string(b));
+    return n;
+}
+
+SalmonValue floatAsValue(float s) {
+    auto n = new SalmonValue();
+    n.setType(SalType.number);
+    n.setValue(s.to!string);
+    return n;
 }
