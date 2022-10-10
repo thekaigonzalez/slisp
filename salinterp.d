@@ -11,6 +11,7 @@ import sal_builtins;
 import sal_std;
 import sal_auxlib;
 import sal_shared_api;
+import extraops;
 
 /* standard library (compiled) */
 import mathstd;
