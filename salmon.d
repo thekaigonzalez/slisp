@@ -23,7 +23,7 @@ int main(string[] args) {
     SalmonValue version_string = new SalmonValue();
 
     auto version_major = quickRun("3", env);
-    auto version_minor = quickRun("0", env);
+    auto version_minor = quickRun("1", env);
 
     version_string.flagAsList();
 
