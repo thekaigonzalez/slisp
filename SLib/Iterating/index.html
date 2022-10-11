@@ -8,19 +8,19 @@
       
       
       
-      <link rel="icon" href="assets/images/favicon.png">
+      <link rel="icon" href="../../assets/images/favicon.png">
       <meta name="generator" content="mkdocs-1.4.0, mkdocs-material-8.5.6">
     
     
       
-        <title>SLisp Website</title>
+        <title>Iterating - SLisp Website</title>
       
     
     
-      <link rel="stylesheet" href="assets/stylesheets/main.20d9efc8.min.css">
+      <link rel="stylesheet" href="../../assets/stylesheets/main.20d9efc8.min.css">
       
         
-        <link rel="stylesheet" href="assets/stylesheets/palette.cbb835fc.min.css">
+        <link rel="stylesheet" href="../../assets/stylesheets/palette.cbb835fc.min.css">
         
       
       
@@ -37,7 +37,7 @@
       
     
     
-    <script>__md_scope=new URL(".",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    <script>__md_scope=new URL("../..",location),__md_hash=e=>[...e].reduce((e,_)=>(e<<5)-e+_.charCodeAt(0),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
     
       
 
@@ -62,7 +62,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#salmon-lisp" class="md-skip">
+        <a href="#iterator-functions" class="md-skip">
           Skip to content
         </a>
       
@@ -76,7 +76,7 @@
 
 <header class="md-header" data-md-component="header">
   <nav class="md-header__inner md-grid" aria-label="Header">
-    <a href="." title="SLisp Website" class="md-header__button md-logo" aria-label="SLisp Website" data-md-component="logo">
+    <a href="../.." title="SLisp Website" class="md-header__button md-logo" aria-label="SLisp Website" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -95,7 +95,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              Salmon Lisp
+              Iterating
             
           </span>
         </div>
@@ -162,7 +162,7 @@
 
 <nav class="md-nav md-nav--primary" aria-label="Navigation" data-md-level="0">
   <label class="md-nav__title" for="__drawer">
-    <a href="." title="SLisp Website" class="md-nav__button md-logo" aria-label="SLisp Website" data-md-component="logo">
+    <a href="../.." title="SLisp Website" class="md-nav__button md-logo" aria-label="SLisp Website" data-md-component="logo">
       
   
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54Z"/></svg>
@@ -179,21 +179,11 @@
 
   
   
-    
   
-  
-    <li class="md-nav__item md-nav__item--active">
-      
-      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
-      
-      
-        
-      
-      
-      <a href="." class="md-nav__link md-nav__link--active">
+    <li class="md-nav__item">
+      <a href="../.." class="md-nav__link">
         Salmon Lisp
       </a>
-      
     </li>
   
 
@@ -204,12 +194,14 @@
 
   
   
+    
+  
   
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
       
-        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" >
+        <input class="md-nav__toggle md-toggle" data-md-toggle="__nav_2" type="checkbox" id="__nav_2" checked>
       
       
       
@@ -232,7 +224,7 @@
   
   
     <li class="md-nav__item">
-      <a href="SLib/" class="md-nav__link">
+      <a href="../" class="md-nav__link">
         Index
       </a>
     </li>
@@ -244,11 +236,73 @@
               
   
   
+    
   
-    <li class="md-nav__item">
-      <a href="SLib/Iterating/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" data-md-toggle="toc" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          Iterating
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         Iterating
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#each" class="md-nav__link">
+    each
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#while" class="md-nav__link">
+    while
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#until" class="md-nav__link">
+    until
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classic" class="md-nav__link">
+    Classic
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -312,7 +366,7 @@
   
   
     <li class="md-nav__item">
-      <a href="SLib/versions/1.5.0/" class="md-nav__link">
+      <a href="../versions/1.5.0/" class="md-nav__link">
         Index
       </a>
     </li>
@@ -352,7 +406,7 @@
   
   
     <li class="md-nav__item">
-      <a href="SLib/versions/1.5.0/functions/" class="md-nav__link">
+      <a href="../versions/1.5.0/functions/" class="md-nav__link">
         Index
       </a>
     </li>
@@ -399,7 +453,7 @@
   
   
     <li class="md-nav__item">
-      <a href="SLib/versions/1.5.0/keywords/" class="md-nav__link">
+      <a href="../versions/1.5.0/keywords/" class="md-nav__link">
         Index
       </a>
     </li>
@@ -446,7 +500,7 @@
   
   
     <li class="md-nav__item">
-      <a href="SLib/versions/1.5.0/operators/" class="md-nav__link">
+      <a href="../versions/1.5.0/operators/" class="md-nav__link">
         Index
       </a>
     </li>
@@ -500,7 +554,7 @@
   
   
     <li class="md-nav__item">
-      <a href="SLib/versions/2.3/" class="md-nav__link">
+      <a href="../versions/2.3/" class="md-nav__link">
         Index
       </a>
     </li>
@@ -548,6 +602,42 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#each" class="md-nav__link">
+    each
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#while" class="md-nav__link">
+    while
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#until" class="md-nav__link">
+    until
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#classic" class="md-nav__link">
+    Classic
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -561,9 +651,58 @@
                   
 
 
-<h1 id="salmon-lisp">Salmon Lisp</h1>
-<p>Salmon is a Lisp dialect focused on extensibility, portability, and speed.</p>
-<p>There's many different functions for many use cases, to learn about the standard library, please visit the <a href="SLib/Iterating/">standard library documentation.</a></p>
+<!--
+ Copyright 2022 Kai Daniel Gonzalez. All rights reserved.
+ Use of this source code is governed by a BSD-style
+ license that can be found in the LICENSE file.
+-->
+
+<h1 id="iterator-functions">Iterator Functions</h1>
+<p>There are many different functions for iterating and creating many types of loops.</p>
+<p>This document will go over some of the basic use cases for them.</p>
+<h2 id="each"><code>each</code></h2>
+<p>The <code>each</code> keyword iterates over the given list and uses a variable <code>@</code> to notate each variable.</p>
+<p>For example, if you want to iterate a list, and add every number in it by one, you would do the following:</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="nv">each</span><span class="w"> </span><span class="nb">list</span><span class="w"> </span>
+<span class="w">    </span><span class="p">(</span><span class="nb">print</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">@</span><span class="w"> </span><span class="mi">1</span><span class="p">)))</span><span class="w"></span>
+</code></pre></div>
+<p>This is the most basic (<strong>and recommended</strong>) form of list iteration.</p>
+<h2 id="while"><code>while</code></h2>
+<p>While is the <a href="https://en.wikipedia.org/wiki/De_facto">de-facto</a>, tried and true method of iteration no matter how big or small the task!</p>
+<p>The <code>while</code> keyword works like it would in any other language, a clause &amp; a body.</p>
+<p>This adds a variable until it is the number <code>10</code>.</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="nv">while</span><span class="w"> </span><span class="p">(</span><span class="nb">&lt;</span><span class="w"> </span><span class="nv">variable</span><span class="w"> </span><span class="mi">10</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="nb">set</span><span class="w"> </span><span class="nv">variable</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">variable</span><span class="w"> </span><span class="mi">1</span><span class="p">)))</span><span class="w"></span>
+</code></pre></div>
+<h2 id="until"><code>until</code></h2>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The until keyword has not been publicly released yet and is a part of the SLisp <code>31</code> release. To use it you must compile
+the 31 build yourself. Please see <a href="">building Salmon (dead link)</a> for tips.</p>
+</div>
+<p>The <code>until</code> keyword runs a block of code until the clause becomes true.</p>
+<p>It's useful for creating loops and could be considered the super-standard <strong><code>for</code>-loop</strong> of modern SLisp. </p>
+<p>Here's a quick example of the <code>until</code> loop in action:</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="nb">set</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="mi">0</span><span class="p">)</span><span class="w"></span>
+
+<span class="p">(</span><span class="nv">until</span><span class="w"> </span><span class="p">(</span><span class="nb">&gt;</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="nb">set</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="mi">1</span><span class="p">)))</span><span class="w"></span>
+</code></pre></div>
+<h2 id="classic">Classic</h2>
+<div class="admonition danger">
+<p class="admonition-title">Danger</p>
+<p>The classic method is not as memory-safe as the other functions, and besides, they are built for this life! Use the newer, more
+modern functions to accomplish your iteration tasks.</p>
+</div>
+<p>The <strong>classic</strong> method of iteration, that could also be defined as recursion is a method of checking a variable inside of a function and running the function again.</p>
+<p>Example:</p>
+<div class="highlight"><pre><span></span><code><span class="p">(</span><span class="nb">defun</span><span class="w"> </span><span class="nv">is_x_5</span><span class="w"> </span><span class="p">()</span><span class="w"></span>
+<span class="w">    </span><span class="p">(</span><span class="nb">case</span><span class="w"> </span><span class="p">(</span><span class="nb">not</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="mi">5</span><span class="p">)</span><span class="w"></span>
+<span class="w">        </span><span class="p">(</span><span class="k">progn</span><span class="w"></span>
+<span class="w">            </span><span class="p">(</span><span class="nb">set</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="nv">x</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
+<span class="w">            </span><span class="p">(</span><span class="nv">is_x_5</span><span class="p">))</span><span class="w"></span>
+<span class="w">        </span><span class="p">(</span><span class="nb">print</span><span class="w"> </span><span class="s">&quot;Done! X is 5!&quot;</span><span class="p">)))</span><span class="w"></span>
+</code></pre></div>
 
 
 
@@ -583,9 +722,24 @@
     
     <nav class="md-footer__inner md-grid" aria-label="Footer" >
       
+        
+        <a href="../" class="md-footer__link md-footer__link--prev" aria-label="Previous: Index" rel="prev">
+          <div class="md-footer__button md-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11h12Z"/></svg>
+          </div>
+          <div class="md-footer__title">
+            <div class="md-ellipsis">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              Index
+            </div>
+          </div>
+        </a>
+      
       
         
-        <a href="SLib/" class="md-footer__link md-footer__link--next" aria-label="Next: Index" rel="next">
+        <a href="../versions/1.5.0/" class="md-footer__link md-footer__link--next" aria-label="Next: Index" rel="next">
           <div class="md-footer__title">
             <div class="md-ellipsis">
               <span class="md-footer__direction">
@@ -622,10 +776,10 @@
       <div class="md-dialog__inner md-typeset"></div>
     </div>
     
-    <script id="__config" type="application/json">{"base": ".", "features": [], "search": "assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
+    <script id="__config" type="application/json">{"base": "../..", "features": [], "search": "../../assets/javascripts/workers/search.5bf1dace.min.js", "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.config.lang": "en", "search.config.pipeline": "trimmer, stopWordFilter", "search.config.separator": "[\\s\\-]+", "search.placeholder": "Search", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version.title": "Select version"}}</script>
     
     
-      <script src="assets/javascripts/bundle.078830c0.min.js"></script>
+      <script src="../../assets/javascripts/bundle.078830c0.min.js"></script>
       
     
   </body>
