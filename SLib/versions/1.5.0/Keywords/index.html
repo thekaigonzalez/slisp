@@ -377,22 +377,29 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#eq" class="md-nav__link">
-    eq
+  <a href="#eq-this-that" class="md-nav__link">
+    eq [this] [that]
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#list" class="md-nav__link">
-    list
+  <a href="#list-name-habitants" class="md-nav__link">
+    list [name] [habitants..]
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#format" class="md-nav__link">
-    format
+  <a href="#format-list-form" class="md-nav__link">
+    format [list] form*
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#if-stat-true-form" class="md-nav__link">
+    if [stat] true-form*
   </a>
   
 </li>
@@ -521,22 +528,29 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#eq" class="md-nav__link">
-    eq
+  <a href="#eq-this-that" class="md-nav__link">
+    eq [this] [that]
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#list" class="md-nav__link">
-    list
+  <a href="#list-name-habitants" class="md-nav__link">
+    list [name] [habitants..]
   </a>
   
 </li>
       
         <li class="md-nav__item">
-  <a href="#format" class="md-nav__link">
-    format
+  <a href="#format-list-form" class="md-nav__link">
+    format [list] form*
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#if-stat-true-form" class="md-nav__link">
+    if [stat] true-form*
   </a>
   
 </li>
@@ -565,9 +579,9 @@
 <h1 id="slisp-150-builtin-keywords">SLisp 1.5.0 Builtin Keywords</h1>
 <h2 id="set-name-value"><code>set [name] [value]</code></h2>
 <p>Creates a new variable called <code>name</code> and sets it's value to <code>value</code>.</p>
-<h2 id="eq"><code>eq</code></h2>
+<h2 id="eq-this-that"><code>eq [this] [that]</code></h2>
 <p>The english form of the operator <a href="../Operators/">+.</a></p>
-<h2 id="list"><code>list</code></h2>
+<h2 id="list-name-habitants"><code>list [name] [habitants..]</code></h2>
 <div class="admonition warning">
 <p class="admonition-title">Warning</p>
 <p>The entirety of list functionality is in very early alpha. It may not work as intended
@@ -576,7 +590,7 @@ and some values may be incorrect. Sorry.</p>
 <p>Creates a new list with the arguments as the inhabitants.</p>
 <div class="highlight"><pre><span></span><code><span class="p">(</span><span class="nb">list</span><span class="w"> </span><span class="nv">a</span><span class="w"> </span><span class="mi">1</span><span class="w"> </span><span class="mi">2</span><span class="w"> </span><span class="mi">3</span><span class="w"> </span><span class="mi">4</span><span class="p">)</span><span class="w"></span>
 </code></pre></div>
-<h2 id="format"><code>format</code></h2>
+<h2 id="format-list-form"><code>format [list] form*</code></h2>
 <div class="admonition note">
 <p class="admonition-title">Note</p>
 <p>This function would later on be replaced by the <code>each</code> keyword. Please
@@ -587,6 +601,8 @@ keep that in mind as they do the same things.</p>
 <span class="w">              </span><span class="p">(</span><span class="nb">print</span><span class="w"> </span>
 <span class="w">                    </span><span class="p">(</span><span class="nv">access</span><span class="w"> </span><span class="nv">@</span><span class="p">)))</span><span class="w"></span>
 </code></pre></div>
+<h2 id="if-stat-true-form"><code>if [stat] true-form*</code></h2>
+<p>Checks if <code>stat</code> is true, if so, it will run the <code>true-form</code>.</p>
 
 
 
