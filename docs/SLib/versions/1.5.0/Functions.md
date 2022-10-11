@@ -22,4 +22,6 @@ Prints out the given arguments.
 
 Returns a string of `str1 + str2`.
 
-## `access 
+## `access [name]`
+
+Returns the value of `[name]`.
