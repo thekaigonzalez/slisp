@@ -1,0 +1,6 @@
+site_name: SLisp Website
+theme: material
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
