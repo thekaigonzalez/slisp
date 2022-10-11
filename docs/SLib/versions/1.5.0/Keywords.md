@@ -10,11 +10,11 @@
 
 Creates a new variable called `name` and sets it's value to `value`.
 
-## `eq`
+## `eq [this] [that]`
 
 The english form of the operator [+.](../1.5.0/Operators.md)
 
-## `list`
+## `list [name] [habitants..]`
 
 !!! warning
     The entirety of list functionality is in very early alpha. It may not work as intended
@@ -26,7 +26,7 @@ Creates a new list with the arguments as the inhabitants.
 (list a 1 2 3 4)
 ```
 
-## `format`
+## `format [list] form*`
 
 !!! note
     This function would later on be replaced by the `each` keyword. Please
@@ -39,3 +39,8 @@ Iterates a list and runs the given code with the list object as a variable.
               (print 
                     (access @)))
 ```
+
+## `if [stat] true-form*`
+
+Checks if `stat` is true, if so, it will run the `true-form`.
+
