@@ -116,6 +116,8 @@ SalType checkSalmonType(string s, SalmonEnvironment optional_environment = new S
         return SalType.func;
     }
 
+    if (s == "nil") return SalType.nil;
+
     try {
         s.to!float;
         return SalType.number;
