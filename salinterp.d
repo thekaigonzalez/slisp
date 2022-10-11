@@ -11,6 +11,8 @@ import sal_builtins;
 import sal_std;
 import sal_auxlib;
 import sal_shared_api;
+
+import stringutl;
 import extraops;
 import operators;
 import iterating;
@@ -549,6 +551,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         saL_closure(env, &loadlib_std);
         saL_closure(env, &sal_mathstd_init);
         saL_closure(env, &sal_ops);
+        saL_closure(env, &stringLibInit);
 
         // sal_mathstd_init(env);
     }
