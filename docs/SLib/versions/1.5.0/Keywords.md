@@ -12,7 +12,7 @@ Creates a new variable called `name` and sets it's value to `value`.
 
 ## `eq`
 
-The english form of the operator [+.](../operators/index.md#math)
+The english form of the operator [+.](../1.5.0/Operators.md)
 
 ## `list`
 
