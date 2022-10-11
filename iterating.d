@@ -22,7 +22,20 @@ SalmonValue until(string[] arg, SalmonEnvironment env) {
     return new SalmonValue();
 }
 
+SalmonValue _LispWith(string[] arg, SalmonEnvironment env) {
+    SalmonValue value = quickRun(arg[1], env);
+
+    string _body = arg[2];
+
+    while (value.getType() != SalType.nil) {
+        quickRun(_body, env);
+        value = quickRun(arg[1], env);
+    }
+    return new SalmonValue();
+}
+
 int salIteratingTools(SalmonEnvironment env) {
     saL_keyword(env, "until", &until);
+    saL_keyword(env, "with", &_LispWith);
     return 0;
 }
