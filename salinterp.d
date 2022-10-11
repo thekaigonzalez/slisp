@@ -531,7 +531,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         env.env_funcs["pair"] = &newPair;
 
         env.env_funcs["print"] = &builtin_print;
-        env.env_funcs["println"] = &builtin_dep_println; /* println deprecated */
+        env.env_funcs["println"] = &builtin_println; /* println deprecated */
         env.env_funcs["strcat"] = &builtin_strcat;
         env.env_funcs["string-trim"] = &builtin_trim;
         env.env_funcs["get"] = &builtin_access;
