@@ -10,7 +10,14 @@ import std.string;
 import sal_auxlib;
 
 int builtin_print(SalmonSub info) {
-    writeln(join(info.aA, ""));
+    string n;
+
+    foreach (string s; valArrayToString(info.rest())) {
+        n ~= s;
+    }
+
+    writeln(n);
+
     return (0);
 }
 
@@ -25,11 +32,16 @@ int builtin_trim(SalmonSub s) {
     return 0;
 }
 
-int builtin_dep_println(SalmonSub s) {
-    writeln(
-            "(deprecation) `println` is not a part of the Common Lisp standard. It is only here for reference purposes.\n"
-            ~ "In future code please use `print`, it does the same as `println` in the CL standard.");
-    return (1);
+int builtin_println(SalmonSub s) {
+    string n;
+
+    foreach (string sg; valArrayToString(s.rest())) {
+        n ~= sg;
+    }
+
+    writeln(n);
+
+    return (0);
 }
 
 int builtin_strcat(SalmonSub info) {
