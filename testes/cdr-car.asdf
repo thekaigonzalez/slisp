@@ -1,0 +1,3 @@
+(set g (list 1 2))
+
+(print (cdr g))
