@@ -17,4 +17,4 @@ The book is written in LaTeX and licensed under a permissive MIT license.
 
 ## Viewing the Book
 
-To view it, please visit [this] page.
+To view it, please visit [this](./slispBible.pdf) page.
