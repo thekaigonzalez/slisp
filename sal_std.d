@@ -44,7 +44,30 @@ int printf(SalmonSub s) {
   return 0;
 }
 
+int cdr(SalmonSub sub) {
+  SalmonValue pair = sub.value_at(0);
+
+  if (pair.getType() == SalType.list) {
+    sub.returnValue(pair.list_members()[1]);
+    return 0;
+  }
+  return 0;
+}
+
+int car(SalmonSub sub) {
+  SalmonValue pair = sub.value_at(0);
+
+  if (pair.getType() == SalType.list) {
+    sub.returnValue(pair.list_members()[0]);
+    return 0;
+  }
+  return 0;
+}
+
 int loadlib_std(SalmonEnvironment env) {
     saL_register(env, "printf", &printf);
+    saL_register(env, "cdr", &cdr);
+    saL_register(env, "car", &car);
+
     return 0;
 }
