@@ -1,0 +1,336 @@
+% Copyright 2022 Kai Daniel Gonzalez. All rights reserved.
+% Use of this source code is governed by a BSD-style
+% license that can be found in the LICENSE file.
+\documentclass{article}
+
+\usepackage{geometry} % This package allows the editing of the page layout
+\usepackage{amsmath}  % This package allows the use of a large range of mathematical formula, commands, and symbols
+\usepackage{graphicx}  % This package allows the importing of images
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{color}
+
+\definecolor{dkgreen}{rgb}{0,0.6,0}
+\definecolor{gray}{rgb}{0.5,0.5,0.5}
+\definecolor{mauve}{rgb}{0.58,0,0.82}
+
+\title{The Salmon Lisp Bible}
+\author{Kai Daniel Gonzalez}
+
+\begin{document}
+	\maketitle
+	\tableofcontents
+	\section{The Start of It All}
+	Salmon Lisp is a very powerful general purpose programming language with a
+	very rich standard library for creating everything from basic I/O programs. To resource intensive algorithms.
+	\newline
+	\newline
+	This book will teach you everything you need to know about Salmon including a detailed explanation of every function in the current standard library. So without further-ado, let's begin shall we?
+	\section{The Beauty of The `sexpr'}
+	An `sexpr' (also known as an `\emph{S-expression}') is a certain type of grammar which
+	contains parenthesis and is usually denoted using a \href{https://en.wikipedia.org/wiki/Top-down_parsing}{type of Top-down parser.} (although, not always.)
+	
+	A sample S-expression looks something like:
+
+	\begin{lstlisting}
+		(function [forms . . .])
+	\end{lstlisting}
+
+	Which is essentially the entire base of the language. To print "Hello, world" in SLisp (\emph{Salmon Lisp}) would be:
+	
+	\begin{lstlisting}
+		(print Hello, world!")
+	\end{lstlisting}
+
+	In Salmon, you denote the beginning of an expression using the \textbf{LEFT PARENTHESIS} symbol: `('
+	
+	\subsection{The Idea of Root Expressions}
+	When you run a statement, there must be a root statement. Whether it's a conditional block or a function, there should always be a root statement. For example, if you have a statement like:
+	\begin{lstlisting}
+		(case (= variable 1)
+			(print "Variable is one!")
+			(print "Variable is not one!")))
+	\end{lstlisting}
+
+	The root statement would be the `case' call. Therefore, it will not return anything. On that note there are two types of statements, \textbf{root} statements, and \textbf{embedded} statements. Root statements do not return anything, they are not meant to and are only ran at the start of a program, kind of like the fire-starter.
+	
+	If you were to print `1 + 1', it would return `2', like any language would.
+	But if you were to \textbf{just add 1 + 1} like the following:
+	
+	\begin{lstlisting}
+		(+ 1 1)
+	\end{lstlisting}
+	
+	It would not return anything. As it should \emph{not}. This is expected behavior, but even though it's meant to return something, it would not, the value would be discarded. So even though it's expected to return something, it's value's nowhere to be found in memory because it was discarded.
+	
+	Values are only used if a statement is used within a statement, like the following:
+	
+	\begin{lstlisting}
+		(print (+ 1 (+ 1 1)))
+	\end{lstlisting}
+
+	At the beginning, the `print' function may not return a value, but we would not know if we ran it as a root statement, to save it's value you would use something like \emph{set} to save and return it's value.
+	
+	\begin{lstlisting}
+		(set print-output (print "hello, world!"))
+	\end{lstlisting}
+
+	When you set the variable, it will run the print function that is inside of the \emph{[value]} field and set that as it's value. Which should 100\% be \emph{nil}.
+	
+	
+	\section{Function defaults}
+	
+	By default, SLisp contains a very strict set of functions for the user to experiment with, and a few keywords. \textbf{progn}, \textbf{set}, and \textbf{print} just to name a few.
+	
+	\subsection{Keywords Versus Functions - Convenience}
+	
+	While hacking SLisp, ninety-five percent of the time you won't ever need to create any sort of keywords (which are stored in the SalmonEnvironment.pluginKeywords array)
+	
+	Keywords are as low-level as it gets, they don't get the arguments as Salmon values, like regular functions do, instead, they get the arguments as \textbf{RAW} strings, meaning that a keyword like \textbf{progn} has multiple different statements as it's arguments, and they are not evaluated.
+	
+	\section{D API}
+	
+	The D API is open to anyone, for anyone to create their own distributions of SLisp if they so need to, with it's own custom standard library, if they need to.
+	
+	\emph{This book DOES NOT go over the basics of the D Programming Language.} If you read this expecting to learn the D programming language, you will not find it here. Please view the \href{https://dlang.org}{D homepage.}
+	
+	\subsection{Including Headers}
+	First of all, the SLisp headers are compliant with the SLisp library, which you should've gotten and linked when you installed SLisp.
+	
+	As D only sees the function outline and not the implementation, to use the interpreter functions or any classes, you would need to link the SLisp file to your program, using the `-lsalmon' flag. You may also need to include the SLisp directory by using the -I flag as well.
+	\subsection{A Very Basic Library}
+	To create a library, you would first need to include the SLisp headers.
+	
+	\begin{lstlisting}
+		1   |	import sal_auxlib;
+		2   |	import sal_shared_api;
+		3   |	import salinterp; /* OPTIONAL: include Salmon interpreter */
+	\end{lstlisting}
+
+	Now before actually writing the functions, let me show you the function that SLisp looks for in an external library.
+	
+	Review the following function, and after that I'll break it down for you.
+	
+	\begin{lstlisting}
+		10   | extern (C):
+		11   | /* function with the environment */
+		11   | int sal_lib_init(SalmonEnvironment env)
+		12   | {
+		13   |     saL_register(env, "myfunction", &func);
+		14   |     return 0;
+		15   | }
+	\end{lstlisting}
+
+	Done? good!
+	
+	Basically what the above function does is register a function called "func" which should be constructed as such:
+	
+	\begin{lstlisting}
+		5   |    int func(SalmonSub sub)
+	\end{lstlisting}
+
+	The `SalmonSub' class, \emph{previously named `SalmonInfo'}, contains information for an external function to run. There's no convenient way to get all of the arguments from SLisp without this class.
+	
+	In essence, it's a copy of the SLisp environment that the function runs in. When running the function it has the information for all of the arguments that the function was run with, and the value that the function should return, ran as such:
+	
+	\begin{lstlisting}
+		sub.returnValue(new SalmonValue());
+	\end{lstlisting}
+	
+	\emph{(and yes, the SalmonValue by default returns `nil')}
+	
+	\subsection{Building This Library}
+	
+	To build the library, using the D compiler, \textbf{gdc}, you would run it like so:
+	
+	\begin{lstlisting}
+		$ gdc -I/path/to/slisp/headers/  \
+			-lsalmon my-library.d  \
+			-o my-library.so -shared -fPIC
+	\end{lstlisting}
+
+	Then you have a file called my-library.so in the current directory, if everything went well.
+	
+	Then, from Salmon, just include the library and run the function, libraries are usually in two places, `libs/', or the current directory.
+	
+	\begin{lstlisting}
+		(import "my-library")
+		(myfunction)
+	\end{lstlisting}
+
+	\section{The Standard Library}
+	
+	Note: this is the rest of the book, you're free to finish reading, or continue to the manual below.
+	
+	\subsection{Base}
+	
+	\subsubsection{print (\&rest text)}
+
+	Prints all of the arguments to stdout. If {hello,world} is passed, it will print hello and world on a new line.
+	
+	\subsubsection{println (\&rest text)}
+	
+	Does the same as print.
+	
+	\subsubsection{null obj (boolean)}
+	
+	Returns `true' if OBJ is \textbf{nil}.
+	
+	\subsubsection{type obj (str)}
+	
+	Returns the type of `obj' as a string. This function is the concatenated version of the parameter's type enum.
+	
+	\begin{lstlisting}
+		(print (type "hello")) ; str
+	\end{lstlisting}
+
+	\subsubsection{return obj (> any)}
+	
+	Returns the obj OBJ without any modifications. This is the default behavior with the last statement of functions.
+	
+	\begin{lstlisting}
+		(defun return_15 ()
+			(return 15))
+		
+		; OR
+		
+		(defun return_15 ()
+			15)
+	\end{lstlisting}
+	
+	\subsubsection{position \{list\}  pos (> list@pos)}
+
+	Returns list at the position [pos].
+	
+	\subsubsection{strcat \{str1\} \{str2\} (> str)}
+	
+	Concatenates `str1' and `str2' and returns it. (str1 + str2)
+	
+	\subsubsection{string-trim \{string\}}
+
+	Trims both sides of \{string\} and returns it.
+	
+	To trim a variable, use the following syntax:
+	
+	\begin{lstlisting}
+		(set variable (string-trim variable))
+	\end{lstlisting}
+
+	\subsubsection{substr \{string\} \{start\} \{end\} (> str)}
+	
+	Returns (substr\{start - end\})
+	
+	\begin{lstlisting}
+		>(substr "hello" 0 3)
+		hel (str)
+	\end{lstlisting}
+
+	\subsubsection{length \{object [string | list]\}}
+
+	If OBJECT is string, return the length of the string, otherwise return the length of the list.
+	
+	\subsection{FileSystem}
+	
+	\subsubsection{probe-file \{name\}}
+	
+	Returns `true' if the file under \{name\} exists.
+	
+	\subsubsection{import \{modname\}}
+	
+	If the modname exists with a `.so' prefix, it will include the symbol which loads the low-level functions, otherwise, read and load the code from the source file.
+	
+	\subsubsection{require \{modname\}}
+	
+	Same as `import', although this did come out first but is less powerful and extensive.
+	
+	\subsubsection{append \{list\} \{obj\}}
+	
+	Adds \{obj\} to \{list\} and returns the newly created variable.
+	
+	\subsection{Iteration}
+	
+	\subsubsection{while \{cond\} \{form*\}}
+	
+	While \{COND\} is true, run \{form*\}.
+	
+	\subsubsection{until \{cond\} \{form\}}
+	
+	Until \{cond\} is true, run \{form\}
+	
+	\subsubsection{with \{scope\} \{form\}}
+	
+	While \{scope\} is not NIL, run \{form\}
+	\subsection{Operators}
+	
+	\subsubsection{+ (\&rest nums)}
+	
+	Adds all of the numbers [nums] and returns the result. If {1,6,8} is passed, it will return `15'
+	
+	\subsubsection{/ \&rest nums}
+	
+	Divides all of the numbers \{NUMS\} in order and returns them.
+	
+	\subsubsection{* \&rest nums}
+	
+	Multiplies all of the numbers \{NUMS\} in order and returns them.
+	
+	\subsubsection{\% \{mod1\} \{mod2\}}
+	
+	Modulus function.
+	
+	\subsection{Copy-and-write}
+	
+	CaW functions edit a list and return the newly created one.
+	
+	\subsubsection{truncate \{list\} \{bound1\} \{bound2\}}
+	
+	Returns list@[bound1 - bound2]
+	
+	Note: if `bound2' is `*', it will return the rest of the list from `bound1'.
+	
+	\subsection{Math}
+	
+	\subsubsection{intersection \{list1\} \{list2\}}
+	
+	Returns the intersection between `list1' and `list2'. As an example, if {1,4,6} and {2, 4,6} are passed into it, the function would return {4,6}.
+	
+	\subsubsection{atan \{\&real x\}}
+	
+	atan(\{x\})
+	
+	\subsubsection{sin \{\&real x\}}
+	
+	sin(\{x\})
+	
+	\section{Math - Function Binds}
+
+	\subsubsection{cos \{\&real x\}}
+	
+	cos(\{x\})
+	
+	\subsubsection{tan \{\&real x\}}
+	
+	tan(\{x\})
+	
+	\subsubsection{asin \{\&real x\}}
+	
+	asin(\{x\})
+	
+	\subsubsection{acos \{\&real x\}}
+	
+	acos(\{x\})
+	
+	\subsubsection{asinh \{\&real x\}}
+	
+	asinh(\{x\})
+	
+	\subsection{Conditional Statements}
+	
+	\subsubsection{if [stat] [expr]}
+	
+	Runs \{expr\} if [stat] is true.
+	
+	\subsubsection{case [stat] [true-expr] [false-expr]}
+	
+	If \{stat\} is true, run \{true-expr\}, otherwise, run \{false-expr\}.
+\end{document}
