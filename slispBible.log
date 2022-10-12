@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Arch Linux) (preloaded format=pdflatex 2022.10.12)  12 OCT 2022 19:39
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Arch Linux) (preloaded format=pdflatex 2022.10.12)  12 OCT 2022 19:44
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -408,43 +408,44 @@ LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
 \tf@toc=\write4
 \openout4 = `slispBible.toc'.
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 24--29
+ [2]
+Underfull \hbox (badness 10000) in paragraph at lines 25--30
 
  []
 
-[2] [3]
-Overfull \hbox (74.00049pt too wide) in paragraph at lines 107--108
+[3]
+Overfull \hbox (74.00049pt too wide) in paragraph at lines 108--109
 [][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
 [4] [5]
 LaTeX Font Info:    Font shape `OMS/cmr/bx/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 201.
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 203.
+ [6]
 LaTeX Font Info:    Trying to load font information for OML+cmr on input line 2
-24.
+26.
  (/usr/share/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 224.
- [6] [7]
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 226.
+ [7] [8] [9]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 307.
+(hyperref)                than one, level fixed on input line 309.
 
-[8] (./slispBible.aux)
+[10] [11] (./slispBible.aux)
 Package rerunfilecheck Info: File `slispBible.out' has not changed.
 (rerunfilecheck)             Checksum: C048112CBF97FBF39CBDE255F4729F23;8385.
  ) 
 Here is how much of TeX's memory you used:
- 11155 strings out of 478238
- 169968 string characters out of 5850455
- 487408 words of memory out of 5000000
+ 11158 strings out of 478238
+ 169988 string characters out of 5850455
+ 487410 words of memory out of 5000000
  29160 multiletter control sequences out of 15000+600000
  475578 words of font info for 50 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 60i,6n,63p,375b,1751s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 60i,6n,63p,375b,1245s stack positions out of 5000i,500n,10000p,200000b,80000s
  </usr/share/texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmmi10.pk> </home/da
 niel/.texlive/texmf-var/fonts/pk/ljfour/public/cm/cmbsy10.600pk> </home/daniel/
 .texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk> </home/daniel/.t
@@ -455,10 +456,10 @@ cm/dpi600/cmr10.pk> </usr/share/texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmb
 x10.pk> </home/daniel/.texlive/texmf-var/fonts/pk/ljfour/public/cm/cmbx12.720pk
 > </usr/share/texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmr12.pk> </usr/share
 /texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmr17.pk>
-Output written on slispBible.pdf (8 pages, 117505 bytes).
+Output written on slispBible.pdf (11 pages, 118069 bytes).
 PDF statistics:
- 737 PDF objects out of 1000 (max. 8388607)
- 406 compressed objects within 5 object streams
- 112 named destinations out of 1000 (max. 500000)
+ 750 PDF objects out of 1000 (max. 8388607)
+ 416 compressed objects within 5 object streams
+ 115 named destinations out of 1000 (max. 500000)
  401 words of extra memory for PDF output out of 10000 (max. 10000000)
 

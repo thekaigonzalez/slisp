@@ -20,6 +20,7 @@
 \begin{document}
 	\maketitle
 	\tableofcontents
+	\newpage
 	\section{The Start of It All}
 	Salmon Lisp is a very powerful general purpose programming language with a
 	very rich standard library for creating everything from basic I/O programs. To resource intensive algorithms.
@@ -158,6 +159,7 @@
 		(myfunction)
 	\end{lstlisting}
 
+	\newpage
 	\section{The Standard Library}
 	
 	Note: this is the rest of the book, you're free to finish reading, or continue to the manual below.
@@ -228,7 +230,7 @@
 	\subsubsection{length \{object [string | list]\}}
 
 	If OBJECT is string, return the length of the string, otherwise return the length of the list.
-	
+	\newpage
 	\subsection{FileSystem}
 	
 	\subsubsection{probe-file \{name\}}
@@ -277,7 +279,7 @@
 	\subsubsection{\% \{mod1\} \{mod2\}}
 	
 	Modulus function.
-	
+	\newpage
 	\subsection{Copy-and-write}
 	
 	CaW functions edit a list and return the newly created one.
@@ -287,7 +289,7 @@
 	Returns list@[bound1 - bound2]
 	
 	Note: if `bound2' is `*', it will return the rest of the list from `bound1'.
-	
+	\newpage
 	\subsection{Math}
 	
 	\subsubsection{intersection \{list1\} \{list2\}}
@@ -324,6 +326,7 @@
 	
 	asinh(\{x\})
 	
+	\newpage
 	\subsection{Conditional Statements}
 	
 	\subsubsection{if [stat] [expr]}
