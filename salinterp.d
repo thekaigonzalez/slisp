@@ -946,7 +946,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                 }
             }
             if (lambda) {
-                if (tmp.rvalue.getType() != SalType.list)
+                if (tmp.rvalue.getType() != SalType.list || tmp.rvalue.getType() != SalType.pair)
                     value.returnValue(tmp.rvalue, tmp.rvalue.getType());
                 else {
                     value.returnList(tmp.rvalue.g);
