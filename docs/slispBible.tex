@@ -160,6 +160,55 @@
 	\end{lstlisting}
 
 	\newpage
+	\section{SLisp History}
+
+	\emph{Salmon} was the original name for the high-level Lisp dialect, later on the
+	modern versions are considered to be \textbf{SLisp} instead of Salmon. As the original name could
+	possibly be translated to more of the \href{https://wikipedia.org/wiki/Salmon}{breed of fish.}/ Although it could be
+	interpreted as the most powerful breed of Salmon, Chinook.
+
+	\subsection{Function Choices}
+
+	SLisp functions were always switching in the older versions, making a program in Salmon in the starting
+	days was like walking on a minefield.. Or from the man himself, \emph{"Shooting yourself in the foot"}. Every
+	now and then there would be a breaking change which would deprecate some of your program's core features. 
+	\textbf{definitely not recommended}
+
+	Nowadays there's only some minor changes and after the new infrastructure changes, not only is it so
+	much more stable, it also won't break from a function that changed it's named from ``b'' to ``b\_''. There
+	may be a 3 percent chance you ever use SLisp, but if you ever do, just know that it's not going to make any major changes,
+	and even if there's a potentially code-breaking change, we'll always let you know ahead of time, 
+	so you know how to prepare yourself for the impact.
+	
+	\newpage
+
+	\section{\textbf{(D API)} Deprecation}
+
+	SalmonInfo was an old class designed for functions, kind of like the modern class, SalmonSub. For your information,
+	SalmonInfo was the older, less modern version, and it contained the bindings to the old APIs, as of recent, the newer
+	APIs are finally in use and it's more stable than ever. This period of changes could be considered the
+	transition to \emph{\textbf{Modern SLisp.}}.
+
+	\subsection{Old SLisp Versus Modern SLisp}
+
+	First of all, old SLisp did \textbf{NOT} support the usage of list values, the way to create a list wasn't
+	introduced until later versions, before the list update you had to create lists using this method:
+
+	\begin{lstlisting}
+		1	|	(list my-list 1 2 3 4)
+		2	|	(print (getf my-list 0))
+	\end{lstlisting}
+
+	Old functions couldn't check the argument's value, they had to use an old method of reading the current environment's
+	lists variable, which would later be deprecated in favor of the SalmonValue, which supports list values by default.
+
+	Nowadays you could just use the ``position'' function without any hassle.
+
+	\begin{lstlisting}
+		1	|	(print (position (list 1 2 3 4) 0)) ; 1
+	\end{lstlisting}
+
+	\newpage
 	\section{The Standard Library}
 	
 	Note: this is the rest of the book, you're free to finish reading, or continue to the manual below.
