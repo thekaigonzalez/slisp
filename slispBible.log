@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Arch Linux) (preloaded format=pdflatex 2022.10.12)  12 OCT 2022 19:44
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022/Arch Linux) (preloaded format=pdflatex 2022.10.12)  13 OCT 2022 19:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -394,14 +394,14 @@ LaTeX Info: Redefining \nameref on input line 20.
 
 \c@lstlisting=\count300
  (./slispBible.toc
-LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 1
-7.
+LaTeX Font Info:    Trying to load font information for OMS+cmr on input line 2
+1.
 
 (/usr/share/texmf-dist/tex/latex/base/omscmr.fd
 File: omscmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 17.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 21.
  [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}])
@@ -418,48 +418,50 @@ Overfull \hbox (74.00049pt too wide) in paragraph at lines 108--109
 [][][][][][][][][][][][][][][][][][][][][][][][][][][] 
  []
 
-[4] [5]
+[4] [5] [6] [7]
 LaTeX Font Info:    Font shape `OMS/cmr/bx/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 203.
- [6]
+(Font)              Font shape `OMS/cmsy/b/n' tried instead on input line 252.
+ [8]
 LaTeX Font Info:    Trying to load font information for OML+cmr on input line 2
-26.
+75.
  (/usr/share/texmf-dist/tex/latex/base/omlcmr.fd
 File: omlcmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <10> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 226.
- [7] [8] [9]
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 275.
+ [9]
+[10] [11]
 
 Package hyperref Warning: Difference (2) between bookmark levels is greater 
-(hyperref)                than one, level fixed on input line 309.
+(hyperref)                than one, level fixed on input line 358.
 
-[10] [11] (./slispBible.aux)
+[12] [13] (./slispBible.aux)
 Package rerunfilecheck Info: File `slispBible.out' has not changed.
-(rerunfilecheck)             Checksum: C048112CBF97FBF39CBDE255F4729F23;8385.
+(rerunfilecheck)             Checksum: 24171CD87FFF3114F8CD3992F11F0B84;9004.
  ) 
 Here is how much of TeX's memory you used:
- 11158 strings out of 478238
- 169988 string characters out of 5850455
- 487410 words of memory out of 5000000
- 29160 multiletter control sequences out of 15000+600000
- 475578 words of font info for 50 fonts, out of 8000000 for 9000
+ 11176 strings out of 478238
+ 170211 string characters out of 5850455
+ 486416 words of memory out of 5000000
+ 29166 multiletter control sequences out of 15000+600000
+ 475937 words of font info for 51 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  60i,6n,63p,375b,1245s stack positions out of 5000i,500n,10000p,200000b,80000s
  </usr/share/texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmmi10.pk> </home/da
 niel/.texlive/texmf-var/fonts/pk/ljfour/public/cm/cmbsy10.600pk> </home/daniel/
-.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk> </home/daniel/.t
-exlive/texmf-var/fonts/pk/ljfour/public/cm/cmbx12.600pk> </usr/share/texmf-dist
-/fonts/pk/ljfour/public/cm/dpi600/cmti10.pk> </usr/share/texmf-dist/fonts/pk/lj
-four/public/cm/dpi600/cmsy10.pk> </usr/share/texmf-dist/fonts/pk/ljfour/public/
-cm/dpi600/cmr10.pk> </usr/share/texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmb
-x10.pk> </home/daniel/.texlive/texmf-var/fonts/pk/ljfour/public/cm/cmbx12.720pk
-> </usr/share/texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmr12.pk> </usr/share
-/texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmr17.pk>
-Output written on slispBible.pdf (11 pages, 118069 bytes).
+.texlive/texmf-var/fonts/pk/ljfour/public/cm/cmbxti10.600pk> </home/daniel/.tex
+live/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk> </home/daniel/.texli
+ve/texmf-var/fonts/pk/ljfour/public/cm/cmbx12.600pk> </usr/share/texmf-dist/fon
+ts/pk/ljfour/public/cm/dpi600/cmti10.pk> </usr/share/texmf-dist/fonts/pk/ljfour
+/public/cm/dpi600/cmsy10.pk> </usr/share/texmf-dist/fonts/pk/ljfour/public/cm/d
+pi600/cmr10.pk> </usr/share/texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmbx10.
+pk> </home/daniel/.texlive/texmf-var/fonts/pk/ljfour/public/cm/cmbx12.720pk> </
+usr/share/texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmr12.pk> </usr/share/tex
+mf-dist/fonts/pk/ljfour/public/cm/dpi600/cmr17.pk>
+Output written on slispBible.pdf (13 pages, 129152 bytes).
 PDF statistics:
- 750 PDF objects out of 1000 (max. 8388607)
- 416 compressed objects within 5 object streams
- 115 named destinations out of 1000 (max. 500000)
- 401 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 813 PDF objects out of 1000 (max. 8388607)
+ 454 compressed objects within 5 object streams
+ 126 named destinations out of 1000 (max. 500000)
+ 433 words of extra memory for PDF output out of 10000 (max. 10000000)
 
