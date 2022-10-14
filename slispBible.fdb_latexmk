@@ -1,11 +1,11 @@
 # Fdb version 3
-["pdflatex"] 1665704936 "/home/daniel/slisp/docs/slispBible.tex" "slispBible.pdf" "slispBible" 1665704936
+["pdflatex"] 1665780167 "/home/daniel/slisp/docs/slispBible.tex" "slispBible.pdf" "slispBible" 1665780167
   "/home/daniel/.texlive/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1000.600pk" 1665613970 11524 496f2daaa663d30480602f8474a5e1dd ""
   "/home/daniel/.texlive/texmf-var/fonts/pk/ljfour/public/cm/cmbsy10.600pk" 1665616364 15064 40d452b196b1fdec76b433699d922aea ""
   "/home/daniel/.texlive/texmf-var/fonts/pk/ljfour/public/cm/cmbx12.600pk" 1665613564 14156 0982516b821716f5d908b2f4472acdff ""
   "/home/daniel/.texlive/texmf-var/fonts/pk/ljfour/public/cm/cmbx12.720pk" 1665612170 17912 b6682114e8ba128098f69efad86cb2a6 ""
   "/home/daniel/.texlive/texmf-var/fonts/pk/ljfour/public/cm/cmbxti10.600pk" 1665704238 15764 8129139c2f816749f52684fe91530db0 ""
-  "/home/daniel/slisp/docs/slispBible.tex" 1665704935 13958 617ca6f2acc48aa14925b331e9297faf ""
+  "/home/daniel/slisp/docs/slispBible.tex" 1665780165 13961 24605fcaf8cfdae683471fa23eee3af5 ""
   "/usr/share/texmf-dist/fonts/map/fontname/texfonts.map" 1650183167 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmbx10.pk" 1650183167 11496 ba2f638a41e1f9ffcd2b35d81b165537 ""
   "/usr/share/texmf-dist/fonts/pk/ljfour/public/cm/dpi600/cmmi10.pk" 1650183167 15032 fb2501d8c01086ab16c7e59dfa920876 ""
@@ -91,10 +91,10 @@
   "/usr/share/texmf-dist/web2c/texmf.cnf" 1650183167 39911 2da6c67557ec033436fe5418a70a8a61 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1665611990 284 6baac5b28e3a41b11fc0eec3c7371c10 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1665611788 2927663 8ab644b3d6e848e6de61a1984460626a ""
-  "slispBible.aux" 1665704936 7832 e266394658f425904310b48ccfdcd922 "pdflatex"
-  "slispBible.out" 1665704936 9004 24171cd87fff3114f8cd3992f11f0b84 "pdflatex"
-  "slispBible.tex" 1665704935 13958 617ca6f2acc48aa14925b331e9297faf ""
-  "slispBible.toc" 1665704936 4930 385731875df5eb67c6bc61d4dcec5bc9 "pdflatex"
+  "slispBible.aux" 1665780167 7832 e266394658f425904310b48ccfdcd922 "pdflatex"
+  "slispBible.out" 1665780167 9004 24171cd87fff3114f8cd3992f11f0b84 "pdflatex"
+  "slispBible.tex" 1665780165 13961 24605fcaf8cfdae683471fa23eee3af5 ""
+  "slispBible.toc" 1665780167 4930 385731875df5eb67c6bc61d4dcec5bc9 "pdflatex"
   (generated)
   "slispBible.aux"
   "slispBible.log"
