@@ -78,10 +78,17 @@ int hasLisp(SalmonSub sub) {
   return (0);
 }
 
+int isNil(SalmonSub s) {
+  s.returnValue(asSBool(s.value_at(0).equals(new SalmonValue()))); /* by default svalue returns nil */
+  return 0;
+}
+
 int loadlib_std(SalmonEnvironment env) {
     saL_register(env, "printf", &printf);
     saL_register(env, "cdr", &cdr);
     saL_register(env, "car", &car);
     saL_register(env, "has", &hasLisp);
+    saL_register(env, "null", &isNil);
+    saL_register(env, "nil?", &isNil);
     return 0;
 }
