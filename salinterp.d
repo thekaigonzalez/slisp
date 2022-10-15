@@ -15,6 +15,7 @@ import sal_shared_api;
 import stringutl;
 import extraops;
 import operators;
+import debugging;
 import iterating;
 import sarithmetic;
 
@@ -546,6 +547,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         saL_closure(env, &sal_mathstd_init);
         saL_closure(env, &sal_ops);
         saL_closure(env, &stringLibInit);
+        saL_closure(env, &loadDebugTools);
+
 
         // sal_mathstd_init(env);
     }
