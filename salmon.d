@@ -34,7 +34,7 @@ int main(string[] args) {
     auto argValue = new SalmonValue();
 
     argValue.flagAsList();
-    argValue.setValue(listToValues(args[1 .. $], env));
+    argValue.setValue(listToValues(args[0 .. $], env));
 
     env.env_vars["arg"] = argValue;
 
@@ -123,6 +123,7 @@ int main(string[] args) {
             input.CODE = "";
         }
     }
+
 
     if (!exists(args[1])) {
         err("file not found.", 0, "commandline");
