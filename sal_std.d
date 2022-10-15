@@ -8,6 +8,7 @@ import std.stdio;
 import sal_shared_api;
 import salinterp;
 import sal_auxlib;
+import std.array;
 
 int printf(SalmonSub s) {
   // string ns;
@@ -83,6 +84,25 @@ int isNil(SalmonSub s) {
   return 0;
 }
 
+int ajoin(SalmonSub s) {
+  string[] ea = valArrayToString(s.value_at(0));
+  s.returnValue(convertStringToValue(join(ea, s.value_at(1).getValue()))); /* by default svalue returns nil */
+  return 0;
+}
+
+int runSys(SalmonSub s) {
+  import std.process;
+  auto n = spawnShell(s.value_at(0).getValue());
+  s.returnValue(fromNumber(wait(n))); /* by default svalue returns nil */
+  return 0;
+}
+
+int endProgram(SalmonSub s) {
+  import core.stdc.stdlib;
+  exit(0);
+  return 0;
+}
+
 int loadlib_std(SalmonEnvironment env) {
     saL_register(env, "printf", &printf);
     saL_register(env, "cdr", &cdr);
@@ -90,5 +110,9 @@ int loadlib_std(SalmonEnvironment env) {
     saL_register(env, "has", &hasLisp);
     saL_register(env, "null", &isNil);
     saL_register(env, "nil?", &isNil);
+    saL_register(env, "combine!", &ajoin);
+    saL_register(env, "sys:run", &runSys);
+    saL_register(env, "exit", &endProgram);
+
     return 0;
 }
