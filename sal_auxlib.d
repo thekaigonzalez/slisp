@@ -76,6 +76,11 @@ public:
         v = value;
     }
 
+    // Comparisons -
+    bool equals(SalmonValue v2) {
+        return (v2.getType() == this.getType()) && (v2.getValue() == this.getValue());
+    }
+
     // Appends @thisValue to the current list (if any)
     void append(SalmonValue thisValue) {
         g ~= thisValue;
