@@ -64,10 +64,24 @@ int car(SalmonSub sub) {
   return 0;
 }
 
+int hasLisp(SalmonSub sub) {
+  SalmonValue nf = sub.value_at(0);
+
+  foreach (SalmonValue s; sub.value_at(1).list_members) {
+    if (nf.equals(s)) {
+      sub.returnValue(asSBool(true));
+      return 0;
+    }
+  }
+
+  sub.returnValue(asSBool(false));
+  return (0);
+}
+
 int loadlib_std(SalmonEnvironment env) {
     saL_register(env, "printf", &printf);
     saL_register(env, "cdr", &cdr);
     saL_register(env, "car", &car);
-
+    saL_register(env, "has", &hasLisp);
     return 0;
 }
