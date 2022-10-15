@@ -4,6 +4,6 @@
 (with scoped_var
     (progn
         (print "Hello")
-        (case (= a 5)
+        (case (= a 4)
             (set scoped_var nil)
             (set a (+ a 1)))))
