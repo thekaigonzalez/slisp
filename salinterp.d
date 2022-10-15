@@ -279,11 +279,6 @@ int compileLisp(SalmonSub inf) {
     return 0;
 }
 
-int isNull(SalmonSub i) {
-    i.returnValue((i.aA[0] == "nil").to!string, SalType.str);
-    return 0;
-}
-
 int lispcanFind(SalmonSub i) {
     string[] target = valArrayToString(i.newArg[0].g);
     string existsBool = canFind(target, i.newArg[1].getValue()).to!string;
@@ -523,7 +518,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         env.env_funcs["append"] = &appendLisp;
 
         env.env_funcs["probe-file"] = &probeFileLisp;
-        env.env_funcs["null"] = &isNull;
         env.env_funcs["import"] = &importLisp;
         env.env_funcs["truncate"] = &truncateList;
 
