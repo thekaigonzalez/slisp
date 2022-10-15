@@ -63,7 +63,9 @@ int main(string[] args) {
     }
 
     if (ver) {
-        writefln("Salmon Version: %s", env.env_vars["salmon_version"].getValue());
+        writefln("Salmon Version: %s", 
+        env.env_vars["salmon_version"].list_members()[0].getValue()
+        ~ env.env_vars["salmon_version"].list_members()[1].getValue());
         return 0;
     }
     if (mode == "normal")
