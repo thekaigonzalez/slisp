@@ -81,6 +81,10 @@ public:
         return (v2.getType() == this.getType()) && (v2.getValue() == this.getValue());
     }
 
+    bool typeis(SalType t) {
+        return (this.getType() == t);
+    }
+
     // Appends @thisValue to the current list (if any)
     void append(SalmonValue thisValue) {
         g ~= thisValue;
@@ -267,3 +271,10 @@ SalmonValue floatAsValue(float s) {
     n.setValue(s.to!string);
     return n;
 }
+SalmonValue fromNumber(int s) {
+    auto n = new SalmonValue();
+    n.setType(SalType.number);
+    n.setValue(s.to!string);
+    return n;
+}
+
