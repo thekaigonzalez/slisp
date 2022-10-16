@@ -1,0 +1,1 @@
+(print (- (factorial 4) 1))
