@@ -22,6 +22,19 @@ import std.math :
                 asinh;
 import std.conv : to;
 
+auto factorial(T)(T t) {
+        import std.range : drop, recurrence;
+        return recurrence!"a[n-1] * n"(1).drop(t).front;
+}
+
+int factorialN(SalmonSub s) {
+    auto facNum = s.value_at(0).getValue().to!int;
+    SalmonValue finalValue = floatAsValue(factorial!int(facNum).to!float);
+
+    s.returnValue(finalValue);
+    return 0;
+}
+
 int _atan(SalmonSub f) {
     real atan1 = f.value_at(0).getValue().to!real;
 
@@ -122,7 +135,7 @@ int sal_mathstd_init(SalmonEnvironment env) {
     saL_register(env, "asin", &_asin);
     saL_register(env, "asinh", &_asin);
     saL_register(env, "distance", &_distance);
-
+    saL_register(env, "factorial", &factorialN);
 
     return 0;
 }
