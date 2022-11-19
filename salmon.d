@@ -99,9 +99,8 @@ int main(string[] args) {
         SalmonState input = new SalmonState();
         _FILEN = "repl";
         writeln("\033[;1mWelcome to..\033[0;0m \033[32;1mSalmon\033[0;0m\033[36;1mLisp\033[0;0m!");
-
         writeln("To learn \033[;1mSLisp\033[0m, please \033[33;1mvisit the\033[0;0m\033[34;1m SLisp "
-                ~ "\033[0;0mwebsite:\033[0;0m \033[33;1mhttps://thekaigonzalez.github.io/slisp\033[0;0m");
+                ~ "\033[0;0mwebsite:\033[0;0m \033[33;1mhttps://digitaljupyter.github.io/slisp\033[0;0m");
 
         while (true) {
             string n = readline(">").to!string;
