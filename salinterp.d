@@ -426,6 +426,8 @@ int appendLisp(SalmonSub s) {
     return 0;
 }
 
+// int helpLisp(SalmonSub s) {}
+
 SalmonValue _Ksort(string[] debug_args, SalmonEnvironment environment) {
     SalmonValue list0 = quickRun(debug_args[1], environment);
 
