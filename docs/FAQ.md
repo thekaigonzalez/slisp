@@ -33,6 +33,10 @@ There's a somewhat working implementation of `cdr` and `car` in the Standard Lib
 (print (+ (cdr a) 1))
 ```
 
+## Is this Interpreted or Compiled?
+
+Interpreted. SLisp reads a statement executes it on the spot.
+
 ## How is SLisp "less rigid" than something like SBCL?
 
 While this may be a stretch, it's all in the handling.
