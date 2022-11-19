@@ -18,7 +18,7 @@ This is a common question for those beginning to get into open source and would 
     - Near native overhead with high-level scripting
     - A bunch of features packed into the tiny binary that SLisp is.
 
-## Since this is a language primarily used for scripting, where's `cdr` & `car`?
+## Since this is a language designed for scripting, where's `cdr` & `car`?
 
 There's no such thing as `cons` or any sort of memory addresses in SLisp, instead
 it's a generic standard and a generic simplified approach to the Lisp & Common Lisp libraries.
