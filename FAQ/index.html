@@ -252,8 +252,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#if-this-is-a-language-primarily-for-scripting-wheres-cdr-car" class="md-nav__link">
-    If this is a language primarily for Scripting, where's cdr &amp; car?
+  <a href="#since-this-is-a-language-designed-for-scripting-wheres-cdr-car" class="md-nav__link">
+    Since this is a language designed for scripting, where's cdr &amp; car?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-this-interpreted-or-compiled" class="md-nav__link">
+    Is this Interpreted or Compiled?
   </a>
   
 </li>
@@ -538,8 +545,15 @@
 </li>
       
         <li class="md-nav__item">
-  <a href="#if-this-is-a-language-primarily-for-scripting-wheres-cdr-car" class="md-nav__link">
-    If this is a language primarily for Scripting, where's cdr &amp; car?
+  <a href="#since-this-is-a-language-designed-for-scripting-wheres-cdr-car" class="md-nav__link">
+    Since this is a language designed for scripting, where's cdr &amp; car?
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#is-this-interpreted-or-compiled" class="md-nav__link">
+    Is this Interpreted or Compiled?
   </a>
   
 </li>
@@ -585,7 +599,7 @@
 <li>A bunch of features packed into the tiny binary that SLisp is.</li>
 </ul>
 </div>
-<h2 id="if-this-is-a-language-primarily-for-scripting-wheres-cdr-car">If this is a language primarily for Scripting, where's <code>cdr</code> &amp; <code>car</code>?</h2>
+<h2 id="since-this-is-a-language-designed-for-scripting-wheres-cdr-car">Since this is a language designed for scripting, where's <code>cdr</code> &amp; <code>car</code>?</h2>
 <p>There's no such thing as <code>cons</code> or any sort of memory addresses in SLisp, instead
 it's a generic standard and a generic simplified approach to the Lisp &amp; Common Lisp libraries.</p>
 <p>There's a somewhat working implementation of <code>cdr</code> and <code>car</code> in the Standard Library. But it's not what you'd expect.</p>
@@ -595,6 +609,8 @@ it's a generic standard and a generic simplified approach to the Lisp &amp; Comm
 <span class="p">(</span><span class="nb">print</span><span class="w"> </span><span class="p">(</span><span class="nb">cdr</span><span class="w"> </span><span class="nv">a</span><span class="p">))</span><span class="w"> </span><span class="c1">; 2</span><span class="w"></span>
 <span class="p">(</span><span class="nb">print</span><span class="w"> </span><span class="p">(</span><span class="nb">+</span><span class="w"> </span><span class="p">(</span><span class="nb">cdr</span><span class="w"> </span><span class="nv">a</span><span class="p">)</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span><span class="w"></span>
 </code></pre></div>
+<h2 id="is-this-interpreted-or-compiled">Is this Interpreted or Compiled?</h2>
+<p>Interpreted. SLisp reads a statement executes it on the spot.</p>
 <h2 id="how-is-slisp-less-rigid-than-something-like-sbcl">How is SLisp "less rigid" than something like SBCL?</h2>
 <p>While this may be a stretch, it's all in the handling.</p>
 <p>With SBCL, if you tried to print "hello, world", the output will literally be "hello world":</p>
