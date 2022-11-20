@@ -23,3 +23,11 @@ This is **NOT** okay:
 # Add things
 (my_func)
 ```
+
+And yes, this is the same for functions.
+
+```lisp
+# Choose ONE!
+(set a (mod 1 1))
+(set a (% 1 1))
+```
