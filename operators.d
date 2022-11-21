@@ -47,7 +47,6 @@ int salOperators(SalmonEnvironment env) {
     saL_register(env, ">", &greaterThan);
     saL_register(env, ">=", &greaterThanOrEqual);
     saL_register(env, "<=", &lessThanOrEqual);
-
     saL_register(env, "not", &not);
     return 0;
 }
