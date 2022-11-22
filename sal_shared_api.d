@@ -202,7 +202,6 @@ string parse_string(string n) {
 class SalmonState {
 public:
     string CODE = "";
-
 }
 
 /* return the argument at the position @p */
