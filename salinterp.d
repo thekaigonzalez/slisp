@@ -411,7 +411,7 @@ int substrLisp(SalmonSub i) {
     SalmonValue substr = new SalmonValue();
 
     substr.setValue(str.getValue()[getArgumentAsNumber(
-                beginningRange) .. getArgumentAsNumber(endingRange)]);
+            beginningRange) .. getArgumentAsNumber(endingRange)]);
     substr.setType(SalType.str);
 
     i.returnValue(substr);
@@ -511,7 +511,6 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         saL_closure(env, &salOperators);
         saL_closure(env, &salIteratingTools);
 
-
         env.env_funcs["length"] = &lengthLisp;
         env.env_funcs["replace"] = &replaceLisp;
         env.env_funcs["return"] = &returnLisp;
@@ -550,7 +549,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
         saL_closure(env, &sal_ops);
         saL_closure(env, &stringLibInit);
         saL_closure(env, &loadDebugTools);
-
+        // saL_closure(env, &sbase64_load);
 
         // sal_mathstd_init(env);
     }
@@ -753,7 +752,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
             if (!(args[0] in env.env_funcs)
                 && !(args[0] in env.env_userdefined) && !(args[0] in reserves)) {
                 err("function \033[;1m`" ~ args[0] ~ "`\033[0m is not defined.",
-                    LINE_NUMBER, _FILEN);
+                LINE_NUMBER, _FILEN);
                 foreach (string f; keys(env.env_funcs)) {
                     if (f.length < 5)
                         continue;
@@ -761,7 +760,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
 
                     if (dist < f.length / 2) { // if it's at least half of the word
                         note("\033[;1m`" ~ args[0] ~ "`\033[0m does not exist, but the function \033[34;1m"
-                                ~ f ~ "\033[0;0m does.", LINE_NUMBER, _FILEN);
+                            ~ f ~ "\033[0;0m does.", LINE_NUMBER, _FILEN);
                         if (_FILEN != "repl")
                             exit(14);
                     }
@@ -772,7 +771,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
 
                     if (dist < f.length / 2) { // if it's at least half of the word
                         note("\033[;1m`" ~ args[0] ~ "`\033[0m does not exist, but the function \033[34;1m"
-                                ~ f ~ "\033[0;0m does.", LINE_NUMBER, _FILEN);
+                            ~ f ~ "\033[0;0m does.", LINE_NUMBER, _FILEN);
                         if (_FILEN != "repl")
                             exit(14);
                     }
@@ -816,7 +815,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                             import core.sys.linux.dlfcn;
 
                             void* hndl = dlopen(("./libs/" ~ argum[0] ~ ".so").toStringz(),
-                                RTLD_LAZY);
+                            RTLD_LAZY);
 
                             int function(SalmonEnvironment) openFunc = cast(
                                 int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
@@ -826,7 +825,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                             import core.sys.linux.dlfcn;
 
                             void* hndl = dlopen(("/usr/local/lib/salmon/libs/" ~ argum[0] ~ ".so")
-                                    .toStringz(), RTLD_LAZY);
+                                .toStringz(), RTLD_LAZY);
 
                             int function(SalmonEnvironment) openFunc = cast(
                                 int function(SalmonEnvironment)) dlsym(hndl, "sal_lib_init");
@@ -834,7 +833,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                             openFunc(env);
                         } else {
                             err("require '" ~ argum[0] ~ "' - library not found in any supported path(s).",
-                                LINE_NUMBER, _FILEN);
+                            LINE_NUMBER, _FILEN);
                             note("required here:\n\t" ~ toSyntax("require",
                                     "\"" ~ argum[0] ~ "\"", "...", LINE_NUMBER),
                                 LINE_NUMBER, _FILEN);
@@ -842,8 +841,8 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                             if (exists("/usr/local/lib/salmon/libs/" ~ argum[0].toLower ~ ".so")
                                 || exists("./libs/" ~ argum[0].toLower)) {
                                 writeln("\033[;1mTip!\033[0m '" ~ argum[0] ~ "' does not exist, but \033[;1m\"" ~ argum[0]
-                                        .toLower ~ "\"\033[0m does. Did you mean, \033[;1m(\033[35;1mrequire\033[;1m \""
-                                        ~ argum[0].toLower ~ "\")\033[0m ?");
+                                    .toLower ~ "\"\033[0m does. Did you mean, \033[;1m(\033[35;1mrequire\033[;1m \""
+                                    ~ argum[0].toLower ~ "\")\033[0m ?");
                             }
                             if (_FILEN != "repl")
                                 exit(8);
@@ -863,9 +862,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                 string target = "nil";
 
                 if (argum[0] in env.env_vars)
-                    target = env.env_vars[argum[0]].getValue();
-                else if (argum[0] in env.env_lists)
-                    target = env.env_vars[argum[0]].list_members().valuesToList(env).join(",");
+                target = env.env_vars[argum[0]].getValue();
+        else if (argum[0] in env.env_lists)
+                target = env.env_vars[argum[0]].list_members().valuesToList(env).join(",");
 
                 auto Scope2 = newState();
                 auto env_loop = new SalmonEnvironment();
@@ -899,9 +898,9 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                             env.env_vars[fn.template_params[f1]] = argcodew;
                         } catch (core.exception.ArrayIndexError) {
                             err("parameter `" ~ fn.template_params[f1] ~ "` not supplied.",
-                                LINE_NUMBER, _FILEN);
+                            LINE_NUMBER, _FILEN);
                             note("defined here:\n  (\033[35;1mdefun\033[0m \033[36;1m" ~ args[0] ~ "\033[;0m (" ~ join(
-                                    fn.template_params, ", ") ~ ") ...", LINE_NUMBER, _FILEN);
+                                fn.template_params, ", ") ~ ") ...", LINE_NUMBER, _FILEN);
                             writeln("\t\033[36;1m ^~~~~~~~~~~~\033[0m");
                             if (_FILEN != "repl") /* don't exit in a repl */
                                 exit(9);
@@ -940,7 +939,7 @@ SalmonValue execute_salmon(SalmonState s, bool lambda = false,
                     } catch (core.exception.AssertError e) {
                         err(e.msg, LINE_NUMBER, _FILEN);
                         note("condition:\n\t" ~ toSyntax(args[0], args[1],
-                                "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
+                        "...", LINE_NUMBER), LINE_NUMBER, _FILEN);
                     }
                 }
             }
