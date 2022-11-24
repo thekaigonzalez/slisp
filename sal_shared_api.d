@@ -100,6 +100,13 @@ public:
         return en;
     }
 
+    void unload_class(SalmonClass s) {
+        auto classFuncs = s.get_functions();
+        foreach (string fn; keys(classFuncs)) {
+            this.env_funcs[s.get_name() ~ ":" ~ fn] = classFuncs[fn];
+        }
+    }
+
     SalmonSettings settings = new SalmonSettings();
 
     SalmonFunction[string] env_userdefined;
@@ -116,13 +123,13 @@ SalType checkSalmonType(string s, SalmonEnvironment optional_environment = new S
         return SalType.func;
     }
 
-    if (s == "nil") return SalType.nil;
+    if (s == "nil")
+        return SalType.nil;
 
     try {
         s.to!float;
         return SalType.number;
-    }
-    catch (Exception) {
+    } catch (Exception) {
         if (s.startsWith('"'))
             return SalType.str;
 
@@ -143,25 +150,19 @@ string parse_string(string n) {
         if (k == '"' && s == 0) {
             s = 1;
             b = "";
-        }
-        else if (k == '\\' && s == 1) {
+        } else if (k == '\\' && s == 1) {
             s = 2;
-        }
-        else if (k == '"' && s == 2) {
+        } else if (k == '"' && s == 2) {
             b ~= '"';
             s = 1;
-        }
-        else if (k == '"' && s == 1) {
+        } else if (k == '"' && s == 1) {
             break;
-        }
-        else if (k == '[' && s == 3) {
+        } else if (k == '[' && s == 3) {
             s = 4;
-        }
-        else if (k == 'm' && s == 4) {
+        } else if (k == 'm' && s == 4) {
             b ~= "\033[" ~ b2 ~ "m";
             s = 1;
-        }
-        else {
+        } else {
             if (s == 2) {
                 switch (k) {
                 case 'n':
@@ -184,12 +185,10 @@ string parse_string(string n) {
                     s = 1;
                     break;
                 }
-            }
-            else {
+            } else {
                 if (s >= 4) {
                     b2 ~= k;
-                }
-                else {
+                } else {
                     b ~= k;
                 }
             }
@@ -202,6 +201,28 @@ string parse_string(string n) {
 class SalmonState {
 public:
     string CODE = "";
+}
+
+/* A helper class to unload <prefix>: functions into the environment */
+class SalmonClass {
+    private string name;
+    private int function(SalmonSub)[string] stuff;
+
+    public void add_function(string asName, int function(SalmonSub) s) {
+        stuff[asName] = s;
+    }
+
+    public void set_name(string asName) {
+        name = asName;
+    }
+
+    public int function(SalmonSub)[string] get_functions() {
+        return this.stuff;
+    }
+
+    public string get_name() {
+        return this.name;
+    }
 }
 
 /* return the argument at the position @p */
